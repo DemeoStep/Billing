@@ -23,6 +23,10 @@ void StringHelper::Input(char* str, const int length){
 }
 
 void StringHelper::InputDigit(char* str, const int length) {
+	short X = Console::X();
+	short Y = Console::Y();
+	Console::SetColor(Console::clBlack, Console::clYellow);
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
 	Null(str);
 	char* s = str;
 	while (!(*s >= '0' && *s <= '9') && *s != '\r') {
@@ -50,9 +54,16 @@ void StringHelper::InputDigit(char* str, const int length) {
 		} else break;
 	}
 	*s = 0;
+
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
+	Console::GotoXY(X, Y);
 }
 
 void StringHelper::InputEng(char* str, const int length) {
+	short X = Console::X();
+	short Y = Console::Y();
+	Console::SetColor(Console::clBlack, Console::clYellow);
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
 	Null(str);
 	char* s = str;
 	while (!(*s >= 'A' && *s <= 'Z') && !(*s >= 'a' && *s <= 'z') && !(*s >= '0' && *s <= '9') && *s != '\r') {
@@ -80,9 +91,17 @@ void StringHelper::InputEng(char* str, const int length) {
 		} else break;
 	}
 	*s = 0;
+
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
+	Console::GotoXY(X, Y);
 }
 
 void StringHelper::InputRus(char* str, const int length) {
+	short X = Console::X();
+	short Y = Console::Y();
+	Console::SetColor(Console::clBlack, Console::clYellow);
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
+
 	Null(str);
 	char* s = str;
 	while (!(*s >= 'À' && *s <= 'ÿ') && !(*s >= '0' && *s <= '9') && *s != '\r') {
@@ -110,6 +129,9 @@ void StringHelper::InputRus(char* str, const int length) {
 		} else break;
 	}
 	*s = 0;
+
+	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
+	Console::GotoXY(X, Y);
 }
 
 void StringHelper::Input_currency(char* str, const int length) {

@@ -681,14 +681,8 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		short Y = 2;
 
 		Console::GotoXY(X, Y);
-		Console::SetColor(Console::clBlack, Console::clYellow);
-
-		Console::FillRect(X - 1, Y, X + 40, Y, Console::clYellow);
-		StringHelper::InputRus(temp, 40);
-		strcpy_s(Abonents->fio, StringHelper::DefaultSize, temp);
-		Console::FillRect(X - 1, Y, X + 40, Y, Console::clLightGrey);
-		Console::GotoXY(X, Y);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		StringHelper::InputRus(Abonents->fio, 40);
+		Print(Abonents->fio, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(false);
 		Y += 2;
@@ -1267,3 +1261,4 @@ void Application::Print(char* str, const Console::ConsoleColors Color, const Con
 	free(LineToPrint);
 	free(Buffer);
 }
+
