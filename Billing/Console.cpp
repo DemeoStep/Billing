@@ -1,5 +1,7 @@
 #include <Windows.h>
+#include <conio.h>
 #include "Console.h"
+#include "StringHelper.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -124,4 +126,38 @@ void Console::ShowCursor(bool show) {
 	CCI.bVisible = show;
 	CCI.dwSize = 1;
 	SetConsoleCursorInfo(GetHandle(), &CCI);
+}
+
+void Console::Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
+	short LWidth = strlen(str);
+
+	_CHAR_INFO* Buffer = (_CHAR_INFO*)calloc(LWidth, sizeof(CHAR_INFO));
+	WORD CharAttrib = BgColor << 4 | Color;
+	char* LineToPrint = StringHelper::New();
+
+	strcpy_s(LineToPrint, StringHelper::DefaultSize, str);
+
+	for (int i = 0; i < LWidth; i++) {
+		Buffer[i].Char.AsciiChar = LineToPrint[i];
+		Buffer[i].Attributes = CharAttrib;
+	}
+	COORD charPosition = { 0, 0 };
+
+	SMALL_RECT writeArea = { Console::X(), Console::Y(), Console::X() + LWidth, Console::Y() };
+
+	COORD bufferSize = { LWidth, 1 };
+	WriteConsoleOutputA(Console::GetHandle(), Buffer, bufferSize, charPosition, &writeArea);
+
+	free(LineToPrint);
+	free(Buffer);
+}
+
+int Console::GetKey() {
+	int keyPressed = _getch();
+
+	if ((keyPressed == 0 && _kbhit()) || (keyPressed == 224 && _kbhit())) {
+		keyPressed = _getch();
+	}
+
+	return keyPressed;
 }

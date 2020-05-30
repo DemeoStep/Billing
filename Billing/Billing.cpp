@@ -66,6 +66,10 @@ void App_OnF6(Application* Sender) {
 	//}
 }
 
+void App_OnF7(Application* Sender) {
+	Sender->Search(Console::Y());
+}
+
 void App_OnF8(Application* Sender) {
 	if (Sender->AbonShow) {
 		if (Sender->CursorOn && Sender->CursorOn->balance <= 0) { // Запрет удаления абонентов с положительным балансом
@@ -91,6 +95,7 @@ int main() {
 	App->OnEnter = &App_OnEnter;
 	App->OnF5 = &App_OnF5;
 	App->OnF6 = &App_OnF6;
+	App->OnF7 = &App_OnF7;
 	App->OnF8 = &App_OnF8;
 	App->Run();
 	delete App;

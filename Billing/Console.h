@@ -68,6 +68,8 @@ public:
 	static short Height();
 	static void SetScreen(short AWidth = DefaultScreenWidth, short AHeight = DefaultScreenHeight);
 	static void ShowCursor(bool show);
+	static void Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor);
+	static int GetKey();
 };
 
 #endif

@@ -18,6 +18,7 @@ public:
 	Street* ListSort(Street* Item);
 	Street* LoadFromFile(const char* FileName);
 	Street* Get_by_id(int id);
+	//Street* DrawChoiceList();
 };
 
 #endif

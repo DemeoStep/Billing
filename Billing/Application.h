@@ -74,14 +74,15 @@ public:
 	void TableDrawOnPageDown(short CursorPos);
 	void TableDrawOnPageUp(short CursorPos);
 	void TableDraw(short CursorPos);
-	void Print(char* str, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
+	//void Print(char* str, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
 
 	int JumpTo(int CursorPos, Abonent* toItem);
+
+	void Search(int CursorPos);
 
 	void ShowAbonentCard(Abonent* Item, bool New);
 	Abonent* ShowAddCard(short CursorPos);
 	void AbonDel(Abonent* Item, short CursorPos);
-	int GetKey();
 	void AbonAdd(Abonent* List, short CursorPos);
 	void Balance_change(Abonent* Item, short CursorPos);
 	bool ShowWarning(short CursorPos, char* warning);

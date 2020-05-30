@@ -167,7 +167,7 @@ void Application::DoProcessKey(const int AKeyPressed) {
 void Application::DrawMenu(short aY, char* str) {
 	Console::FillRect(0, aY, Console::Width(), aY, Console::clLightGrey);
 	Console::GotoXY(0, aY);
-	Print(str, Console::clBlack, Console::clLightGrey);
+	Console::Print(str, Console::clBlack, Console::clLightGrey);
 }
 
 void Application::DoOnKeyEscape()		{ if (NULL != OnEscape)		OnEscape(this); }
@@ -481,75 +481,75 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 		LeftY += 2;
 
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"Ф.И.О: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Ф.И.О: ", Color, BgColor);
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		if (!New) strcat_s(temp, StringHelper::DefaultSize, Item->fio);
 		StringHelper::StrToSize(temp, 42);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		LeftY += 2;
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"Адрес: ул. ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Адрес: ул. ", Color, BgColor);
 
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		if (!New) strcat_s(temp, StringHelper::DefaultSize, Item->StreetPTR->name);
 		StringHelper::StrToSize(temp, 23);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoX(LeftX + 31);
-		if (!AbonShow) Print((char*)"д: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"д: ", Color, BgColor);
 		Console::GotoX(LeftX + 34);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		if (!New) StringHelper::int_to_str(int_to_str_temp, Item->House);
 		strcat_s(temp, StringHelper::DefaultSize, int_to_str_temp);
 		StringHelper::StrToSize(temp, 5);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(LeftX + 40);
-		if (!AbonShow) Print((char*)"кв: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"кв: ", Color, BgColor);
 		Console::GotoX(LeftX + 44);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		if (!New) StringHelper::int_to_str(int_to_str_temp, Item->Apartment);
 		strcat_s(temp, StringHelper::DefaultSize, int_to_str_temp);
 		StringHelper::StrToSize(temp, 5);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		LeftY += 2;
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"Тел: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Тел: ", Color, BgColor);
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		strcat_s(temp, StringHelper::DefaultSize, Item->Phone);
 		StringHelper::StrToSize(temp, 17);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoX(LeftX + 26);
-		if (!AbonShow) Print((char*)"Id: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Id: ", Color, BgColor);
 		Console::GotoX(LeftX + 30);
 		StringHelper::int_to_str(int_to_str_temp, Item->id);
-		Print(int_to_str_temp, Color, BgColor);
+		Console::Print(int_to_str_temp, Color, BgColor);
 
 		LeftY += 2;
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"Логин: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Логин: ", Color, BgColor);
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		strcat_s(temp, StringHelper::DefaultSize, Item->login);
 		StringHelper::StrToSize(temp, 17);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoX(LeftX + 26);
-		if (!AbonShow) Print((char*)"Пароль: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Пароль: ", Color, BgColor);
 		Console::GotoX(LeftX + 34);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		strcat_s(temp, StringHelper::DefaultSize, Item->pass);
 		StringHelper::StrToSize(temp, 15);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		LeftY += 2;
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"Тариф: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"Тариф: ", Color, BgColor);
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		Tarifs = Tarifs->ListFirst();
@@ -558,21 +558,21 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 		}
 		if (!New) strcat_s(temp, StringHelper::DefaultSize, Tarifs->name);
 		StringHelper::StrToSize(temp, 42);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		LeftY += 2;
 		Console::GotoXY(LeftX, LeftY);
-		if (!AbonShow) Print((char*)"IP: ", Color, BgColor);
+		if (!AbonShow) Console::Print((char*)"IP: ", Color, BgColor);
 		Console::GotoX(LeftX + 7);
 		strcpy_s(temp, StringHelper::DefaultSize, " ");
 		strcat_s(temp, StringHelper::DefaultSize, Item->IP);
 
 		StringHelper::StrToSize(temp, 17);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 		if (!New) {
 			LeftY += 2;
 			Console::GotoXY(LeftX, LeftY);
-			if (!AbonShow) Print((char*)"Баланс: ", Color, BgColor);
+			if (!AbonShow) Console::Print((char*)"Баланс: ", Color, BgColor);
 			Console::GotoX(LeftX + 8);
 
 			StringHelper::int_to_currency(bal, Item->balance);
@@ -583,15 +583,15 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 			strcat_s(temp, StringHelper::DefaultSize, " ");
 			strcat_s(temp, StringHelper::DefaultSize, Curr);
 			strcat_s(temp, StringHelper::DefaultSize, "         ");
-			Print(temp, Color, BgColor);
+			Console::Print(temp, Color, BgColor);
 
 			LeftY += 2;
 			Console::GotoXY(LeftX, LeftY);
-			if (!AbonShow) Print((char*)"Статус: ", Color, BgColor);
+			if (!AbonShow) Console::Print((char*)"Статус: ", Color, BgColor);
 			Console::GotoX(LeftX + 8);
 			if (!this->CursorOn->state) {
-				Print((char*)"Доступ разрешен", Color, BgColor);
-			} else Print((char*)"Заблокирован   ", Console::clRed, BgColor);
+				Console::Print((char*)"Доступ разрешен", Color, BgColor);
+			} else Console::Print((char*)"Заблокирован   ", Console::clRed, BgColor);
 
 			Color = Console::clCyan;
 			BgColor = Console::clYellow;
@@ -607,7 +607,7 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 					LeftX++;
 				}
 				Console::GotoXY(LeftX, LeftY);
-				Print((char*)" F5 - Редактировать  ", Color, BgColor);
+				Console::Print((char*)" F5 - Редактировать  ", Color, BgColor);
 			}
 
 			if (!AbonShow) {
@@ -616,7 +616,7 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
 				} else LeftX += 26;
 				Console::GotoXY(LeftX, LeftY);
-				Print((char*)" F6 - Пополнить счет ", Color, BgColor);
+				Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
 			}
 
 			if (CursorOn->balance <= 0) {
@@ -635,7 +635,7 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				LeftX = Console::Width() - 39;
 			}
 			Console::GotoXY(LeftX, LeftY);
-			Print((char*)"   F8 - УДАЛИТЬ!!!   ", Color, BgColor);
+			Console::Print((char*)"   F8 - УДАЛИТЬ!!!   ", Color, BgColor);
 		}
 		Console::GotoXY(0, CursorPos);
 		AbonShow = true;
@@ -682,12 +682,13 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		Console::GotoXY(X, Y);
 		StringHelper::InputRus(Abonents->fio, 40);
-		Print(Abonents->fio, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->fio, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(false);
 		Y += 2;
 
 		Console::GotoXY(X, Y);
+
 		Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
 		Streets = Streets->ListFirst();
 		strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
@@ -711,8 +712,8 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 			strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
 			StringHelper::StrToSize(temp, 20);
-			Print(temp, Console::clBlack, Console::clYellow);
-			keyPressed = GetKey();
+			Console::Print(temp, Console::clBlack, Console::clYellow);
+			keyPressed = Console::GetKey();
 			*str = keyPressed;
 			*(str + 1) = '\0';
 		}
@@ -720,7 +721,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Abonents->StreetPTR = Streets;
 		Console::GotoXY(X, Y);
 		Console::FillRect(X - 1, Y, X + 21, Y, Console::clLightGrey);
-		Print(Abonents->StreetPTR->name, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->StreetPTR->name, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(true);
 		X += 27;
@@ -728,12 +729,12 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		StringHelper::InputDigit(temp, 3);
 		Abonents->House = atoi(temp);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoXY(X + 10, Y);
 		StringHelper::InputDigit(temp, 3);
 		Abonents->Apartment = atoi(temp);
-		Print(temp, Console::clBlack, Console::clLightGrey);
+		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
 		X -= 27;
@@ -751,14 +752,14 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			}
 			if (!correct) {
 				Console::GotoXY(X, Y);
-				Print((char*)"   ", Console::clBlack, Console::clYellow);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
 				StringHelper::InputDigit(temp, 3);
 			}
 		}
 
 		strcpy_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 4);
 
 		correct = false;
@@ -770,14 +771,14 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			}
 			if (!correct) {
 				Console::GotoXY(X + 4, Y);
-				Print((char*)"   ", Console::clBlack, Console::clYellow);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
 				StringHelper::InputDigit(temp, 3);
 			}
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
 		Console::GotoXY(X, Y);
-		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 8);
 
 		StringHelper::InputDigit(temp, 2);
@@ -790,7 +791,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			}
 			if (!correct) {
 				Console::GotoXY(X + 8, Y);
-				Print((char*)"   ", Console::clBlack, Console::clYellow);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
 				StringHelper::InputDigit(temp, 2);
 			}
 		}
@@ -798,7 +799,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
 		Console::GotoXY(X, Y);
-		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 11);
 
 		StringHelper::InputDigit(temp, 2);
@@ -811,26 +812,26 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			}
 			if (!correct) {
 				Console::GotoXY(X + 11, Y);
-				Print((char*)"   ", Console::clBlack, Console::clYellow);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
 				StringHelper::InputDigit(temp, 2);
 			}
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X, Y);
-		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
 		Console::GotoXY(X, Y);
 		StringHelper::InputEng(temp, 15);
 		strcpy_s(Abonents->login, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X, Y);
-		Print(Abonents->login, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->login, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoXY(X + 27, Y);
 		StringHelper::InputEng(temp, 13);
 		strcpy_s(Abonents->pass, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X + 27, Y);
-		Print(Abonents->pass, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->pass, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(false);
 		Y += 2;
@@ -839,7 +840,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Tarifs = Tarifs->ListFirst();
 		strcpy_s(temp, StringHelper::DefaultSize, Tarifs->name);
 		StringHelper::StrToSize(temp, 20);
-		Print(Tarifs->name, Console::clBlack, Console::clYellow);
+		Console::Print(Tarifs->name, Console::clBlack, Console::clYellow);
 		keyPressed = 0;
 
 		while (keyPressed != Console::keyEnter) {
@@ -851,8 +852,8 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 			strcpy_s(temp, StringHelper::DefaultSize, Tarifs->name);
 			StringHelper::StrToSize(temp, 20);
-			Print(temp, Console::clBlack, Console::clYellow);
-			keyPressed = GetKey();
+			Console::Print(temp, Console::clBlack, Console::clYellow);
+			keyPressed = Console::GetKey();
 			*str = keyPressed;
 			*(str + 1) = '\0';
 		}
@@ -860,7 +861,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Abonents->TarifPTR = Tarifs;
 		Console::GotoXY(X, Y);
 		Console::FillRect(X - 1, Y, X + 40, Y, Console::clLightGrey);
-		Print(Abonents->TarifPTR->name, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->TarifPTR->name, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
 		Console::GotoXY(X, Y);
@@ -874,7 +875,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			strcpy_s(temp, StringHelper::DefaultSize, FreeRealIPs->ip);
 		}
 		StringHelper::StrToSize(temp, 15);
-		Print(temp, Console::clBlack, Console::clYellow);
+		Console::Print(temp, Console::clBlack, Console::clYellow);
 		keyPressed = 0;
 
 		while (keyPressed != Console::keyEnter) {
@@ -898,9 +899,9 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 				strcpy_s(temp, StringHelper::DefaultSize, FreeRealIPs->ip);
 			}
 			StringHelper::StrToSize(temp, 15);
-			Print(temp, Console::clBlack, Console::clYellow);
+			Console::Print(temp, Console::clBlack, Console::clYellow);
 
-			keyPressed = GetKey();
+			keyPressed = Console::GetKey();
 			*str = keyPressed;
 			*(str + 1) = '\0';
 		}
@@ -913,7 +914,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		}
 		Console::GotoXY(X, Y);
 		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
-		Print(Abonents->IP, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->IP, Console::clBlack, Console::clLightGrey);
 
 		free(temp);
 		free(str);
@@ -1028,16 +1029,6 @@ void Application::AbonDel(Abonent* Item, short CursorPos) {
 	CursorOn->SaveToFile("bin\\abonents.db");
 }
 
-int Application::GetKey() {
-	int keyPressed = _getch();
-
-	if ((keyPressed == 0 && _kbhit()) || (keyPressed == 224 && _kbhit())) {
-		keyPressed = _getch();
-	}
-
-	return keyPressed;
-}
-
 void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 	LAdded = ShowAddCard(CursorPos);
 
@@ -1130,10 +1121,10 @@ void Application::Balance_change(Abonent* Item, short CursorPos) {
 	StringHelper::int_to_currency(bal, CursorOn->balance);
 	strcat_s(temp, StringHelper::DefaultSize, bal);
 	strcat_s(temp, StringHelper::DefaultSize, " ");
-	Print(temp, Console::clWhite, Console::clDarkGrey);
+	Console::Print(temp, Console::clWhite, Console::clDarkGrey);
 
 	Console::GotoY(Y += 2);
-	Print((char*)" Приход/расход: ", Console::clWhite, Console::clDarkGrey);
+	Console::Print((char*)" Приход/расход: ", Console::clWhite, Console::clDarkGrey);
 
 	Console::FillRect(X + 16, Y, X + 25, Y, Console::clLightGrey);
 	Console::GotoXY(X + 17, Y);
@@ -1171,7 +1162,7 @@ bool Application::ShowWarning(short CursorPos, char* warning) {
 
 	Console::GotoXY(X, Y);
 	strcpy_s(temp, StringHelper::DefaultSize, warning);
-	Print(temp, Console::clYellow, Console::clRed);
+	Console::Print(temp, Console::clYellow, Console::clRed);
 	free(temp);
 
 	char keyPressed = 0;
@@ -1210,7 +1201,7 @@ void Application::ShowProgress(short CursorPos, char* mess, int step) {
 	strcat_s(temp, StringHelper::DefaultSize, step_temp);
 	strcat_s(temp, StringHelper::DefaultSize, "%");
 
-	Print(temp, Console::clYellow, Console::clRed);
+	Console::Print(temp, Console::clYellow, Console::clRed);
 
 	Console::GotoXY(0, CursorPos);
 	free(temp);
@@ -1229,29 +1220,29 @@ void Application::Init() {
 	Abonents = Abonents->ListSort(Abonents);
 }
 
-void Application::Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
-	short LWidth = strlen(str);
-
-	_CHAR_INFO* Buffer = (_CHAR_INFO*)calloc(LWidth, sizeof(CHAR_INFO));
-	WORD CharAttrib = BgColor << 4 | Color;
-	char* LineToPrint = StringHelper::New();
-
-	strcpy_s(LineToPrint, StringHelper::DefaultSize, str);
-
-	for (int i = 0; i < LWidth; i++) {
-		Buffer[i].Char.AsciiChar = LineToPrint[i];
-		Buffer[i].Attributes = CharAttrib;
-	}
-	COORD charPosition = { 0, 0 };
-
-	SMALL_RECT writeArea = { Console::X(), Console::Y(), Console::X() + LWidth, Console::Y() };
-
-	COORD bufferSize = { LWidth, 1 };
-	WriteConsoleOutputA(Console::GetHandle(), Buffer, bufferSize, charPosition, &writeArea);
-
-	free(LineToPrint);
-	free(Buffer);
-}
+//void Application::Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
+//	short LWidth = strlen(str);
+//
+//	_CHAR_INFO* Buffer = (_CHAR_INFO*)calloc(LWidth, sizeof(CHAR_INFO));
+//	WORD CharAttrib = BgColor << 4 | Color;
+//	char* LineToPrint = StringHelper::New();
+//
+//	strcpy_s(LineToPrint, StringHelper::DefaultSize, str);
+//
+//	for (int i = 0; i < LWidth; i++) {
+//		Buffer[i].Char.AsciiChar = LineToPrint[i];
+//		Buffer[i].Attributes = CharAttrib;
+//	}
+//	COORD charPosition = { 0, 0 };
+//
+//	SMALL_RECT writeArea = { Console::X(), Console::Y(), Console::X() + LWidth, Console::Y() };
+//
+//	COORD bufferSize = { LWidth, 1 };
+//	WriteConsoleOutputA(Console::GetHandle(), Buffer, bufferSize, charPosition, &writeArea);
+//
+//	free(LineToPrint);
+//	free(Buffer);
+//}
 
 int Application::JumpTo(int CursorPos, Abonent* toItem) {
 
@@ -1308,4 +1299,23 @@ int Application::JumpTo(int CursorPos, Abonent* toItem) {
 		}
 	}
 	return CursorPos;
+}
+
+void Application::Search(int CursorPos) {
+	int X = Console::Width() / 2;
+	int Y = Console::Height() / 2;
+	char* temp = StringHelper::New();
+	int Width = 40;
+	int Height = 4;
+
+	X -= 20;
+	Y -= 2;
+
+	Console::FillRect(X, Y, X + Width, Y + Height, Console::clCyan);
+	X += 2;
+	Y ++;
+	Console::GotoXY(X, Y);
+	
+	Console::ShowCursor(true);
+
 }
