@@ -292,7 +292,6 @@ Abonent* Abonent::ListAdd(Abonent* ExistingItem) {
 }
 
 Abonent* Abonent::ListDel() {
-	this->SaveToFile("bin\\abonents.db");
 	Abonent* AbonNext = this->ListNext;
 	Abonent* AbonPrev = this->ListPrev;
 	if (AbonPrev) {
@@ -302,8 +301,14 @@ Abonent* Abonent::ListDel() {
 		AbonNext->ListPrev = this->ListPrev;
 	}
 	delete this;
-	if (AbonNext) return AbonNext;
-	else if (AbonPrev) return AbonPrev; 
+	if (AbonNext) {
+		AbonNext->SaveToFile("bin\\abonents.db");
+		return AbonNext;
+	}
+	else if (AbonPrev) {
+		AbonPrev->SaveToFile("bin\\abonents.db");
+		return AbonPrev;
+	}
 	else return NULL;
 }
 
@@ -393,7 +398,7 @@ int Abonent::GetMaxID() {
 }
 
 void Abonent::SaveAbon(FILE* FileHandle, Abonent* Item) {
-	fprintf(FileHandle, "%d|%s|%s|%s|%s|%d|%d|%d|%d|%s|%d|%d  \n",
+	fprintf(FileHandle, "%d|%s|%s|%s|%s|%d|%d|%d|%d|%s|%d|%d\n",
 		Item->id, Item->fio, Item->login, Item->pass, Item->Phone, Item->StreetPTR->id, Item->House,
 		Item->Apartment, Item->TarifPTR->id, Item->IP, Item->balance, Item->state);
 }
@@ -408,7 +413,7 @@ void Abonent::SaveToFile(const char* FileName) {
 				SaveAbon(LFileHandle, LItem);
 				LItem = LItem->ListNext;
 			}
-		}
+		} else fprintf(LFileHandle, "");
 		fclose(LFileHandle);
 	} else {
 		printf("Не удалось сохранить данные в файл %s \n", FileName);
@@ -451,7 +456,7 @@ Abonent* Abonent::LoadFromFile(const char* FileName, Street* StreetList, Tarif* 
 		free(context);
 		free(buffer);
 		fclose(LFile);
-		return List->ListFirst();
+		if (List) return List->ListFirst();
 	} else {
 		printf("Ошибка открытия файла\n");
 		return NULL;

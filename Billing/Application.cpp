@@ -1027,6 +1027,7 @@ void Application::AbonDel(Abonent* Item, short CursorPos) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
+	CursorOn->SaveToFile("bin\\abonents.db");
 }
 
 int Application::GetKey() {
@@ -1216,7 +1217,6 @@ void Application::ShowProgress(short CursorPos, char* mess, int step) {
 }
 
 void Application::OnExit() {
-	/*Abonents->SaveToFile("bin\\abonents.db");*/
 }
 
 void Application::Init() {
