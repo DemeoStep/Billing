@@ -692,7 +692,6 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Streets = Streets->ListFirst();
 		strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
 		StringHelper::StrToSize(temp, 20);
-		//Print(Streets->name, Console::clBlack, Console::clYellow);
 		keyPressed = 0;
 
 		while (keyPressed != Console::keyEnter) {
@@ -724,26 +723,21 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Print(Abonents->StreetPTR->name, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(true);
-		Console::GotoXY(X + 27, Y);
-		Console::FillRect(X + 26, Y, X + 30, Y, Console::clYellow);
+		X += 27;
+		Console::GotoXY(X, Y);
 
 		StringHelper::InputDigit(temp, 3);
 		Abonents->House = atoi(temp);
-		Console::GotoXY(X + 27, Y);
-		Console::FillRect(X + 26, Y, X + 30, Y, Console::clLightGrey);
 		Print(temp, Console::clBlack, Console::clLightGrey);
 
-		Console::GotoXY(X + 37, Y);
-		Console::FillRect(X + 36, Y, X + 40, Y, Console::clYellow);
+		Console::GotoXY(X + 10, Y);
 		StringHelper::InputDigit(temp, 3);
 		Abonents->Apartment = atoi(temp);
-		Console::GotoXY(X + 37, Y);
-		Console::FillRect(X + 36, Y, X + 40, Y, Console::clLightGrey);
 		Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
+		X -= 27;
 		Console::GotoXY(X, Y);
-		Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 		StringHelper::InputDigit(temp, 3);
 
 		CellCodes = CellCodes->ListFirst();
@@ -764,8 +758,8 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		strcpy_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::GotoX(X + 3);
-		printf("-");
+		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 4);
 
 		correct = false;
 		StringHelper::InputDigit(temp, 3);
@@ -782,8 +776,9 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::GotoX(X + 7);
-		printf("-");
+		Console::GotoXY(X, Y);
+		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 8);
 
 		StringHelper::InputDigit(temp, 2);
 		correct = false;
@@ -802,8 +797,10 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::GotoX(X + 10);
-		printf("-");
+		Console::GotoXY(X, Y);
+		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 11);
+
 		StringHelper::InputDigit(temp, 2);
 		correct = false;
 
@@ -819,26 +816,20 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			}
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-
 		Console::GotoXY(X, Y);
-		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
 		Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
 		Console::GotoXY(X, Y);
-		Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 		StringHelper::InputEng(temp, 15);
 		strcpy_s(Abonents->login, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X, Y);
-		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
 		Print(Abonents->login, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoXY(X + 27, Y);
-		Console::FillRect(X + 26, Y, X + 40, Y, Console::clYellow);
-		StringHelper::InputEng(temp, 15);
+		StringHelper::InputEng(temp, 13);
 		strcpy_s(Abonents->pass, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X + 27, Y);
-		Console::FillRect(X + 26, Y, X + 40, Y, Console::clLightGrey);
 		Print(Abonents->pass, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(false);
