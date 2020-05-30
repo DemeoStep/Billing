@@ -920,28 +920,27 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		if (ShowWarning(Console::Y(), (char*)"Сохранить? (Y/n)")) {
 			LResult = Abonents;
-			if (Abonents) {
 				
-				if (Abonents->ListCount() > 1) {
-					TableFirst = Abonents->ListFirst();
-				} else TableFirst = Abonents;
+			if (Abonents->ListCount() > 1) {
+				TableFirst = Abonents->ListFirst();
+			} else TableFirst = Abonents;
 
-				TableLast = TableFirst;
-				int end = 0;
+			TableLast = TableFirst;
+			int end = 0;
 
-				if (Abonents->ListCount() < (Console::Height() - 2)) {
-					end = Abonents->ListCount();
-				} else {
-					end = (Console::Height() - 2);
-				}
-
-				if (TableLast->ListNext) {
-					for (int i = 1; i < end; i++) {
-						TableLast = TableLast->ListNext;
-					}
-				}
-
+			if (Abonents->ListCount() < (Console::Height() - 2)) {
+				end = Abonents->ListCount();
+			} else {
+				end = (Console::Height() - 2);
 			}
+
+			if (TableLast->ListNext) {
+				for (int i = 1; i < end; i++) {
+					TableLast = TableLast->ListNext;
+				}
+			}
+
+			LResult->SaveToFile("bin\\abonents.db");
 
 		} else {
 			if (!Abonents->TarifPTR->isReal) FreeGreyIPs = FreeGreyIPs->ipRestore(Abonents);
@@ -1217,7 +1216,7 @@ void Application::ShowProgress(short CursorPos, char* mess, int step) {
 }
 
 void Application::OnExit() {
-	Abonents->SaveToFile("bin\\abonents.db");
+	/*Abonents->SaveToFile("bin\\abonents.db");*/
 }
 
 void Application::Init() {

@@ -292,6 +292,7 @@ Abonent* Abonent::ListAdd(Abonent* ExistingItem) {
 }
 
 Abonent* Abonent::ListDel() {
+	this->SaveToFile("bin\\abonents.db");
 	Abonent* AbonNext = this->ListNext;
 	Abonent* AbonPrev = this->ListPrev;
 	if (AbonPrev) {
