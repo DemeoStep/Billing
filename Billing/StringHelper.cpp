@@ -97,12 +97,12 @@ void StringHelper::InputRus(char* str, const int length) {
 		}
 	}
 	int i = 0;
-	while (i < length && *s != '\r' && ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9'))) {
+	while (i < length && *s != '\r' && ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9') || *s == ' ')) {
 		s++;
 		i++;
 		if (i < length) {
 			*s = _getch();
-			if ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9')) {
+			if ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9') || *s == ' ') {
 				printf("%c", *s);
 			} else if (*s != '\r') {
 				s--;
