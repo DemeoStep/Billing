@@ -379,6 +379,7 @@ void Abonent::ListSwap(Abonent* Item_1, Abonent* Item_2) {
 }
 
 Abonent* Abonent::ListSort(Abonent* Item) {
+	Item = Item->ListLast();
 	if (Item->ListCount() > 1) {
 		while (Item->ListPrev && strcmp(Item->fio, Item->ListPrev->fio) < 0) {
 			ListSwap(Item, Item->ListPrev);
@@ -456,7 +457,9 @@ Abonent* Abonent::LoadFromFile(const char* FileName, Street* StreetList, Tarif* 
 		free(context);
 		free(buffer);
 		fclose(LFile);
-		if (List) return List->ListFirst();
+		if (List) {
+			return List->ListSort(List);
+		}
 	} else {
 		printf("Ошибка открытия файла\n");
 		return NULL;

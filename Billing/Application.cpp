@@ -940,8 +940,6 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 				}
 			}
 
-			LResult->SaveToFile("bin\\abonents.db");
-
 		} else {
 			if (!Abonents->TarifPTR->isReal) FreeGreyIPs = FreeGreyIPs->ipRestore(Abonents);
 			else FreeRealIPs = FreeRealIPs->ipRestore(Abonents);
@@ -1052,7 +1050,10 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 
 		}
 
-		if (Abonents->ListCount() < Console::Height() - 1) {
+		CursorOn->SaveToFile("bin\\abonents.db");
+		CursorPos = JumpTo(CursorPos, LAdded);
+
+		/*if (Abonents->ListCount() < Console::Height() - 1) {
 			TableFirst = Abonents->ListFirst();
 			TableLast = Abonents->ListLast();
 			if (CursorOn != LAdded && strcmp(CursorOn->fio, LAdded->fio) < 0) {
@@ -1103,7 +1104,7 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 			} else {
 				printf("");
 			}
-		}
+		}*/
 	}
 
 	AbonShow = false;
@@ -1212,7 +1213,6 @@ void Application::ShowProgress(short CursorPos, char* mess, int step) {
 	Print(temp, Console::clYellow, Console::clRed);
 
 	Console::GotoXY(0, CursorPos);
-
 	free(temp);
 }
 
@@ -1226,6 +1226,7 @@ void Application::Init() {
 	Tarifs = Tarifs->LoadFromFile("bin\\config\\tarifs.cfg");
 	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
 	Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
+	Abonents = Abonents->ListSort(Abonents);
 }
 
 void Application::Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
@@ -1252,3 +1253,59 @@ void Application::Print(char* str, const Console::ConsoleColors Color, const Con
 	free(Buffer);
 }
 
+int Application::JumpTo(int CursorPos, Abonent* toItem) {
+
+	if (Abonents->ListCount() < Console::Height() - 1) {
+		TableFirst = Abonents->ListFirst();
+		TableLast = Abonents->ListLast();
+		if (CursorOn != toItem && strcmp(CursorOn->fio, toItem->fio) < 0) {
+			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+				CursorOn = CursorOn->ListNext;
+				CursorPos++;
+			}
+		} else if (CursorOn != toItem && strcmp(CursorOn->fio, toItem->fio) > 0) {
+			CursorPos++;
+			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+				CursorOn = CursorOn->ListPrev;
+				CursorPos--;
+			}
+		} else if (CursorOn != toItem) {
+			while (CursorOn != toItem) {
+				if (CursorOn->ListCount() > 1) {
+					CursorPos++;
+					CursorOn = CursorOn->ListNext;
+				}
+			}
+		} else {
+			if (CursorOn->ListCount() > 1) {
+				CursorPos++;
+				CursorOn = toItem;
+			}
+		}
+	} else {
+		TableFirst = TableFirst->ListFirst();
+		TableLast = TableFirst;
+
+		for (int i = 0; i < Console::Height() - 3; i++) {
+			TableLast = TableLast->ListNext;
+		}
+
+		CursorOn = TableFirst;
+		CursorPos = 1;
+		if (strcmp(CursorOn->fio, toItem->fio) != 0) {
+			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+				if (TableLast->ListNext) {
+					TableLast = TableLast->ListNext;
+					CursorOn = CursorOn->ListNext;
+					TableFirst = TableFirst->ListNext;
+				} else {
+					CursorOn = CursorOn->ListNext;
+					CursorPos++;
+				}
+			}
+		} else {
+			printf("");
+		}
+	}
+	return CursorPos;
+}

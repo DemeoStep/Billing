@@ -76,6 +76,8 @@ public:
 	void TableDraw(short CursorPos);
 	void Print(char* str, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
 
+	int JumpTo(int CursorPos, Abonent* toItem);
+
 	void ShowAbonentCard(Abonent* Item, bool New);
 	Abonent* ShowAddCard(short CursorPos);
 	void AbonDel(Abonent* Item, short CursorPos);
