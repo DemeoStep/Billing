@@ -6,36 +6,35 @@
 
 void App_OnKeyEscape(Application* Sender) {
 	if (Sender->AbonShow) {
-		int CursorPos = Console::Y();
 		Sender->AbonShow = false;
-		Sender->TableDraw(CursorPos);
+		Sender->TableDraw();
 		Sender->DrawMenu(Console::Height() - 1, Sender->HelpString);
 		Sender->DrawMenu(0, Sender->TableString);
-		Console::GotoXY(0, CursorPos);
+		Console::GotoXY(0, Sender->CursorPos);
 	} else Sender->Running = false;
 }
 
 void App_OnKeyDown(Application* Sender) {
 	if (Sender->CursorOn) {
-		Sender->TableDrawOnKeyDown(Console::Y());
+		Sender->TableDrawOnKeyDown();
 	}
 }
 
 void App_OnKeyUp(Application* Sender) {
 	if (Sender->CursorOn) {
-		Sender->TableDrawOnKeyUp(Console::Y());
+		Sender->TableDrawOnKeyUp();
 	}
 }
 
 void App_OnPageDown(Application* Sender) {
 	if (Sender->CursorOn) {
-		Sender->TableDrawOnPageDown(Console::Y());
+		Sender->TableDrawOnPageDown();
 	}
 }
 
 void App_OnPageUp(Application* Sender) {
 	if (Sender->CursorOn) {
-		Sender->TableDrawOnPageUp(Console::Y());
+		Sender->TableDrawOnPageUp();
 	}
 }
 
@@ -44,28 +43,27 @@ void App_OnEnter(Application* Sender) {
 		if (!Sender->AbonShow) {
 			Sender->ShowAbonentCard(Sender->CursorOn, false);
 		} else {
-			int CursorPos = Console::Y();
 			Sender->AbonShow = false;
-			Sender->TableDraw(CursorPos);
+			Sender->TableDraw();
 			Sender->DrawMenu(Console::Height() - 1, Sender->HelpString);
 			Sender->DrawMenu(0, Sender->TableString);
-			Console::GotoXY(0, CursorPos);
+			Console::GotoXY(0, Sender->CursorPos);
 		}
 	}
 }
 
 void App_OnF5(Application* Sender) {
 	if (!Sender->AbonShow) {
-		Sender->AbonAdd(Sender->Abonents, Console::Y());
-	} else Sender->ShowEditCard(Console::Y(), false);
+		Sender->AbonAdd(Sender->Abonents);
+	} else Sender->AbonEdit();
 }
 
 void App_OnF6(Application* Sender) {
-	Sender->Balance_change(Sender->CursorOn, Console::Y());
+	Sender->Balance_change(Sender->CursorOn);
 }
 
 void App_OnF7(Application* Sender) {
-	Sender->Search(Console::Y());
+	Sender->Search();
 }
 
 void App_OnF8(Application* Sender) {
@@ -73,9 +71,9 @@ void App_OnF8(Application* Sender) {
 		if (Sender->CursorOn && Sender->CursorOn->balance <= 0) { // Запрет удаления абонентов с положительным балансом
 		//if (Sender->CursorOn) {
 			if (Sender->CursorOn->ListNext || Sender->CursorOn->ListPrev) {
-				Sender->AbonDel(Sender->CursorOn, Console::Y());
+				Sender->AbonDel(Sender->CursorOn);
 			} else {
-				Sender->AbonDel(Sender->CursorOn, Console::Y());
+				Sender->AbonDel(Sender->CursorOn);
 				Sender->DrawMenu(Console::Height() - 1, Sender->HelpString);
 				Sender->DrawMenu(0, Sender->TableString);
 			}

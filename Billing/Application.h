@@ -27,6 +27,7 @@ public:
 	char* HelpString;
 	char* TableString;
 	char* Curr;
+	short CursorPos;
 
 	FuncOnKey OnEscape;
 	FuncOnKey OnSpace;
@@ -69,23 +70,24 @@ public:
 	Abonent* TableLast;
 	Abonent* CursorOn;
 
-	void TableDrawOnKeyDown(short CursorPos);
-	void TableDrawOnKeyUp(short CursorPos);
-	void TableDrawOnPageDown(short CursorPos);
-	void TableDrawOnPageUp(short CursorPos);
-	void TableDraw(short CursorPos);
+	void TableDrawOnKeyDown();
+	void TableDrawOnKeyUp();
+	void TableDrawOnPageDown();
+	void TableDrawOnPageUp();
+	void TableDraw();
 
-	int JumpTo(int CursorPos, Abonent* toItem, bool New);
+	int JumpTo(Abonent* toItem, bool New);
 
-	void Search(int CursorPos);
+	void Search();
 
 	void ShowAbonentCard(Abonent* Item, bool New);
-	Abonent* ShowEditCard(short CursorPos, bool New);
-	void AbonDel(Abonent* Item, short CursorPos);
-	void AbonAdd(Abonent* List, short CursorPos);
-	void Balance_change(Abonent* Item, short CursorPos);
-	bool ShowWarning(short CursorPos, char* warning);
-	void ShowProgress(short CursorPos, char* mess, int step);
+	Abonent* ShowEditCard(bool New);
+	void AbonDel(Abonent* Item);
+	void AbonAdd(Abonent* List);
+	void AbonEdit();
+	void Balance_change(Abonent* Item);
+	bool ShowWarning(char* warning);
+	void ShowProgress(char* mess, int step);
 	void OnExit();
 	void Init();
 

@@ -58,6 +58,7 @@ Application::Application() {
 	HelpString = StringHelper::New();
 	TableString = StringHelper::New();
 	Curr = StringHelper::New();
+	CursorPos = 0;
 
 	strcpy_s(HelpString, StringHelper::DefaultSize,  " Esc - Выход | F5 - Новый | F6 - Пополнить счет | F7 - Поиск по адресу");
 	strcpy_s(TableString, StringHelper::DefaultSize, "  №  |                    ФИО                   |    Телефон    |             Адрес            | Тариф |        IP       |   Баланс  | "); // Состояние | ");
@@ -117,8 +118,8 @@ void Application::Run() {
 		}
 
 		CursorOn = TableFirst;
-
-		TableDraw(Console::Y());
+		CursorPos = 1;
+		TableDraw();
 
 	}
 	while (Running) {
@@ -199,7 +200,7 @@ void Application::DoOnKeyF10()			{ if (NULL != OnF10)		OnF10(this); }
 void Application::DoOnKeyF11()			{ if (NULL != OnF11)		OnF11(this); }
 void Application::DoOnKeyF12()			{ if (NULL != OnF12)		OnF12(this); }
 
-void Application::TableDrawOnKeyDown(short CursorPos) {
+void Application::TableDrawOnKeyDown() {
 	if (CursorOn) {
 		Console::ConsoleColors TextColor = Console::clWhite;
 		Console::ConsoleColors BgColor = Console::clBlack;
@@ -217,7 +218,8 @@ void Application::TableDrawOnKeyDown(short CursorPos) {
 			}
 			CursorOn->FastPrint(AbonShow, TextColor, BgColor);
 			CursorOn = CursorOn->ListNext;
-			Console::GotoXY(0, CursorPos + 1);
+			CursorPos++;
+			Console::GotoXY(0, CursorPos);
 			if (CursorOn->state) {
 				CursorOn->FastPrint(AbonShow, Console::clYellow, Console::clRed);
 			} else {
@@ -231,7 +233,7 @@ void Application::TableDrawOnKeyDown(short CursorPos) {
 			TableLast = TableLast->ListNext;
 			CursorOn = CursorOn->ListNext;
 			Console::GotoXY(0, 1);
-			TableDraw(CursorPos);
+			TableDraw();
 			if (AbonShow) {
 				ShowAbonentCard(CursorOn, false);
 			}
@@ -241,7 +243,7 @@ void Application::TableDrawOnKeyDown(short CursorPos) {
 	}
 }
 
-void Application::TableDrawOnKeyUp(short CursorPos) {
+void Application::TableDrawOnKeyUp() {
 	if (CursorOn) {
 		Console::ConsoleColors TextColor = Console::clWhite;
 		Console::ConsoleColors BgColor = Console::clBlack;
@@ -259,7 +261,8 @@ void Application::TableDrawOnKeyUp(short CursorPos) {
 			}
 			CursorOn->FastPrint(AbonShow, TextColor, BgColor);
 			CursorOn = CursorOn->ListPrev;
-			Console::GotoXY(0, CursorPos - 1);
+			CursorPos--;
+			Console::GotoXY(0, CursorPos);
 			if (CursorOn->state) {
 				CursorOn->FastPrint(AbonShow, Console::clYellow, Console::clRed);
 			} else {
@@ -273,7 +276,7 @@ void Application::TableDrawOnKeyUp(short CursorPos) {
 			TableLast = TableLast->ListPrev;
 			CursorOn = CursorOn->ListPrev;
 			Console::GotoXY(0, 1);
-			TableDraw(CursorPos);
+			TableDraw();
 			if (AbonShow) {
 				ShowAbonentCard(CursorOn, false);
 			}
@@ -283,7 +286,7 @@ void Application::TableDrawOnKeyUp(short CursorPos) {
 	}
 }
 
-void Application::TableDrawOnPageDown(short CursorPos) {
+void Application::TableDrawOnPageDown() {
 	if (CursorOn) {
 		Console::ConsoleColors TextColor = Console::clWhite;
 		Console::ConsoleColors BgColor = Console::clBlack;
@@ -331,7 +334,7 @@ void Application::TableDrawOnPageDown(short CursorPos) {
 			CursorOn = TableLast;
 			CursorPos = Console::Height() - 2;
 			Console::GotoXY(0, CursorPos);
-			TableDraw(CursorPos);
+			TableDraw();
 			if (AbonShow) {
 				ShowAbonentCard(CursorOn, false);
 			}
@@ -341,7 +344,7 @@ void Application::TableDrawOnPageDown(short CursorPos) {
 	}
 }
 
-void Application::TableDrawOnPageUp(short CursorPos) {
+void Application::TableDrawOnPageUp() {
 	if (CursorOn) {
 		Console::ConsoleColors TextColor = Console::clWhite;
 		Console::ConsoleColors BgColor = Console::clBlack;
@@ -391,14 +394,14 @@ void Application::TableDrawOnPageUp(short CursorPos) {
 			if (AbonShow) {
 				ShowAbonentCard(CursorOn, false);
 			}
-			TableDraw(CursorPos);
+			TableDraw();
 			Console::GotoXY(0, CursorPos);
 		}
 		Console::SetColor(Console::clWhite, Console::clBlack);
 	}
 }
 
-void Application::TableDraw(short CursorPos) {
+void Application::TableDraw() {
 	Console::GotoXY(0, 1);
 	if (CursorOn) {
 		if (CursorOn->ListNext || CursorOn->ListPrev) {
@@ -450,7 +453,6 @@ void Application::TableDraw(short CursorPos) {
 
 void Application::ShowAbonentCard(Abonent* Item, bool New) {
 	if (Item) {
-		int CursorPos = Console::Y();
 		short LeftX = Console::Width() - StringHelper::AbonCardWidth;
 		short LeftY = 0;
 
@@ -646,14 +648,16 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 	}
 }
 
-Abonent* Application::ShowEditCard(short CursorPos, bool New) {
-	if (!New) Abonents = CursorOn;
+Abonent* Application::ShowEditCard(bool New) {
+	if (!New) {
+		Abonents = CursorOn;
+	}
 	Abonent* LResult = Abonents;
 	int keyPressed = 0;
 	char* temp = StringHelper::New();
 	char* str = StringHelper::New();
 
-	if (Abonents->ListCount() > 0) TableDraw(CursorPos);
+	if (Abonents->ListCount() > 0) TableDraw();
 	else {
 		int X = Console::Width() / 2;
 		int Y = Console::Height() / 2;
@@ -668,6 +672,7 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 	short Y = 2;
 
 	Console::GotoXY(X, Y);
+
 	StringHelper::InputRus(Abonents->fio, 40);
 
 	Console::ShowCursor(false);
@@ -680,26 +685,30 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 	X += 27;
 	Console::GotoXY(X, Y);
 
-	StringHelper::int_to_str(temp, Abonents->House);
+	if (!New) StringHelper::int_to_str(temp, Abonents->House);
 	StringHelper::InputDigit(temp, 3, false);
 	Abonents->House = atoi(temp);
+	StringHelper::Null(temp);
 
 	Console::GotoXY(X + 10, Y);
-	StringHelper::int_to_str(temp, Abonents->Apartment);
+	if (!New) StringHelper::int_to_str(temp, Abonents->Apartment);
 	StringHelper::InputDigit(temp, 3, true);
 	Abonents->Apartment = atoi(temp);
 	Console::Print(temp, Console::clBlack, Console::clLightGrey);
+	StringHelper::Null(temp);
 
 	Y += 2;
 	X -= 27;
 	Console::GotoXY(X, Y);
+	Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 	if (!New) {
-		Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clYellow);
 		keyPressed = Console::GetKey();
-	} else keyPressed = Console::keyEnter;
+	} else keyPressed = Console::keyBackspace;
 
-	if (keyPressed == Console::keyEnter) {
+	if (keyPressed == Console::keyBackspace) {
+		StringHelper::Null(temp);
+		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
 		StringHelper::InputDigit(temp, 3, false);
 
 		CellCodes = CellCodes->ListFirst();
@@ -724,6 +733,7 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 		Console::GotoX(X + 4);
 
 		correct = false;
+		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 3, false);
 		while (!correct) {
 			if (strlen(temp) == 3) {
@@ -742,6 +752,7 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 8);
 
+		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 2, false);
 		correct = false;
 
@@ -763,6 +774,7 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 11);
 
+		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 2, false);
 		correct = false;
 
@@ -804,32 +816,19 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 	Y += 2;
 	Console::GotoXY(X, Y);
 	Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
-	FreeGreyIPs = FreeGreyIPs->ListFirst();
-	FreeRealIPs = FreeRealIPs->ListFirst();
 
-	if (!Abonents->TarifPTR->isReal) {
-		strcpy_s(temp, StringHelper::DefaultSize, FreeGreyIPs->ip);
-	} else {
-		strcpy_s(temp, StringHelper::DefaultSize, FreeRealIPs->ip);
-	}
-	StringHelper::StrToSize(temp, 15);
-	Console::Print(temp, Console::clBlack, Console::clYellow);
-	keyPressed = 0;
-
-	while (keyPressed != Console::keyEnter) {
-		if (keyPressed == Console::keyDown) {
-			if (!Abonents->TarifPTR->isReal) {
-				if (FreeGreyIPs->ListNext) FreeGreyIPs = FreeGreyIPs->ListNext;
-			} else {
-				if (FreeRealIPs->ListNext) FreeRealIPs = FreeRealIPs->ListNext;
-			}
-		} else if (keyPressed == Console::keyUp) {
-			if (!Abonents->TarifPTR->isReal) {
-				if (FreeGreyIPs->ListPrev) FreeGreyIPs = FreeGreyIPs->ListPrev;
-			} else {
-				if (FreeRealIPs->ListPrev) FreeRealIPs = FreeRealIPs->ListPrev;
-			}
+	if (!New) {
+		Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);
+		keyPressed = Console::GetKey();
+		if (keyPressed == Console::keyBackspace) {
+			if (Abonents->TarifPTR->isReal) FreeRealIPs->ipRestore(Abonents);
+			else FreeGreyIPs->ipRestore(Abonents);
 		}
+	} else keyPressed = Console::keyBackspace;
+
+	if (keyPressed == Console::keyBackspace) {
+		FreeGreyIPs = FreeGreyIPs->ListFirst();
+		FreeRealIPs = FreeRealIPs->ListFirst();
 
 		if (!Abonents->TarifPTR->isReal) {
 			strcpy_s(temp, StringHelper::DefaultSize, FreeGreyIPs->ip);
@@ -838,21 +837,46 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 		}
 		StringHelper::StrToSize(temp, 15);
 		Console::Print(temp, Console::clBlack, Console::clYellow);
+		keyPressed = 0;
 
-		keyPressed = Console::GetKey();
-		*str = keyPressed;
-		*(str + 1) = '\0';
+		while (keyPressed != Console::keyEnter) {
+			if (keyPressed == Console::keyDown) {
+				if (!Abonents->TarifPTR->isReal) {
+					if (FreeGreyIPs->ListNext) FreeGreyIPs = FreeGreyIPs->ListNext;
+				} else {
+					if (FreeRealIPs->ListNext) FreeRealIPs = FreeRealIPs->ListNext;
+				}
+			} else if (keyPressed == Console::keyUp) {
+				if (!Abonents->TarifPTR->isReal) {
+					if (FreeGreyIPs->ListPrev) FreeGreyIPs = FreeGreyIPs->ListPrev;
+				} else {
+					if (FreeRealIPs->ListPrev) FreeRealIPs = FreeRealIPs->ListPrev;
+				}
+			}
+
+			if (!Abonents->TarifPTR->isReal) {
+				strcpy_s(temp, StringHelper::DefaultSize, FreeGreyIPs->ip);
+			} else {
+				strcpy_s(temp, StringHelper::DefaultSize, FreeRealIPs->ip);
+			}
+			StringHelper::StrToSize(temp, 15);
+			Console::Print(temp, Console::clBlack, Console::clYellow);
+
+			keyPressed = Console::GetKey();
+			*str = keyPressed;
+			*(str + 1) = '\0';
+		}
+		if (!Abonents->TarifPTR->isReal) {
+			strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeGreyIPs->ip);
+			FreeGreyIPs = FreeGreyIPs->ListDel();
+		} else {
+			strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeRealIPs->ip);
+			FreeRealIPs = FreeRealIPs->ListDel();
+		}
+		Console::GotoXY(X, Y);
+		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
+		Console::Print(Abonents->IP, Console::clBlack, Console::clLightGrey);
 	}
-	if (!Abonents->TarifPTR->isReal) {
-		strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeGreyIPs->ip);
-		FreeGreyIPs = FreeGreyIPs->ListDel();
-	} else {
-		strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeRealIPs->ip);
-		FreeRealIPs = FreeRealIPs->ListDel();
-	}
-	Console::GotoXY(X, Y);
-	Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
-	Console::Print(Abonents->IP, Console::clBlack, Console::clLightGrey);
 
 	free(temp);
 	free(str);
@@ -860,9 +884,9 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 	return LResult;
 }
 
-void Application::AbonDel(Abonent* Item, short CursorPos) {
+void Application::AbonDel(Abonent* Item) {
 	if (CursorOn) { // Список НЕнулевой
-		bool Desigion = ShowWarning(CursorPos, (char*)"Удалить? (Y/n)");
+		bool Desigion = ShowWarning((char*)"Удалить? (Y/n)");
 		if (Desigion) {
 			FreeGreyIPs = FreeGreyIPs->ListLast();
 			if (CursorOn == TableFirst && CursorOn != TableLast) { // Курсор на первой позиции таблицы
@@ -924,7 +948,7 @@ void Application::AbonDel(Abonent* Item, short CursorPos) {
 			}
 		}
 
-		TableDraw(CursorPos);
+		TableDraw();
 		AbonShow = false;
 		ShowAbonentCard(CursorOn, false);
 		Console::GotoXY(0, CursorPos);
@@ -937,7 +961,7 @@ void Application::AbonDel(Abonent* Item, short CursorPos) {
 	CursorOn->SaveToFile("bin\\abonents.db");
 }
 
-void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
+void Application::AbonAdd(Abonent* LAdded) {
 	if (Abonents) {
 		Abonents = Abonents->ListLast();
 		Abonents = Abonents->ListAdd(new Abonent);
@@ -945,15 +969,16 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 		Abonents = new Abonent;
 	}
 
-	if (ShowWarning(Console::Y(), (char*)"Создать абонента? (Y/n)")) {
+	if (ShowWarning((char*)"Создать абонента? (Y/n)")) {
 
 		Abonents->id = Abonents->GetMaxID() + 1;
 		Abonents->state = 1;
 		Abonents->TarifPTR = Tarifs->ListFirst();
+		Abonents->StreetPTR = Streets->ListFirst();
 
-		LAdded = ShowEditCard(CursorPos, true);
+		LAdded = ShowEditCard(true);
 
-		if (ShowWarning(Console::Y(), (char*)"Сохранить? (Y/n)")) {
+		if (ShowWarning((char*)"Сохранить? (Y/n)")) {
 
 			if (Abonents->ListCount() > 1) {
 				TableFirst = Abonents->ListFirst();
@@ -991,7 +1016,7 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 			}
 
 			CursorOn->SaveToFile("bin\\abonents.db");
-			CursorPos = JumpTo(CursorPos, LAdded, true);
+			CursorPos = JumpTo(LAdded, true);
 
 		}
 	}
@@ -999,10 +1024,54 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
 	Console::GotoXY(0, CursorPos);
-	TableDraw(CursorPos);
+	TableDraw();
 }
 
-void Application::Balance_change(Abonent* Item, short CursorPos) {
+void Application::AbonEdit() {
+	
+	if (ShowWarning((char*)"Редактировать? (Y/n)")) {
+
+		ShowEditCard(false);
+
+		if (Abonents->ListCount() > 1) {
+			TableFirst = Abonents->ListFirst();
+		} else TableFirst = Abonents;
+
+		TableLast = TableFirst;
+		int end = 0;
+
+		if (Abonents->ListCount() < (Console::Height() - 2)) {
+			end = Abonents->ListCount();
+		} else {
+			end = (Console::Height() - 2);
+		}
+
+		if (TableLast->ListNext) {
+			for (int i = 1; i < end; i++) {
+				TableLast = TableLast->ListNext;
+			}
+		}
+
+		if (Abonents->ListCount() > 1) {
+			Abonents = Abonents->ListSort(Abonents);
+		} else {
+			CursorOn = Abonents;
+			CursorPos = 1;
+
+		}
+
+		CursorOn->SaveToFile("bin\\abonents.db");
+		CursorPos = JumpTo(CursorOn, false);
+
+	}
+	AbonShow = false;
+	DrawMenu(Console::Height() - 1, HelpString);
+	DrawMenu(0, TableString);
+	Console::GotoXY(0, CursorPos);
+	TableDraw();
+}
+
+void Application::Balance_change(Abonent* Item) {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -1036,7 +1105,7 @@ void Application::Balance_change(Abonent* Item, short CursorPos) {
 	
 	if (CursorOn->balance <= 0) CursorOn->state = 1;
 	else CursorOn->state = 0;
-	TableDraw(CursorPos);
+	TableDraw();
 	if (AbonShow) {
 		AbonShow = false;
 		ShowAbonentCard(CursorOn, false);
@@ -1048,7 +1117,7 @@ void Application::Balance_change(Abonent* Item, short CursorPos) {
 	free(input);
 }
 
-bool Application::ShowWarning(short CursorPos, char* warning) {
+bool Application::ShowWarning(char* warning) {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -1082,7 +1151,7 @@ bool Application::ShowWarning(short CursorPos, char* warning) {
 
 }
 
-void Application::ShowProgress(short CursorPos, char* mess, int step) {
+void Application::ShowProgress(char* mess, int step) {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -1114,10 +1183,10 @@ void Application::Init() {
 	Tarifs = Tarifs->LoadFromFile("bin\\config\\tarifs.cfg");
 	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
 	Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
-	Abonents = Abonents->ListSort(Abonents);
+	if (Abonents) Abonents = Abonents->ListSort(Abonents);
 }
 
-int Application::JumpTo(int CursorPos, Abonent* toItem, bool New) {
+int Application::JumpTo(Abonent* toItem, bool New) {
 
 	if (Abonents->ListCount() < Console::Height() - 1) {
 		TableFirst = Abonents->ListFirst();
@@ -1174,7 +1243,7 @@ int Application::JumpTo(int CursorPos, Abonent* toItem, bool New) {
 	return CursorPos;
 }
 
-void Application::Search(int CursorPos) {
+void Application::Search() {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -1223,16 +1292,16 @@ void Application::Search(int CursorPos) {
 	}
 
 	if (Search_abon) {
-		CursorPos = JumpTo(CursorPos, Search_abon, false);
+		CursorPos = JumpTo(Search_abon, false);
 	} else {
-		ShowWarning(CursorPos, (char*)"Абонент не найден!");
+		ShowWarning((char*)"Абонент не найден!");
 	}
 
 	AbonShow = false;
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
 	Console::GotoXY(0, CursorPos);
-	TableDraw(CursorPos);
+	TableDraw();
 	printf("");
 }
 

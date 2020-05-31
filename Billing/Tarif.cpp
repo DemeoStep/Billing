@@ -194,7 +194,7 @@ Tarif* Tarif::DrawChoiceList() {
 	char* temp = StringHelper::New();
 	char* str = StringHelper::New();
 
-	Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
+	Console::FillRect(X - 1, Y, X + 41, Y, Console::clYellow);
 	strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
 	StringHelper::StrToSize(temp, 40);
 	int keyPressed = 0;
@@ -223,7 +223,7 @@ Tarif* Tarif::DrawChoiceList() {
 	}
 
 	Console::GotoXY(X, Y);
-	Console::FillRect(X - 1, Y, X + 21, Y, Console::clLightGrey);
+	Console::FillRect(X - 1, Y, X + 41, Y, Console::clLightGrey);
 	Console::Print(Choice->name, Console::clBlack, Console::clLightGrey);
 
 	free(str);
