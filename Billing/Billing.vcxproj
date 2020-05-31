@@ -166,9 +166,13 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Free_grey_IP.h" />
     <ClInclude Include="Free_real_IP.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="Tarif.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Billing.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

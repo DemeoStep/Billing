@@ -27,34 +27,37 @@ public:
 	};
 	static const ConsoleColors DefaultColor = clWhite;
 	static const ConsoleColors DefaultBgColor = clBlack;
-	static const int keyEscape		= 27;
-	static const int keySpace		= 32;
-	static const int keyBackspace	= 8;
-	static const int keyTab			= 9;
-	static const int keyEnter		= 13;
-	static const int keyInsert		= 82;
-	static const int keyDelete		= 83;
-	static const int keyUp			= 72;
-	static const int keyDown		= 80;
-	static const int keyLeft		= 75;
-	static const int keyRight		= 77;
-	static const int keyPageUp		= 73;
-	static const int keyPageDown	= 81;
-	static const int keyHome		= 71;
-	static const int keyEnd			= 79;
-	static const int keyCenter		= 76;
-	static const int keyF1			= 59;
-	static const int keyF2			= 60;
-	static const int keyF3			= 61;
-	static const int keyF4			= 62;
-	static const int keyF5			= 63;
-	static const int keyF6			= 64;
-	static const int keyF7			= 65;
-	static const int keyF8			= 66;
-	static const int keyF9			= 67;
-	static const int keyF10			= 68;
-	static const int keyF11			= 69;
-	static const int keyF12			= 70;
+
+	static enum FuncKeys {
+		keyBackspace = 8
+		, keyTab = 9
+		, keyEnter = 13
+		, keyEscape = 27
+		, keySpace = 32
+		, keyF1 = 59
+		, keyF2 = 60
+		, keyF3 = 61
+		, keyF4 = 62
+		, keyF5 = 63
+		, keyF6 = 64
+		, keyF7 = 65
+		, keyF8 = 66
+		, keyF9 = 67
+		, keyF10 = 68
+		, keyF11 = 69
+		, keyF12 = 70
+		, keyHome = 71
+		, keyUp = 72
+		, keyPageUp = 73
+		, keyLeft = 75
+		, keyCenter = 76
+		, keyRight = 77
+		, keyEnd = 79
+		, keyDown = 80
+		, keyPageDown = 81
+		, keyInsert = 82
+		, keyDelete = 83
+	};
 
 	static HANDLE GetHandle();
 	static void SetColor(const ConsoleColors Foreground, const ConsoleColors Background = clBlack);

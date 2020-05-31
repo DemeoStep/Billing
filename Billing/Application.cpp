@@ -682,46 +682,13 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		Console::GotoXY(X, Y);
 		StringHelper::InputRus(Abonents->fio, 40);
-		Console::Print(Abonents->fio, Console::clBlack, Console::clLightGrey);
 
 		Console::ShowCursor(false);
 		Y += 2;
 
 		Console::GotoXY(X, Y);
 
-		Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
-		Streets = Streets->ListFirst();
-		strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
-		StringHelper::StrToSize(temp, 20);
-		keyPressed = 0;
-
-		while (keyPressed != Console::keyEnter) {
-			if (keyPressed == Console::keyDown) {
-				if (Streets->ListNext) Streets = Streets->ListNext;
-			} else if (keyPressed == Console::keyUp) {
-				if (Streets->ListPrev) Streets = Streets->ListPrev;
-			} else if (*str >= 'À' && *str <= 'ÿ') {
-				*str = toupper(*str);
-				Streets = Streets->ListFirst();
-				while (!strstr(Streets->name, str)) {
-					if (Streets->ListNext) {
-						Streets = Streets->ListNext;
-					} else break;
-				}
-			}
-
-			strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
-			StringHelper::StrToSize(temp, 20);
-			Console::Print(temp, Console::clBlack, Console::clYellow);
-			keyPressed = Console::GetKey();
-			*str = keyPressed;
-			*(str + 1) = '\0';
-		}
-
-		Abonents->StreetPTR = Streets;
-		Console::GotoXY(X, Y);
-		Console::FillRect(X - 1, Y, X + 21, Y, Console::clLightGrey);
-		Console::Print(Abonents->StreetPTR->name, Console::clBlack, Console::clLightGrey);
+		Abonents->StreetPTR = Streets->DrawChoiceList();
 
 		Console::ShowCursor(true);
 		X += 27;

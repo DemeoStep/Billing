@@ -20,6 +20,7 @@ public:
 	static void int_to_str(char* str, int num);
 	static void StrToSize(char* str, unsigned int new_size, int dir = 0);
 	static void int_to_currency(char* str, int currency);
+	static bool key_is_func(int keyPressed);
 };
 
 #endif
