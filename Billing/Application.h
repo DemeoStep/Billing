@@ -80,7 +80,7 @@ public:
 	void Search(int CursorPos);
 
 	void ShowAbonentCard(Abonent* Item, bool New);
-	Abonent* ShowAddCard(short CursorPos);
+	Abonent* ShowEditCard(short CursorPos);
 	void AbonDel(Abonent* Item, short CursorPos);
 	void AbonAdd(Abonent* List, short CursorPos);
 	void Balance_change(Abonent* Item, short CursorPos);

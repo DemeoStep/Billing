@@ -646,19 +646,12 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 	}
 }
 
-Abonent* Application::ShowAddCard(short CursorPos) {
+Abonent* Application::ShowEditCard(short CursorPos) {
 	Abonent* LResult = NULL;
 	//if (ShowWarning(Console::Y(), (char*)"Создать абонента? (Y/n)")) {
 		int keyPressed = 0;
 		char* temp = StringHelper::New();
 		char* str = StringHelper::New();
-
-		if (Abonents) {
-			Abonents = Abonents->ListLast();
-			Abonents = Abonents->ListAdd(new Abonent);
-		} else {
-			Abonents = new Abonent;
-		}
 
 		LResult = Abonents;
 
@@ -884,35 +877,6 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		free(temp);
 		free(str);
-
-		if (ShowWarning(Console::Y(), (char*)"Сохранить? (Y/n)")) {
-			LResult = Abonents;
-				
-			if (Abonents->ListCount() > 1) {
-				TableFirst = Abonents->ListFirst();
-			} else TableFirst = Abonents;
-
-			TableLast = TableFirst;
-			int end = 0;
-
-			if (Abonents->ListCount() < (Console::Height() - 2)) {
-				end = Abonents->ListCount();
-			} else {
-				end = (Console::Height() - 2);
-			}
-
-			if (TableLast->ListNext) {
-				for (int i = 1; i < end; i++) {
-					TableLast = TableLast->ListNext;
-				}
-			}
-
-		} else {
-			if (!Abonents->TarifPTR->isReal) FreeGreyIPs = FreeGreyIPs->ipRestore(Abonents);
-			else FreeRealIPs = FreeRealIPs->ipRestore(Abonents);
-			Abonents = Abonents->ListDel();
-			LResult = NULL;
-		}
 		
 		return LResult;
 	//}
@@ -996,7 +960,42 @@ void Application::AbonDel(Abonent* Item, short CursorPos) {
 }
 
 void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
-	LAdded = ShowAddCard(CursorPos);
+	if (Abonents) {
+		Abonents = Abonents->ListLast();
+		Abonents = Abonents->ListAdd(new Abonent);
+	} else {
+		Abonents = new Abonent;
+	}
+
+	LAdded = ShowEditCard(CursorPos);
+
+	if (ShowWarning(Console::Y(), (char*)"Сохранить? (Y/n)")) {
+
+		if (Abonents->ListCount() > 1) {
+			TableFirst = Abonents->ListFirst();
+		} else TableFirst = Abonents;
+
+		TableLast = TableFirst;
+		int end = 0;
+
+		if (Abonents->ListCount() < (Console::Height() - 2)) {
+			end = Abonents->ListCount();
+		} else {
+			end = (Console::Height() - 2);
+		}
+
+		if (TableLast->ListNext) {
+			for (int i = 1; i < end; i++) {
+				TableLast = TableLast->ListNext;
+			}
+		}
+
+	} else {
+		if (!Abonents->TarifPTR->isReal) FreeGreyIPs = FreeGreyIPs->ipRestore(Abonents);
+		else FreeRealIPs = FreeRealIPs->ipRestore(Abonents);
+		Abonents = Abonents->ListDel();
+		LAdded = NULL;
+	}
 
 	if (LAdded) {
 		if (Abonents->ListCount() > 1) {
@@ -1252,3 +1251,4 @@ void Application::Search(int CursorPos) {
 	TableDraw(CursorPos);
 	printf("");
 }
+
