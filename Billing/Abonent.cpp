@@ -211,7 +211,7 @@ void Abonent::BuildStr(Abonent* Abon, char* LineToBuild) {
 	strcat_s(temp, StringHelper::DefaultSize, "-");
 	StringHelper::int_to_str(int_to_str_temp, Abon->Apartment);
 	strcat_s(temp, StringHelper::DefaultSize, int_to_str_temp);
-	StringHelper::StrToSize(temp, 22);
+	StringHelper::StrToSize(temp, 25);
 	strcat_s(LineToBuild, StringHelper::DefaultSize, temp);
 	strcat_s(LineToBuild, StringHelper::DefaultSize, " | ");
 

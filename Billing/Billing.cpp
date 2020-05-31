@@ -57,13 +57,11 @@ void App_OnEnter(Application* Sender) {
 void App_OnF5(Application* Sender) {
 	if (!Sender->AbonShow) {
 		Sender->AbonAdd(Sender->Abonents, Console::Y());
-	}
+	} else Sender->ShowEditCard(Console::Y(), false);
 }
 
 void App_OnF6(Application* Sender) {
-	//if (Sender->AbonShow) {
-		Sender->Balance_change(Sender->CursorOn, Console::Y());
-	//}
+	Sender->Balance_change(Sender->CursorOn, Console::Y());
 }
 
 void App_OnF7(Application* Sender) {
