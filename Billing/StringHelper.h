@@ -12,7 +12,7 @@ public:
 
 	static void Null(char *str, const int length = DefaultSize);
 	static void Input(char* str, const int length = DefaultSize);
-	static void InputDigit(char* str, const int length);
+	static void InputDigit(char* str, const int length, bool can_be_null);
 	static void InputEng(char* str, const int length);
 	static void InputRus(char* str, const int length);
 	static void Input_currency(char* str, const int length = DefaultSize);

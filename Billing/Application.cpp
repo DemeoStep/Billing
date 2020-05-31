@@ -694,18 +694,18 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		X += 27;
 		Console::GotoXY(X, Y);
 
-		StringHelper::InputDigit(temp, 3);
+		StringHelper::InputDigit(temp, 3, false);
 		Abonents->House = atoi(temp);
 
 		Console::GotoXY(X + 10, Y);
-		StringHelper::InputDigit(temp, 3);
+		StringHelper::InputDigit(temp, 3, true);
 		Abonents->Apartment = atoi(temp);
 		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Y += 2;
 		X -= 27;
 		Console::GotoXY(X, Y);
-		StringHelper::InputDigit(temp, 3);
+		StringHelper::InputDigit(temp, 3, false);
 
 		CellCodes = CellCodes->ListFirst();
 		bool correct = false;
@@ -719,7 +719,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			if (!correct) {
 				Console::GotoXY(X, Y);
 				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 3);
+				StringHelper::InputDigit(temp, 3, false);
 			}
 		}
 
@@ -729,7 +729,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Console::GotoX(X + 4);
 
 		correct = false;
-		StringHelper::InputDigit(temp, 3);
+		StringHelper::InputDigit(temp, 3, false);
 		while (!correct) {
 			if (strlen(temp) == 3) {
 				correct = true;
@@ -738,7 +738,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			if (!correct) {
 				Console::GotoXY(X + 4, Y);
 				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 3);
+				StringHelper::InputDigit(temp, 3, false);
 			}
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
@@ -747,7 +747,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 8);
 
-		StringHelper::InputDigit(temp, 2);
+		StringHelper::InputDigit(temp, 2, false);
 		correct = false;
 
 		while (!correct) {
@@ -758,7 +758,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			if (!correct) {
 				Console::GotoXY(X + 8, Y);
 				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 2);
+				StringHelper::InputDigit(temp, 2, false);
 			}
 		}
 
@@ -768,7 +768,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 11);
 
-		StringHelper::InputDigit(temp, 2);
+		StringHelper::InputDigit(temp, 2, false);
 		correct = false;
 
 		while (!correct) {
@@ -779,7 +779,7 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 			if (!correct) {
 				Console::GotoXY(X + 11, Y);
 				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 2);
+				StringHelper::InputDigit(temp, 2, false);
 			}
 		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
@@ -1225,11 +1225,11 @@ void Application::Search(int CursorPos) {
 
 	Y += 2;
 	Console::GotoXY(X, Y);
-	StringHelper::InputDigit(temp, 3);
+	StringHelper::InputDigit(temp, 3, false);
 	search_house = atoi(temp);
 
 	Console::GotoXY(X + 11, Y);
-	StringHelper::InputDigit(temp, 3);
+	StringHelper::InputDigit(temp, 3, true);
 	search_appart = atoi(temp);
 
 	while (Search_abon) {

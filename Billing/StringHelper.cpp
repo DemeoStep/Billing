@@ -22,7 +22,7 @@ void StringHelper::Input(char* str, const int length){
 	*s = 0;
 }
 
-void StringHelper::InputDigit(char* str, const int length) {
+void StringHelper::InputDigit(char* str, const int length, bool can_be_null) {
 	short X = Console::X();
 	short Y = Console::Y();
 	Console::SetColor(Console::clBlack, Console::clYellow);
@@ -30,24 +30,30 @@ void StringHelper::InputDigit(char* str, const int length) {
 	int keyPressed = 0;
 	Null(str);
 	char* s = str;
-	keyPressed = Console::GetKey();
-	while (strlen(str) < length && keyPressed != Console::keyEnter && keyPressed != Console::keyEscape) {
+	keyPressed = 0;
+	int i = 0;
+	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
 			if (*s >= '0' && *s <= '9') {
 				printf("%c", *s);
 				s++;
+				i++;
 			}
 		} else if (keyPressed == Console::keyBackspace) {
 			if (strlen(str) > 0) {
 				s--;
+				i--;
 				*s = 0;
 				Console::GotoXY(Console::X() - 1, Y);
 				printf("%c", *s);
 				Console::GotoXY(Console::X() - 1, Y);
 			}
-		} else {
-			break;
+		} else if (keyPressed == Console::keyEnter || keyPressed == Console::keyEscape){
+			if (!i && can_be_null) {
+				*s = '0';
+				break;
+			} else if (i) break;
 		}
 		if (strlen(str) == length) break;
 		keyPressed = Console::GetKey();
@@ -69,26 +75,30 @@ void StringHelper::InputEng(char* str, const int length) {
 	Null(str);
 	char* s = str;
 	keyPressed = Console::GetKey();
-	while (strlen(str) < length && keyPressed != Console::keyEnter && keyPressed != Console::keyEscape) {
+	int i = 0;
+	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
-			if ((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') || (*s >= '0' && *s <= '9')) {
+			if ((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') || (*s >= '0' && *s <= '9') || *s == '_') {
 				printf("%c", *s);
 				s++;
+				i++;
 			}
 		} else if (keyPressed == Console::keySpace) {
 			*s = ' ';
 			printf("%c", *s);
 			s++;
+			i++;
 		} else if (keyPressed == Console::keyBackspace) {
 			if (strlen(str) > 0) {
 				s--;
+				i--;
 				*s = 0;
 				Console::GotoXY(Console::X() - 1, Y);
 				printf("%c", *s);
 				Console::GotoXY(Console::X() - 1, Y);
 			}
-		} else {
+		} else if (i && (keyPressed == Console::keyEnter || keyPressed == Console::keyEscape)) {
 			break;
 		}
 		keyPressed = Console::GetKey();
@@ -109,27 +119,31 @@ void StringHelper::InputRus(char* str, const int length) {
 	int keyPressed = 0;
 	Null(str);
 	char* s = str;
+	int i = 0;
 	keyPressed = Console::GetKey();
-	while (strlen(str) < length && keyPressed != Console::keyEnter && keyPressed != Console::keyEscape) {
+	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
-			if ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9')) {
+			if ((*s >= 'À' && *s <= 'ÿ') || (*s >= '0' && *s <= '9') || *s == '_') {
 				printf("%c", *s);
 				s++;
+				i++;
 			}
 		} else if (keyPressed == Console::keySpace) {
 			*s = ' ';
 			printf("%c", *s);
 			s++;
+			i++;
 		} else if (keyPressed == Console::keyBackspace){
 			if (strlen(str) > 0) {
 				s--;
+				i--;
 				*s = 0;
 				Console::GotoXY(Console::X() - 1, Y);
 				printf("%c", *s);
 				Console::GotoXY(Console::X() - 1, Y);
 			}
-		} else {
+		} else if (i && (keyPressed == Console::keyEnter || keyPressed == Console::keyEscape)) {
 			break;
 		}
 		keyPressed = Console::GetKey();
