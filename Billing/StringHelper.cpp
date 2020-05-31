@@ -27,12 +27,19 @@ void StringHelper::InputDigit(char* str, const int length, bool can_be_null) {
 	short Y = Console::Y();
 	Console::SetColor(Console::clBlack, Console::clYellow);
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
+	Console::ShowCursor(true);
 	int keyPressed = 0;
-	Null(str);
+	
 	char* s = str;
+	int i = strlen(str);
+	printf("%s", str);
+	for (int j = 0; j < i; j++) {
+		s++;
+	}
+
 	keyPressed = 0;
-	int i = 0;
-	while (strlen(str) < length) {
+	do {
+		keyPressed = Console::GetKey();
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
 			if (*s >= '0' && *s <= '9') {
@@ -56,14 +63,14 @@ void StringHelper::InputDigit(char* str, const int length, bool can_be_null) {
 			} else if (i) break;
 		}
 		if (strlen(str) == length) break;
-		keyPressed = Console::GetKey();
-	}
+	} while (strlen(str) < length);
 
 	*s = 0;
 
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
 	Console::GotoXY(X, Y);
 	Console::Print(str, Console::clBlack, Console::clLightGrey);
+	Console::ShowCursor(false);
 }
 
 void StringHelper::InputEng(char* str, const int length) {
@@ -71,11 +78,17 @@ void StringHelper::InputEng(char* str, const int length) {
 	short Y = Console::Y();
 	Console::SetColor(Console::clBlack, Console::clYellow);
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
+	Console::ShowCursor(true);
 	int keyPressed = 0;
-	Null(str);
+	
 	char* s = str;
+	int i = strlen(str);
+	printf("%s", str);
+	for (int j = 0; j < i; j++) {
+		s++;
+	}
+
 	keyPressed = Console::GetKey();
-	int i = 0;
 	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
@@ -109,6 +122,7 @@ void StringHelper::InputEng(char* str, const int length) {
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
 	Console::GotoXY(X, Y);
 	Console::Print(str, Console::clBlack, Console::clLightGrey);
+	Console::ShowCursor(false);
 }
 
 void StringHelper::InputRus(char* str, const int length) {
@@ -116,10 +130,16 @@ void StringHelper::InputRus(char* str, const int length) {
 	short Y = Console::Y();
 	Console::SetColor(Console::clBlack, Console::clYellow);
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clYellow);
+	Console::ShowCursor(true);
 	int keyPressed = 0;
-	Null(str);
+	
 	char* s = str;
-	int i = 0;
+	int i = strlen(str);
+	printf("%s", str);
+	for (int j = 0; j < i; j++) {
+		s++;
+	}
+
 	keyPressed = Console::GetKey();
 	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
@@ -154,6 +174,7 @@ void StringHelper::InputRus(char* str, const int length) {
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
 	Console::GotoXY(X, Y);
 	Console::Print(str, Console::clBlack, Console::clLightGrey);
+	Console::ShowCursor(false);
 }
 
 void StringHelper::Input_currency(char* str, const int length) {

@@ -27,6 +27,8 @@ public:
 
 	Tarif* Get_by_id(int id);
 
+	Tarif* DrawChoiceList();
+
 
 
 };

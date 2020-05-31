@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Tarif.h"
+#include "Console.h"
 #include "StringHelper.h"
 
 Tarif::Tarif() {
@@ -185,3 +186,48 @@ Tarif* Tarif::Get_by_id(int id) {
 
 	return LResult;
 };
+
+Tarif* Tarif::DrawChoiceList() {
+	short X = Console::X();
+	short Y = Console::Y();
+	Tarif* Choice = this;
+	char* temp = StringHelper::New();
+	char* str = StringHelper::New();
+
+	Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
+	strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
+	StringHelper::StrToSize(temp, 40);
+	int keyPressed = 0;
+
+	while (keyPressed != Console::keyEnter) {
+		if (keyPressed == Console::keyDown) {
+			if (Choice->ListNext) Choice = Choice->ListNext;
+		} else if (keyPressed == Console::keyUp) {
+			if (Choice->ListPrev) Choice = Choice->ListPrev;
+		} else if (*str >= 'À' && *str <= 'ÿ') {
+			*str = toupper(*str);
+			Choice = Choice->ListFirst();
+			while (!strstr(Choice->name, str)) {
+				if (Choice->ListNext) {
+					Choice = Choice->ListNext;
+				} else break;
+			}
+		}
+
+		strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
+		StringHelper::StrToSize(temp, 40);
+		Console::Print(temp, Console::clBlack, Console::clYellow);
+		keyPressed = Console::GetKey();
+		*str = keyPressed;
+		*(str + 1) = '\0';
+	}
+
+	Console::GotoXY(X, Y);
+	Console::FillRect(X - 1, Y, X + 21, Y, Console::clLightGrey);
+	Console::Print(Choice->name, Console::clBlack, Console::clLightGrey);
+
+	free(str);
+	free(temp);
+
+	return Choice;
+}

@@ -647,8 +647,8 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 }
 
 Abonent* Application::ShowEditCard(short CursorPos, bool New) {
+	if (!New) Abonents = CursorOn;
 	Abonent* LResult = Abonents;
-	if (!New) LResult = CursorOn;
 	int keyPressed = 0;
 	char* temp = StringHelper::New();
 	char* str = StringHelper::New();
@@ -660,38 +660,32 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 		Console::FillRect(X - 20, Y - 2, X + 20, Y + 2, Console::clBlack);
 	};
 
-	ShowAbonentCard(Abonents, true);
+	ShowAbonentCard(Abonents, New);
 
-	Console::ShowCursor(true);
+	Console::ShowCursor(false);
 
 	short X = Console::Width() - StringHelper::AbonCardWidth + 12;
 	short Y = 2;
 
 	Console::GotoXY(X, Y);
-	if (New) {
-		StringHelper::InputRus(Abonents->fio, 40);
-	} else {
-		keyPressed = Console::GetKey();
-		if (keyPressed == Console::keyEnter) {
-			StringHelper::InputRus(Abonents->fio, 40);
-		}
-	}
+	StringHelper::InputRus(Abonents->fio, 40);
 
 	Console::ShowCursor(false);
 	Y += 2;
 
 	Console::GotoXY(X, Y);
 
-	Abonents->StreetPTR = Streets->DrawChoiceList();
+	Abonents->StreetPTR = Abonents->StreetPTR->DrawChoiceList();
 
-	Console::ShowCursor(true);
 	X += 27;
 	Console::GotoXY(X, Y);
 
+	StringHelper::int_to_str(temp, Abonents->House);
 	StringHelper::InputDigit(temp, 3, false);
 	Abonents->House = atoi(temp);
 
 	Console::GotoXY(X + 10, Y);
+	StringHelper::int_to_str(temp, Abonents->Apartment);
 	StringHelper::InputDigit(temp, 3, true);
 	Abonents->Apartment = atoi(temp);
 	Console::Print(temp, Console::clBlack, Console::clLightGrey);
@@ -699,129 +693,113 @@ Abonent* Application::ShowEditCard(short CursorPos, bool New) {
 	Y += 2;
 	X -= 27;
 	Console::GotoXY(X, Y);
-	StringHelper::InputDigit(temp, 3, false);
+	if (!New) {
+		Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clYellow);
+		keyPressed = Console::GetKey();
+	} else keyPressed = Console::keyEnter;
 
-	CellCodes = CellCodes->ListFirst();
-	bool correct = false;
-	while (!correct) {
-		while (CellCodes->ListNext) {
-			if (!strcmp(temp, CellCodes->code)) {
+	if (keyPressed == Console::keyEnter) {
+		StringHelper::InputDigit(temp, 3, false);
+
+		CellCodes = CellCodes->ListFirst();
+		bool correct = false;
+		while (!correct) {
+			while (CellCodes->ListNext) {
+				if (!strcmp(temp, CellCodes->code)) {
+					correct = true;
+					break;
+				} else CellCodes = CellCodes->ListNext;
+			}
+			if (!correct) {
+				Console::GotoXY(X, Y);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::InputDigit(temp, 3, false);
+			}
+		}
+
+		strcpy_s(Abonents->Phone, StringHelper::DefaultSize, temp);
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 4);
+
+		correct = false;
+		StringHelper::InputDigit(temp, 3, false);
+		while (!correct) {
+			if (strlen(temp) == 3) {
 				correct = true;
 				break;
-			} else CellCodes = CellCodes->ListNext;
+			}
+			if (!correct) {
+				Console::GotoXY(X + 4, Y);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::InputDigit(temp, 3, false);
+			}
 		}
-		if (!correct) {
-			Console::GotoXY(X, Y);
-			Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-			StringHelper::InputDigit(temp, 3, false);
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
+		Console::GotoXY(X, Y);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 8);
+
+		StringHelper::InputDigit(temp, 2, false);
+		correct = false;
+
+		while (!correct) {
+			if (strlen(temp) == 2) {
+				correct = true;
+				break;
+			}
+			if (!correct) {
+				Console::GotoXY(X + 8, Y);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::InputDigit(temp, 2, false);
+			}
 		}
+
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
+		Console::GotoXY(X, Y);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::GotoX(X + 11);
+
+		StringHelper::InputDigit(temp, 2, false);
+		correct = false;
+
+		while (!correct) {
+			if (strlen(temp) == 2) {
+				correct = true;
+				break;
+			}
+			if (!correct) {
+				Console::GotoXY(X + 11, Y);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::InputDigit(temp, 2, false);
+			}
+		}
+		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
+		Console::GotoXY(X, Y);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 	}
 
-	strcpy_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-	Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-	Console::GotoX(X + 4);
-
-	correct = false;
-	StringHelper::InputDigit(temp, 3, false);
-	while (!correct) {
-		if (strlen(temp) == 3) {
-			correct = true;
-			break;
-		}
-		if (!correct) {
-			Console::GotoXY(X + 4, Y);
-			Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-			StringHelper::InputDigit(temp, 3, false);
-		}
+	if (!New) {
+		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 	}
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-	Console::GotoXY(X, Y);
-	Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-	Console::GotoX(X + 8);
-
-	StringHelper::InputDigit(temp, 2, false);
-	correct = false;
-
-	while (!correct) {
-		if (strlen(temp) == 2) {
-			correct = true;
-			break;
-		}
-		if (!correct) {
-			Console::GotoXY(X + 8, Y);
-			Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-			StringHelper::InputDigit(temp, 2, false);
-		}
-	}
-
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-	Console::GotoXY(X, Y);
-	Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-	Console::GotoX(X + 11);
-
-	StringHelper::InputDigit(temp, 2, false);
-	correct = false;
-
-	while (!correct) {
-		if (strlen(temp) == 2) {
-			correct = true;
-			break;
-		}
-		if (!correct) {
-			Console::GotoXY(X + 11, Y);
-			Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-			StringHelper::InputDigit(temp, 2, false);
-		}
-	}
-	strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-	Console::GotoXY(X, Y);
-	Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 
 	Y += 2;
 	Console::GotoXY(X, Y);
-	StringHelper::InputEng(temp, 15);
-	strcpy_s(Abonents->login, StringHelper::DefaultSize, temp);
-	Console::GotoXY(X, Y);
-	Console::Print(Abonents->login, Console::clBlack, Console::clLightGrey);
+	StringHelper::InputEng(Abonents->login, 15);
 
 	Console::GotoXY(X + 27, Y);
-	StringHelper::InputEng(temp, 13);
-	strcpy_s(Abonents->pass, StringHelper::DefaultSize, temp);
-	Console::GotoXY(X + 27, Y);
-	Console::Print(Abonents->pass, Console::clBlack, Console::clLightGrey);
+	StringHelper::InputEng(Abonents->pass, 13);
 
-	Console::ShowCursor(false);
 	Y += 2;
 	Console::GotoXY(X, Y);
 	Console::FillRect(X - 1, Y, X + 40, Y, Console::clYellow);
-	Tarifs = Tarifs->ListFirst();
-	strcpy_s(temp, StringHelper::DefaultSize, Tarifs->name);
-	StringHelper::StrToSize(temp, 20);
-	Console::Print(Tarifs->name, Console::clBlack, Console::clYellow);
-	keyPressed = 0;
-
-	while (keyPressed != Console::keyEnter) {
-		if (keyPressed == Console::keyDown) {
-			if (Tarifs->ListNext) Tarifs = Tarifs->ListNext;
-		} else if (keyPressed == Console::keyUp) {
-			if (Tarifs->ListPrev) Tarifs = Tarifs->ListPrev;
-		} 
-
-		strcpy_s(temp, StringHelper::DefaultSize, Tarifs->name);
-		StringHelper::StrToSize(temp, 20);
-		Console::Print(temp, Console::clBlack, Console::clYellow);
-		keyPressed = Console::GetKey();
-		*str = keyPressed;
-		*(str + 1) = '\0';
-	}
-
-	Abonents->TarifPTR = Tarifs;
-	Console::GotoXY(X, Y);
-	Console::FillRect(X - 1, Y, X + 40, Y, Console::clLightGrey);
-	Console::Print(Abonents->TarifPTR->name, Console::clBlack, Console::clLightGrey);
+	
+	
+	Abonents->TarifPTR = Abonents->TarifPTR->DrawChoiceList();
 
 	Y += 2;
 	Console::GotoXY(X, Y);

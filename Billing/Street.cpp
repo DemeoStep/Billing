@@ -168,7 +168,6 @@ Street* Street::DrawChoiceList() {
 	char* str = StringHelper::New();
 
 	Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
-	Choice = Choice->ListFirst();
 	strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
 	StringHelper::StrToSize(temp, 20);
 	int keyPressed = 0;
