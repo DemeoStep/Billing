@@ -721,8 +721,10 @@ Abonent* Application::ShowEditCard(bool New) {
 				} else CellCodes = CellCodes->ListNext;
 			}
 			if (!correct) {
+				CellCodes = CellCodes->ListFirst();
 				Console::GotoXY(X, Y);
 				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::Null(temp);
 				StringHelper::InputDigit(temp, 3, false);
 			}
 		}
@@ -732,20 +734,8 @@ Abonent* Application::ShowEditCard(bool New) {
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
 		Console::GotoX(X + 4);
 
-		correct = false;
 		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 3, false);
-		while (!correct) {
-			if (strlen(temp) == 3) {
-				correct = true;
-				break;
-			}
-			if (!correct) {
-				Console::GotoXY(X + 4, Y);
-				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 3, false);
-			}
-		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
 		Console::GotoXY(X, Y);
@@ -754,20 +744,6 @@ Abonent* Application::ShowEditCard(bool New) {
 
 		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 2, false);
-		correct = false;
-
-		while (!correct) {
-			if (strlen(temp) == 2) {
-				correct = true;
-				break;
-			}
-			if (!correct) {
-				Console::GotoXY(X + 8, Y);
-				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 2, false);
-			}
-		}
-
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
 		Console::GotoXY(X, Y);
@@ -776,19 +752,6 @@ Abonent* Application::ShowEditCard(bool New) {
 
 		StringHelper::Null(temp);
 		StringHelper::InputDigit(temp, 2, false);
-		correct = false;
-
-		while (!correct) {
-			if (strlen(temp) == 2) {
-				correct = true;
-				break;
-			}
-			if (!correct) {
-				Console::GotoXY(X + 11, Y);
-				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::InputDigit(temp, 2, false);
-			}
-		}
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X, Y);
 		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
