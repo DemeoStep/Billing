@@ -57,6 +57,7 @@ void StringHelper::InputDigit(char* str, const int length) {
 
 	Console::FillRect(X - 1, Y, X + length, Y, Console::clLightGrey);
 	Console::GotoXY(X, Y);
+	Console::Print(str, Console::clBlack, Console::clLightGrey);
 }
 
 void StringHelper::InputEng(char* str, const int length) {

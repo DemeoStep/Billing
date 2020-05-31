@@ -74,9 +74,8 @@ public:
 	void TableDrawOnPageDown(short CursorPos);
 	void TableDrawOnPageUp(short CursorPos);
 	void TableDraw(short CursorPos);
-	//void Print(char* str, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
 
-	int JumpTo(int CursorPos, Abonent* toItem);
+	int JumpTo(int CursorPos, Abonent* toItem, bool New);
 
 	void Search(int CursorPos);
 

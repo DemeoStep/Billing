@@ -729,7 +729,6 @@ Abonent* Application::ShowAddCard(short CursorPos) {
 
 		StringHelper::InputDigit(temp, 3);
 		Abonents->House = atoi(temp);
-		Console::Print(temp, Console::clBlack, Console::clLightGrey);
 
 		Console::GotoXY(X + 10, Y);
 		StringHelper::InputDigit(temp, 3);
@@ -1042,60 +1041,8 @@ void Application::AbonAdd(Abonent* LAdded, short CursorPos) {
 		}
 
 		CursorOn->SaveToFile("bin\\abonents.db");
-		CursorPos = JumpTo(CursorPos, LAdded);
+		CursorPos = JumpTo(CursorPos, LAdded, true);
 
-		/*if (Abonents->ListCount() < Console::Height() - 1) {
-			TableFirst = Abonents->ListFirst();
-			TableLast = Abonents->ListLast();
-			if (CursorOn != LAdded && strcmp(CursorOn->fio, LAdded->fio) < 0) {
-				while (strcmp(CursorOn->fio, LAdded->fio) != 0) {
-					CursorOn = CursorOn->ListNext;
-					CursorPos++;
-				}
-			} else if (CursorOn != LAdded && strcmp(CursorOn->fio, LAdded->fio) > 0) {
-				CursorPos++;
-				while (strcmp(CursorOn->fio, LAdded->fio) != 0) {
-					CursorOn = CursorOn->ListPrev;
-					CursorPos--;
-				}
-			} else if (CursorOn != LAdded) {
-				while (CursorOn != LAdded) {
-					if (CursorOn->ListCount() > 1) {
-						CursorPos++;
-						CursorOn = CursorOn->ListNext;
-					}
-				}
-			} else {
-				if (CursorOn->ListCount() > 1) {
-					CursorPos++;
-					CursorOn = LAdded;
-				}
-			}
-		} else {
-			TableFirst = TableFirst->ListFirst();
-			TableLast = TableFirst;
-
-			for (int i = 0; i < Console::Height() - 3; i++) {
-				TableLast = TableLast->ListNext;
-			}
-
-			CursorOn = TableFirst;
-			CursorPos = 1;
-			if (strcmp(CursorOn->fio, LAdded->fio) != 0) {
-				while (strcmp(CursorOn->fio, LAdded->fio) != 0) {
-					if(TableLast->ListNext){
-						TableLast = TableLast->ListNext;
-						CursorOn = CursorOn->ListNext;
-						TableFirst = TableFirst->ListNext;
-					} else {
-						CursorOn = CursorOn->ListNext;
-						CursorPos++;
-					}
-				}
-			} else {
-				printf("");
-			}
-		}*/
 	}
 
 	AbonShow = false;
@@ -1220,31 +1167,7 @@ void Application::Init() {
 	Abonents = Abonents->ListSort(Abonents);
 }
 
-//void Application::Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
-//	short LWidth = strlen(str);
-//
-//	_CHAR_INFO* Buffer = (_CHAR_INFO*)calloc(LWidth, sizeof(CHAR_INFO));
-//	WORD CharAttrib = BgColor << 4 | Color;
-//	char* LineToPrint = StringHelper::New();
-//
-//	strcpy_s(LineToPrint, StringHelper::DefaultSize, str);
-//
-//	for (int i = 0; i < LWidth; i++) {
-//		Buffer[i].Char.AsciiChar = LineToPrint[i];
-//		Buffer[i].Attributes = CharAttrib;
-//	}
-//	COORD charPosition = { 0, 0 };
-//
-//	SMALL_RECT writeArea = { Console::X(), Console::Y(), Console::X() + LWidth, Console::Y() };
-//
-//	COORD bufferSize = { LWidth, 1 };
-//	WriteConsoleOutputA(Console::GetHandle(), Buffer, bufferSize, charPosition, &writeArea);
-//
-//	free(LineToPrint);
-//	free(Buffer);
-//}
-
-int Application::JumpTo(int CursorPos, Abonent* toItem) {
+int Application::JumpTo(int CursorPos, Abonent* toItem, bool New) {
 
 	if (Abonents->ListCount() < Console::Height() - 1) {
 		TableFirst = Abonents->ListFirst();
@@ -1255,7 +1178,7 @@ int Application::JumpTo(int CursorPos, Abonent* toItem) {
 				CursorPos++;
 			}
 		} else if (CursorOn != toItem && strcmp(CursorOn->fio, toItem->fio) > 0) {
-			CursorPos++;
+			if (New) CursorPos++;
 			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
 				CursorOn = CursorOn->ListPrev;
 				CursorPos--;
@@ -1269,7 +1192,7 @@ int Application::JumpTo(int CursorPos, Abonent* toItem) {
 			}
 		} else {
 			if (CursorOn->ListCount() > 1) {
-				CursorPos++;
+				if (New) CursorPos++;
 				CursorOn = toItem;
 			}
 		}
@@ -1305,17 +1228,60 @@ void Application::Search(int CursorPos) {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
-	int Width = 40;
+	int Width = 35;
 	int Height = 4;
 
+	Street* Search_street = Streets;
+	Abonent* Search_abon = Abonents->ListFirst();
+	int search_house = 0;
+	int search_appart = 0;
 	X -= 20;
 	Y -= 2;
 
 	Console::FillRect(X, Y, X + Width, Y + Height, Console::clCyan);
 	X += 2;
-	Y ++;
+	Y++;
 	Console::GotoXY(X, Y);
-	
+	Console::Print((char*)"ул. ", Console::clYellow, Console::clCyan);
+	Console::GotoXY(X + 1, Y + 2);
+	Console::Print((char*)"д. ", Console::clYellow, Console::clCyan);
+	Console::GotoXY(X + 11, Y + 2);
+	Console::Print((char*)"кв. ", Console::clYellow, Console::clCyan);
 	Console::ShowCursor(true);
+	X += 5;
 
+	Console::FillRect(X - 1, Y + 2, X + 3, Y + 2, Console::clLightGrey);
+	Console::FillRect(X + 10, Y + 2, X + 14, Y + 2, Console::clLightGrey);
+	Console::GotoXY(X, Y);
+
+	Search_street = Search_street->DrawChoiceList();
+
+	Y += 2;
+	Console::GotoXY(X, Y);
+	StringHelper::InputDigit(temp, 3);
+	search_house = atoi(temp);
+
+	Console::GotoXY(X + 11, Y);
+	StringHelper::InputDigit(temp, 3);
+	search_appart = atoi(temp);
+
+	while (Search_abon) {
+		if (Search_abon->StreetPTR == Search_street && Search_abon->House == search_house && Search_abon->Apartment == search_appart) {
+
+			break;
+		} else Search_abon = Search_abon->ListNext;
+	}
+
+	if (Search_abon) {
+		CursorPos = JumpTo(CursorPos, Search_abon, false);
+	} else {
+		ShowWarning(CursorPos, (char*)"јбонент не найден!");
+	}
+
+	AbonShow = false;
+	DrawMenu(Console::Height() - 1, HelpString);
+	DrawMenu(0, TableString);
+	Console::GotoXY(0, CursorPos);
+	TableDraw(CursorPos);
+	printf("");
 }

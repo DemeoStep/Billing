@@ -160,44 +160,48 @@ Street* Street::Get_by_id(int id) {
 	return LResult;
 };
 
-//Street* Street::DrawChoiceList() {
-//	short X = Console::X();
-//	short Y = Console::Y();
-//	Street* Streets = this;
-//	char* temp = StringHelper::New();
-//	char* str = StringHelper::New();
-//
-//	Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
-//	Streets = Streets->ListFirst();
-//	strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
-//	StringHelper::StrToSize(temp, 20);
-//	int keyPressed = 0;
-//
-//	while (keyPressed != Console::keyEnter) {
-//		if (keyPressed == Console::keyDown) {
-//			if (Streets->ListNext) Streets = Streets->ListNext;
-//		} else if (keyPressed == Console::keyUp) {
-//			if (Streets->ListPrev) Streets = Streets->ListPrev;
-//		} else if (*str >= 'À' && *str <= 'ÿ') {
-//			*str = toupper(*str);
-//			Streets = Streets->ListFirst();
-//			while (!strstr(Streets->name, str)) {
-//				if (Streets->ListNext) {
-//					Streets = Streets->ListNext;
-//				} else break;
-//			}
-//		}
-//
-//		strcpy_s(temp, StringHelper::DefaultSize, Streets->name);
-//		StringHelper::StrToSize(temp, 20);
-//		Console::Print(temp, Console::clBlack, Console::clYellow);
-//		keyPressed = Console::GetKey();
-//		*str = keyPressed;
-//		*(str + 1) = '\0';
-//	}
-//
-//	free(str);
-//	free(temp);
-//
-//
-//}
+Street* Street::DrawChoiceList() {
+	short X = Console::X();
+	short Y = Console::Y();
+	Street* Choice = this;
+	char* temp = StringHelper::New();
+	char* str = StringHelper::New();
+
+	Console::FillRect(X - 1, Y, X + 21, Y, Console::clYellow);
+	Choice = Choice->ListFirst();
+	strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
+	StringHelper::StrToSize(temp, 20);
+	int keyPressed = 0;
+
+	while (keyPressed != Console::keyEnter) {
+		if (keyPressed == Console::keyDown) {
+			if (Choice->ListNext) Choice = Choice->ListNext;
+		} else if (keyPressed == Console::keyUp) {
+			if (Choice->ListPrev) Choice = Choice->ListPrev;
+		} else if (*str >= 'À' && *str <= 'ÿ') {
+			*str = toupper(*str);
+			Choice = Choice->ListFirst();
+			while (!strstr(Choice->name, str)) {
+				if (Choice->ListNext) {
+					Choice = Choice->ListNext;
+				} else break;
+			}
+		}
+
+		strcpy_s(temp, StringHelper::DefaultSize, Choice->name);
+		StringHelper::StrToSize(temp, 20);
+		Console::Print(temp, Console::clBlack, Console::clYellow);
+		keyPressed = Console::GetKey();
+		*str = keyPressed;
+		*(str + 1) = '\0';
+	}
+
+	Console::GotoXY(X, Y);
+	Console::FillRect(X - 1, Y, X + 21, Y, Console::clLightGrey);
+	Console::Print(Choice->name, Console::clBlack, Console::clLightGrey);
+
+	free(str);
+	free(temp);
+
+	return Choice;
+}
