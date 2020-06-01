@@ -889,14 +889,15 @@ void Application::AbonDel(Abonent* Item) {
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
-	if (Abonents) {
-		Abonents = Abonents->ListLast();
-		Abonents = Abonents->ListAdd(new Abonent);
-	} else {
-		Abonents = new Abonent;
-	}
 
 	if (ShowWarning((char*)"Создать абонента? (Y/n)")) {
+
+		if (Abonents) {
+			Abonents = Abonents->ListLast();
+			Abonents = Abonents->ListAdd(new Abonent);
+		} else {
+			Abonents = new Abonent;
+		}
 
 		Abonents->id = Abonents->GetMaxID() + 1;
 		Abonents->state = 1;
@@ -1207,6 +1208,7 @@ void Application::Search() {
 	Console::GotoXY(X, Y);
 	StringHelper::InputDigit(temp, 3, false);
 	search_house = atoi(temp);
+	StringHelper::Null(temp);
 
 	Console::GotoXY(X + 11, Y);
 	StringHelper::InputDigit(temp, 3, true);
