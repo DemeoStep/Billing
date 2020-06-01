@@ -719,7 +719,7 @@ Abonent* Application::ShowEditCard(bool New) {
 
 	Y += 2;
 	Console::GotoXY(X, Y);
-	StringHelper::InputEng(Abonents->login, 15);
+	Check_login(Abonents->login, 15);
 
 	Console::GotoXY(X + 27, Y);
 	StringHelper::InputEng(Abonents->pass, 13);
@@ -813,7 +813,7 @@ Abonent* Application::ShowEditCard(bool New) {
 
 void Application::AbonDel(Abonent* Item) {
 	if (CursorOn) { // Список НЕнулевой
-		bool Desigion = ShowWarning((char*)"Удалить? (Y/n)");
+		bool Desigion = Console::ShowWarning((char*)"Удалить? (Y/n)", CursorPos);
 		if (Desigion) {
 			FreeGreyIPs = FreeGreyIPs->ListLast();
 			if (CursorOn == TableFirst && CursorOn != TableLast) { // Курсор на первой позиции таблицы
@@ -890,7 +890,7 @@ void Application::AbonDel(Abonent* Item) {
 
 void Application::AbonAdd(Abonent* LAdded) {
 
-	if (ShowWarning((char*)"Создать абонента? (Y/n)")) {
+	if (Console::ShowWarning((char*)"Создать абонента? (Y/n)", CursorPos)) {
 
 		if (Abonents) {
 			Abonents = Abonents->ListLast();
@@ -906,7 +906,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 		LAdded = ShowEditCard(true);
 
-		if (ShowWarning((char*)"Сохранить? (Y/n)")) {
+		if (Console::ShowWarning((char*)"Сохранить? (Y/n)", CursorPos)) {
 
 			if (Abonents->ListCount() > 1) {
 				TableFirst = Abonents->ListFirst();
@@ -957,7 +957,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 void Application::AbonEdit() {
 	
-	if (ShowWarning((char*)"Редактировать? (Y/n)")) {
+	if (Console::ShowWarning((char*)"Редактировать? (Y/n)", CursorPos)) {
 
 		ShowEditCard(false);
 
@@ -1043,40 +1043,6 @@ void Application::Balance_change(Abonent* Item) {
 	free(bal);
 	free(temp);
 	free(input);
-}
-
-bool Application::ShowWarning(char* warning) {
-	int X = Console::Width() / 2;
-	int Y = Console::Height() / 2;
-	char* temp = StringHelper::New();
-
-	Console::FillRect(X - 20, Y - 2, X + 20, Y + 2, Console::clRed);
-
-	X -= strlen(warning) / 2;
-
-	Console::GotoXY(X, Y);
-	strcpy_s(temp, StringHelper::DefaultSize, warning);
-	Console::Print(temp, Console::clYellow, Console::clRed);
-	free(temp);
-
-	char keyPressed = 0;
-	char* s = StringHelper::New(StringHelper::DefaultSize);
-
-	while (*s != 'y' && *s != 'Y' && *s != 'n' && *s != 'N' && *s != 'н' && *s != 'Н' && *s != 'т' && *s != 'Т' && keyPressed != Console::keyEscape && keyPressed != Console::keyEnter) {
-		keyPressed = _getch();
-		*s = keyPressed;
-	}
-	
-	Console::GotoXY(0, CursorPos);
-
-	if (*s == 'y' || *s == 'Y' || *s == 'н' || *s == 'Н' || keyPressed == Console::keyEnter) {
-		free(s);
-		return true;
-	} else {
-		free(s);
-		return false;
-	}
-
 }
 
 void Application::ShowProgress(char* mess, int step) {
@@ -1224,7 +1190,7 @@ void Application::Search() {
 	if (Search_abon) {
 		CursorPos = JumpTo(Search_abon, false);
 	} else {
-		ShowWarning((char*)"Абонент не найден!");
+		Console::ShowWarning((char*)"Абонент не найден!", CursorPos);
 	}
 
 	AbonShow = false;
@@ -1235,3 +1201,28 @@ void Application::Search() {
 	printf("");
 }
 
+void Application::Check_login(char* str, const int length) {
+	bool is_unique = false;
+	Abonent* AbonList = Abonents->ListFirst();
+	short X = Console::X();
+	short Y = Console::Y();
+
+	while (!is_unique) {
+		StringHelper::InputEng(str, length);
+		while (AbonList->ListNext) {
+			if (!strcmp(str, AbonList->login)) {
+				is_unique = false;
+				break;
+			} else {
+				is_unique = true;
+			}
+			if (AbonList->ListNext) AbonList = AbonList->ListNext;
+		}
+		if (!is_unique) {
+			Console::ShowWarning((char*)"Логин должен быть уникальным!", Y);
+			TableDraw();
+			Console::GotoXY(X, Y);
+		}
+	}
+
+};

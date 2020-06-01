@@ -73,6 +73,7 @@ public:
 	static void ShowCursor(bool show);
 	static void Print(char* str, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor);
 	static int GetKey();
+	static bool ShowWarning(char* warning, short CursorPos);
 };
 
 #endif

@@ -80,13 +80,14 @@ public:
 
 	void Search();
 
+	void Check_login(char* str, const int length);
+
 	void ShowAbonentCard(Abonent* Item, bool New);
 	Abonent* ShowEditCard(bool New);
 	void AbonDel(Abonent* Item);
 	void AbonAdd(Abonent* List);
 	void AbonEdit();
 	void Balance_change(Abonent* Item);
-	bool ShowWarning(char* warning);
 	void ShowProgress(char* mess, int step);
 	void OnExit();
 	void Init();

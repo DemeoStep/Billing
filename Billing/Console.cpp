@@ -161,3 +161,37 @@ int Console::GetKey() {
 
 	return keyPressed;
 }
+
+bool Console::ShowWarning(char* warning, short CursorPos) {
+	int X = Console::Width() / 2;
+	int Y = Console::Height() / 2;
+	char* temp = StringHelper::New();
+
+	Console::FillRect(X - 20, Y - 2, X + 20, Y + 2, Console::clRed);
+
+	X -= strlen(warning) / 2;
+
+	Console::GotoXY(X, Y);
+	strcpy_s(temp, StringHelper::DefaultSize, warning);
+	Console::Print(temp, Console::clYellow, Console::clRed);
+	free(temp);
+
+	char keyPressed = 0;
+	char* s = StringHelper::New(StringHelper::DefaultSize);
+
+	while (*s != 'y' && *s != 'Y' && *s != 'n' && *s != 'N' && *s != 'í' && *s != 'Í' && *s != 'ò' && *s != 'Ò' && keyPressed != Console::keyEscape && keyPressed != Console::keyEnter) {
+		keyPressed = _getch();
+		*s = keyPressed;
+	}
+
+	Console::GotoXY(0, CursorPos);
+
+	if (*s == 'y' || *s == 'Y' || *s == 'í' || *s == 'Í' || keyPressed == Console::keyEnter) {
+		free(s);
+		return true;
+	} else {
+		free(s);
+		return false;
+	}
+
+}
