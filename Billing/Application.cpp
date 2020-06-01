@@ -742,10 +742,9 @@ Abonent* Application::ShowEditCard(bool New) {
 		} else {
 			FreeGreyIPs->ipRestore(Abonents);
 		}
-	}
+	} else Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);
 
 	if (!New) {
-		/*Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);*/
 		keyPressed = Console::GetKey();
 		if (keyPressed == Console::keyBackspace) {
 			if (Abonents->TarifPTR->isReal) FreeRealIPs->ipRestore(Abonents);
