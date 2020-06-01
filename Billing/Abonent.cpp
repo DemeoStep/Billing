@@ -12,15 +12,15 @@ class Application;
 
 Abonent::Abonent() {
 	id = 0;
-	fio = StringHelper::New(StringHelper::DefaultSize);
-	login = StringHelper::New(StringHelper::DefaultSize);
-	pass = StringHelper::New(StringHelper::DefaultSize);
-	Phone = StringHelper::New(StringHelper::DefaultSize);
+	fio = StringHelper::New();
+	login = StringHelper::New();
+	pass = StringHelper::New();
+	Phone = StringHelper::New();
 	StreetPTR = NULL;
 	House = 0;
 	Apartment = 0;
 	TarifPTR = NULL;
-	IP = StringHelper::New(StringHelper::DefaultSize);
+	IP = StringHelper::New();
 	balance = 0;
 	state = 0;
 

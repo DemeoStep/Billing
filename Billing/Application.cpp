@@ -1203,26 +1203,37 @@ void Application::Search() {
 
 void Application::Check_login(char* str, const int length) {
 	bool is_unique = false;
+	char* old_pass = StringHelper::New();
+	char* new_pass = StringHelper::New();
+	strcpy_s(old_pass, StringHelper::DefaultSize, str);
+	strcpy_s(new_pass, StringHelper::DefaultSize, str);
+
 	Abonent* AbonList = Abonents->ListFirst();
 	short X = Console::X();
 	short Y = Console::Y();
 
 	while (!is_unique) {
-		StringHelper::InputEng(str, length);
-		while (AbonList->ListNext) {
-			if (!strcmp(str, AbonList->login)) {
-				is_unique = false;
-				break;
-			} else {
-				is_unique = true;
+		StringHelper::InputEng(new_pass, length);
+		if (strcmp(old_pass, new_pass)) {
+			while (AbonList) {
+				if (!strcmp(new_pass, AbonList->login)) {
+					is_unique = false;
+					break;
+				} else {
+					is_unique = true;
+				}
+				AbonList = AbonList->ListNext;
 			}
-			if (AbonList->ListNext) AbonList = AbonList->ListNext;
-		}
-		if (!is_unique) {
-			Console::ShowWarning((char*)"Логин должен быть уникальным!", Y);
-			TableDraw();
-			Console::GotoXY(X, Y);
-		}
+			if (!is_unique) {
+				Console::ShowWarning((char*)"Логин должен быть уникальным!", Y);
+				TableDraw();
+				Console::GotoXY(X, Y);
+				AbonList = Abonents->ListFirst();
+			}
+		} else is_unique = true;
 	}
 
+	strcpy_s(str, StringHelper::DefaultSize, new_pass);
+	free(new_pass);
+	free(old_pass);
 };

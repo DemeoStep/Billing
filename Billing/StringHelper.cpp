@@ -93,6 +93,7 @@ void StringHelper::InputEng(char* str, const int length) {
 	while (strlen(str) < length) {
 		if (!key_is_func(keyPressed)) {
 			*s = keyPressed;
+			*(s + 1) = 0;
 			if ((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') || (*s >= '0' && *s <= '9') || *s == '_') {
 				printf("%c", *s);
 				s++;
@@ -359,7 +360,8 @@ void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
 }
 
 char* StringHelper::New(const int length) {
-	char* LStr = (char*)calloc(length, sizeof(char));
+	char* LStr = (char*)malloc(length * sizeof(char));
+	Null(LStr);
 	return LStr;
 }
 
