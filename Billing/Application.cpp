@@ -710,51 +710,6 @@ Abonent* Application::ShowEditCard(bool New) {
 		
 		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
 		StringHelper::InputCellPhone(Abonents->Phone, CellCodes);
-
-		/*CellCodes = CellCodes->ListFirst();
-		bool correct = false;
-		while (!correct) {
-			while (CellCodes->ListNext) {
-				if (!strcmp(temp, CellCodes->code)) {
-					correct = true;
-					break;
-				} else CellCodes = CellCodes->ListNext;
-			}
-			if (!correct) {
-				CellCodes = CellCodes->ListFirst();
-				Console::GotoXY(X, Y);
-				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
-				StringHelper::Null(temp);
-				StringHelper::InputDigit(temp, 3, false);
-			}
-		}
-
-		strcpy_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-		Console::GotoX(X + 4);
-
-		StringHelper::Null(temp);
-		StringHelper::InputDigit(temp, 3, false);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::GotoXY(X, Y);
-		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-		Console::GotoX(X + 8);
-
-		StringHelper::Null(temp);
-		StringHelper::InputDigit(temp, 2, false);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, "-");
-		Console::GotoXY(X, Y);
-		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
-		Console::GotoX(X + 11);
-
-		StringHelper::Null(temp);
-		StringHelper::InputDigit(temp, 2, false);
-		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
-		Console::GotoXY(X, Y);
-		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);*/
 	}
 
 	if (!New) {
@@ -773,15 +728,24 @@ Abonent* Application::ShowEditCard(bool New) {
 	Console::GotoXY(X, Y);
 	Console::FillRect(X - 1, Y, X + 40, Y, Console::clYellow);
 	
-	
+	bool tarif_is_real = Abonents->TarifPTR->isReal;
 	Abonents->TarifPTR = Abonents->TarifPTR->DrawChoiceList();
 
 	Y += 2;
 	Console::GotoXY(X, Y);
 	Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 
+	if (tarif_is_real != Abonents->TarifPTR->isReal) {
+		New = true;
+		if (tarif_is_real) {
+			FreeRealIPs->ipRestore(Abonents);
+		} else {
+			FreeGreyIPs->ipRestore(Abonents);
+		}
+	}
+
 	if (!New) {
-		Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);
+		/*Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);*/
 		keyPressed = Console::GetKey();
 		if (keyPressed == Console::keyBackspace) {
 			if (Abonents->TarifPTR->isReal) FreeRealIPs->ipRestore(Abonents);
