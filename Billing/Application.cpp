@@ -707,11 +707,11 @@ Abonent* Application::ShowEditCard(bool New) {
 	} else keyPressed = Console::keyBackspace;
 
 	if (keyPressed == Console::keyBackspace) {
-		StringHelper::Null(temp);
+		
 		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
-		StringHelper::InputDigit(temp, 3, false);
+		StringHelper::InputCellPhone(Abonents->Phone, CellCodes);
 
-		CellCodes = CellCodes->ListFirst();
+		/*CellCodes = CellCodes->ListFirst();
 		bool correct = false;
 		while (!correct) {
 			while (CellCodes->ListNext) {
@@ -754,7 +754,7 @@ Abonent* Application::ShowEditCard(bool New) {
 		StringHelper::InputDigit(temp, 2, false);
 		strcat_s(Abonents->Phone, StringHelper::DefaultSize, temp);
 		Console::GotoXY(X, Y);
-		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);
+		Console::Print(Abonents->Phone, Console::clBlack, Console::clLightGrey);*/
 	}
 
 	if (!New) {
@@ -1137,6 +1137,8 @@ void Application::ShowProgress(char* mess, int step) {
 }
 
 void Application::OnExit() {
+	Console::GotoXY(0, 0);
+	Console::SetColor(Console::clWhite);
 }
 
 void Application::Init() {
@@ -1146,7 +1148,6 @@ void Application::Init() {
 	Tarifs = Tarifs->LoadFromFile("bin\\config\\tarifs.cfg");
 	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
 	Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
-	if (Abonents) Abonents = Abonents->ListSort(Abonents);
 }
 
 int Application::JumpTo(Abonent* toItem, bool New) {

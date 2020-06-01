@@ -2,6 +2,7 @@
 #include "StringHelper.h"
 #include <string>
 #include "Abonent.h"
+#include "CellOper.h"
 #include <conio.h>
 
 void StringHelper::Null(char* str, const int length) {
@@ -274,6 +275,87 @@ void StringHelper::Input_currency(char* str, const int length) {
 		}
 	}
 	*str = 0;
+}
+
+void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
+	int length = 13;
+	short X = Console::X();
+	short Y = Console::Y();
+	Console::SetColor(Console::clBlack, Console::clYellow);
+	Console::FillRect(X - 1, Y, X + length + 2, Y, Console::clYellow);
+	Console::ShowCursor(true);
+	int keyPressed = 0;
+
+	char* s = str;
+	int i = strlen(str);
+	printf("%s", str);
+	for (int j = 0; j < i; j++) {
+		s++;
+	}
+
+	keyPressed = 0;
+	do {
+		if (i == 3) {
+			bool correct = false;
+			OperList = OperList->ListFirst();
+
+			while (OperList->ListNext) {
+				if (!strcmp(str, OperList->code)) {
+					correct = true;
+					break;
+				} else OperList = OperList->ListNext;
+			}
+			if (!correct) {
+				Console::GotoXY(X, Y);
+				Console::Print((char*)"   ", Console::clBlack, Console::clYellow);
+				StringHelper::Null(str);
+				i = 0;
+				s = str;
+			}
+		}
+		if (i == 3 || i == 7 || i == 10) {
+
+			i++;
+			*s = '-';
+			printf("%c", *s);
+			s++;
+
+		}
+		keyPressed = Console::GetKey();
+		if (!key_is_func(keyPressed)) {
+			*s = keyPressed;
+			if (*s >= '0' && *s <= '9') {
+				printf("%c", *s);
+				s++;
+				i++;
+			}
+		} else if (keyPressed == Console::keyBackspace) {
+			if (strlen(str) > 0) {
+				s--;
+				i--;
+				if (i == 3 || i == 7 || i == 10) {
+					s--;
+					i--;
+					*s = 0;
+					Console::GotoXY(Console::X() - 1, Y);
+					printf("%c", *s);
+					Console::GotoXY(Console::X() - 1, Y);
+				}
+				*s = 0;
+				Console::GotoXY(Console::X() - 1, Y);
+				printf("%c", *s);
+				Console::GotoXY(Console::X() - 1, Y);
+			}
+		} 
+		if (strlen(str) == length) break;
+	} while (strlen(str) < length);
+
+	*s = 0;
+
+	Console::FillRect(X - 1, Y, X + length + 2, Y, Console::clLightGrey);
+	Console::GotoXY(X, Y);
+	Console::Print(str, Console::clBlack, Console::clLightGrey);
+	Console::ShowCursor(false);
 }
 
 char* StringHelper::New(const int length) {

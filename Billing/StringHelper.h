@@ -3,6 +3,7 @@
 #include <string>
 
 class Abonent;
+class CellOper;
 
 class StringHelper {
 public:
@@ -16,6 +17,7 @@ public:
 	static void InputEng(char* str, const int length);
 	static void InputRus(char* str, const int length);
 	static void Input_currency(char* str, const int length = DefaultSize);
+	static void InputCellPhone(char* str, CellOper* OperList);
 	static char* New(const int length = DefaultSize);
 	static void int_to_str(char* str, int num);
 	static void StrToSize(char* str, unsigned int new_size, int dir = 0);
