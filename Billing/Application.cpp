@@ -1038,6 +1038,7 @@ void Application::Balance_change(Abonent* Item) {
 		ShowAbonentCard(CursorOn, false);
 	}
 	Console::GotoXY(0, CursorPos);
+	CursorOn->SaveToFile("bin\\abonents.db");
 
 	free(bal);
 	free(temp);
