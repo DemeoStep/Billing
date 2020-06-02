@@ -11,6 +11,7 @@
 #include "Tarif.h"
 #include "Free_grey_IP.h"
 #include "Free_real_IP.h"
+#include "MySQL.h"
 
 Application::Application() {
 	// установка локализации по-умолчанию
@@ -96,6 +97,10 @@ void Application::Run() {
 	Console::GotoXY(0, 1);
 
 	Init();
+
+	MySQL* connection = new MySQL;
+
+	Abonents = connection->Load(Streets, Tarifs);
 
 	if (Abonents) {
 		if (Abonents->ListCount() > 1) {
@@ -1078,7 +1083,7 @@ void Application::Init() {
 	Streets = Streets->LoadFromFile("bin\\config\\streets.cfg");
 	Tarifs = Tarifs->LoadFromFile("bin\\config\\tarifs.cfg");
 	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
-	Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
+	//Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
 }
 
 int Application::JumpTo(Abonent* toItem, bool New) {

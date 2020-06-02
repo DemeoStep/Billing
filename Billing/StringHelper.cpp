@@ -23,6 +23,20 @@ void StringHelper::Input(char* str, const int length){
 	*s = 0;
 }
 
+void StringHelper::InputPass(char* str, const int length) {
+	char* s = str;
+	*s = _getch();
+	printf("*");
+	int i = 0;
+	while (i < length - 2 && *s != '\r') {
+		s++;
+		i++;
+		*s = _getch();
+		printf("*");
+	}
+	*s = 0;
+}
+
 void StringHelper::InputDigit(char* str, const int length, bool can_be_null) {
 	short X = Console::X();
 	short Y = Console::Y();
