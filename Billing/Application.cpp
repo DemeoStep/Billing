@@ -71,6 +71,7 @@ Application::Application() {
 	FreeGreyIPs = NULL;
 	FreeRealIPs = NULL;
 	CellCodes = NULL;
+	Connection = new MySQL;
 
 	CursorOn = NULL;
 	TableFirst = NULL;
@@ -86,6 +87,7 @@ Application::~Application() {
 	Console::FillRect(0, 0, Console::Width(), Console::Height(), Console::clBlack);
 	Console::GotoXY(0, 0);
 
+	delete Connection;
 }
 
 void Application::Run() {
@@ -97,10 +99,6 @@ void Application::Run() {
 	Console::GotoXY(0, 1);
 
 	Init();
-
-	MySQL* connection = new MySQL;
-
-	Abonents = connection->Load(Streets, Tarifs);
 
 	if (Abonents) {
 		if (Abonents->ListCount() > 1) {
@@ -826,7 +824,7 @@ void Application::AbonDel(Abonent* Item) {
 				} else {
 					FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
 				}
-				
+				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
 				TableFirst = CursorOn;
 				if (TableLast->ListNext) {
@@ -837,12 +835,14 @@ void Application::AbonDel(Abonent* Item) {
 					if (CursorOn->TarifPTR->isReal) {
 						FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
 					} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+					Connection->DelAbon(CursorOn);
 					CursorOn = CursorOn->ListDel();
 					TableLast = CursorOn;
 				} else { // Курсор на последнем элементе списка
 					if (CursorOn->TarifPTR->isReal) {
 						FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
 					} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+					Connection->DelAbon(CursorOn);
 					CursorOn = CursorOn->ListDel();
 					TableLast = CursorOn;
 					if (TableFirst->ListPrev) {
@@ -858,6 +858,7 @@ void Application::AbonDel(Abonent* Item) {
 				} else {
 					FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
 				}
+				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
 				CursorOn = NULL;
 				AbonShow = false;
@@ -865,6 +866,7 @@ void Application::AbonDel(Abonent* Item) {
 				if (CursorOn->TarifPTR->isReal) {
 					FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
 				} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
 				if (!TableLast->ListNext && TableFirst->ListPrev) {
 					TableFirst = TableFirst->ListPrev;
@@ -889,7 +891,6 @@ void Application::AbonDel(Abonent* Item) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
-	CursorOn->SaveToFile("bin\\abonents.db");
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
@@ -947,7 +948,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 			}
 
-			CursorOn->SaveToFile("bin\\abonents.db");
+			Connection->SaveAbon(LAdded, true, Streets, Tarifs);
 			CursorPos = JumpTo(LAdded, true);
 
 		}
@@ -992,7 +993,7 @@ void Application::AbonEdit() {
 
 		}
 
-		CursorOn->SaveToFile("bin\\abonents.db");
+		Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 		CursorPos = JumpTo(CursorOn, false);
 
 	}
@@ -1043,7 +1044,7 @@ void Application::Balance_change(Abonent* Item) {
 		ShowAbonentCard(CursorOn, false);
 	}
 	Console::GotoXY(0, CursorPos);
-	CursorOn->SaveToFile("bin\\abonents.db");
+	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 
 	free(bal);
 	free(temp);
@@ -1080,10 +1081,10 @@ void Application::OnExit() {
 void Application::Init() {
 	FreeGreyIPs = FreeGreyIPs->LoadFromFile("bin\\config\\free_grey_ip.cfg");
 	FreeRealIPs = FreeRealIPs->LoadFromFile("bin\\config\\free_real_ip.cfg");
-	Streets = Streets->LoadFromFile("bin\\config\\streets.cfg");
-	Tarifs = Tarifs->LoadFromFile("bin\\config\\tarifs.cfg");
+	Streets = Connection->LoadStreets();
+	Tarifs = Connection->LoadTarifs();
 	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
-	//Abonents = Abonents->LoadFromFile("bin\\abonents.db", Streets, Tarifs);
+	Abonents = Connection->LoadAbons(Streets, Tarifs);
 }
 
 int Application::JumpTo(Abonent* toItem, bool New) {

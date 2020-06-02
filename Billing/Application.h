@@ -10,6 +10,7 @@ class CellOper;
 class Free_grey_IP;
 class Free_real_IP;
 class Console;
+class MySQL;
 
 typedef void(*FuncOnKey)(Application *Sender);
 
@@ -62,6 +63,7 @@ public:
 	Street* Streets;
 	Tarif* Tarifs;
 	CellOper* CellCodes;
+	MySQL* Connection;
 
 	Free_grey_IP* FreeGreyIPs;
 	Free_real_IP* FreeRealIPs;

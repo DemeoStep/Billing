@@ -13,18 +13,25 @@ public:
 	char* server;
 	char* username;
 	char* password;
+	char* schema;
 
 	MySQL();
 	~MySQL();
 
 	void Connect();
 
+	Street* LoadStreets();
+
+	Tarif* LoadTarifs();
+
 	sql::Driver* driver;
 	sql::Connection* con;
 	//sql::Statement* stmt;
 	sql::PreparedStatement* pstmt;
 
-	Abonent* Load(Street* StreetList, Tarif* TarifList);
+	Abonent* LoadAbons(Street* StreetList, Tarif* TarifList);
+	void SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList);
+	void DelAbon(Abonent* Abon);
 };
 
 #endif
