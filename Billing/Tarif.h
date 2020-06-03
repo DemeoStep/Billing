@@ -15,6 +15,7 @@ public:
 
 	Tarif* ListAdd(Tarif* ExistingItem);
 	Tarif* ListFirst();
+	Tarif* ListLast();
 	int ListCount();
 	void ListSwap(Tarif* Item_1, Tarif* Item_2);
 	Tarif* ListSort(Tarif* Item);

@@ -891,7 +891,7 @@ void Application::AbonDel(Abonent* Item) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
-	AbonListReLoad();
+	ListsReLoad();
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
@@ -950,7 +950,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 			}
 
 			Connection->SaveAbon(LAdded, true, Streets, Tarifs);
-			AbonListReLoad();
+			ListsReLoad();
 			CursorPos = JumpTo(LAdded, true);
 
 		}
@@ -1003,7 +1003,7 @@ void Application::AbonEdit() {
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
 	Console::GotoXY(0, CursorPos);
-	AbonListReLoad();
+	ListsReLoad();
 }
 
 void Application::Balance_change(Abonent* Item) {
@@ -1047,7 +1047,7 @@ void Application::Balance_change(Abonent* Item) {
 	}
 	Console::GotoXY(0, CursorPos);
 	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
-	AbonListReLoad();
+	ListsReLoad();
 
 	free(bal);
 	free(temp);
@@ -1224,7 +1224,7 @@ void Application::Check_login(char* str, const int length) {
 	free(old_pass);
 };
 
-void Application::AbonListNULL() {
+void Application::ListsNULL() {
 	Abonents = Abonents->ListLast();
 	while (Abonents) {
 		Abonent* Temp = Abonents;
@@ -1232,13 +1232,54 @@ void Application::AbonListNULL() {
 		delete Temp;
 	}
 	Abonents = NULL;
+
+	FreeGreyIPs = FreeGreyIPs->ListLast();
+	while (FreeGreyIPs) {
+		Free_grey_IP* Temp = FreeGreyIPs;
+		FreeGreyIPs = FreeGreyIPs->ListPrev;
+		delete Temp;
+	}
+	FreeGreyIPs = NULL;
+
+	FreeRealIPs = FreeRealIPs->ListLast();
+	while (FreeRealIPs) {
+		Free_real_IP* Temp = FreeRealIPs;
+		FreeRealIPs = FreeRealIPs->ListPrev;
+		delete Temp;
+	}
+	FreeRealIPs = NULL;
+
+	Streets = Streets->ListLast();
+	while (Streets) {
+		Street* Temp = Streets;
+		Streets = Streets->ListPrev;
+		delete Temp;
+	}
+	Streets = NULL;
+
+	Tarifs = Tarifs->ListLast();
+	while (Tarifs) {
+		Tarif* Temp = Tarifs;
+		Tarifs = Tarifs->ListPrev;
+		delete Temp;
+	}
+	Tarifs = NULL;
+
+	CellCodes = CellCodes->ListLast();
+	while (CellCodes) {
+		CellOper* Temp = CellCodes;
+		CellCodes = CellCodes->ListPrev;
+		delete Temp;
+	}
+	CellCodes = NULL;
+
 };
 
-void Application::AbonListReLoad() {
+void Application::ListsReLoad() {
 	int CursorOn_id = CursorOn->id;
 
-	AbonListNULL();
-	Abonents = Connection->LoadAbons(Streets, Tarifs);
+	ListsNULL();
+	Init();
 	CursorOn = Abonents;
 	CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
 	TableDraw();

@@ -11,6 +11,8 @@ public:
 
 	CellOper* ListFirst();
 
+	CellOper* ListLast();
+
 	int ListCount();
 
 	void ListSwap(CellOper* Item_1, CellOper* Item_2);

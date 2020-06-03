@@ -43,6 +43,14 @@ Tarif* Tarif::ListFirst() {
 	return LResult;
 }
 
+Tarif* Tarif::ListLast() {
+	Tarif* LResult = this;
+	while (LResult->ListNext) {
+		LResult = LResult->ListNext;
+	}
+	return LResult;
+}
+
 int Tarif::ListCount() {
 	int LResult = 0;
 	Tarif* LItem = ListFirst();

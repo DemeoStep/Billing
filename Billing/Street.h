@@ -13,6 +13,7 @@ public:
 
 	Street* ListAdd(Street* ExistingItem);
 	Street* ListFirst();
+	Street* ListLast();
 	int ListCount();
 	void ListSwap(Street* Item_1, Street* Item_2);
 	Street* ListSort(Street* Item);

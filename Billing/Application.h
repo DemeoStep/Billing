@@ -84,9 +84,9 @@ public:
 
 	void Check_login(char* str, const int length);
 
-	void AbonListNULL();
+	void ListsNULL();
 
-	void AbonListReLoad();
+	void ListsReLoad();
 
 	void ShowAbonentCard(Abonent* Item, bool New);
 	Abonent* ShowEditCard(bool New);

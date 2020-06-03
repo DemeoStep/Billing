@@ -38,6 +38,14 @@ CellOper* CellOper::ListFirst() {
 	return LResult;
 }
 
+CellOper* CellOper::ListLast() {
+	CellOper* LResult = this;
+	while (LResult->ListNext) {
+		LResult = LResult->ListNext;
+	}
+	return LResult;
+}
+
 int CellOper::ListCount() {
 	int LResult = 0;
 	CellOper* LItem = ListFirst();

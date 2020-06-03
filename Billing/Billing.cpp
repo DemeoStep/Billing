@@ -82,7 +82,7 @@ void App_OnF8(Application* Sender) {
 }
 
 void App_OnF12(Application* Sender) {
-	Sender->AbonListReLoad();
+	Sender->ListsReLoad();
 }
 
 int main() {

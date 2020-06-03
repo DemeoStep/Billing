@@ -41,6 +41,14 @@ Street* Street::ListFirst() {
 	return LResult;
 }
 
+Street* Street::ListLast() {
+	Street* LResult = this;
+	while (LResult->ListNext) {
+		LResult = LResult->ListNext;
+	}
+	return LResult;
+}
+
 int Street::ListCount() {
 	int LResult = 0;
 	Street* LItem = ListFirst();
