@@ -43,10 +43,8 @@ Free_grey_IP* Free_grey_IP::ListDel() {
 	}
 	delete this;
 	if (IPNext) {
-		IPNext->SaveToFile("bin\\config\\free_grey_ip.cfg");
 		return IPNext;
 	} else if (IPPrev) {
-		IPPrev->SaveToFile("bin\\config\\free_grey_ip.cfg");
 		return IPPrev;
 	}
 	else return NULL;
@@ -172,56 +170,5 @@ Free_grey_IP* Free_grey_IP::ipRestore(Abonent* Abon) {
 		strcpy_s(IP->ip, StringHelper::DefaultSize, Abon->IP);
 	}
 	IP = ListSort(IP);
-	IP->SaveToFile("bin\\config\\free_grey_ip.cfg");
 	return IP;
-}
-
-void Free_grey_IP::SaveIP(FILE* FileHandle, Free_grey_IP* Item) {
-	fprintf(FileHandle, "%s\n", Item->ip);
-}
-
-void Free_grey_IP::SaveToFile(const char* FileName) {
-	FILE* LFileHandle;
-	int LFileOpenError = fopen_s(&LFileHandle, FileName, "w+");
-	if (0 == LFileOpenError) {
-		Free_grey_IP* LItem = this->ListFirst();
-		while (LItem) {
-			SaveIP(LFileHandle, LItem);
-			LItem = LItem->ListNext;
-		}
-		fclose(LFileHandle);
-	} else {
-		printf("Не удалось сохранить данные в файл %s \n", FileName);
-	}
-}
-
-Free_grey_IP* Free_grey_IP::LoadFromFile(const char* FileName) {
-	Free_grey_IP* List = NULL;
-	FILE* LFile;
-	int LFileOpenError = fopen_s(&LFile, FileName, "r");
-	if (!LFileOpenError) {
-		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
-		char* network = StringHelper::New(StringHelper::DefaultSize);
-
-		while (!feof(LFile)) {
-			fgets(network, StringHelper::DefaultSize * sizeof(char), LFile);
-			if (feof(LFile)) break;
-			if (List) {
-				List = List->ListAdd(new Free_grey_IP);
-			} else {
-				List = new Free_grey_IP;
-			}
-			strcpy_s(List->ip, StringHelper::DefaultSize, strtok_s(network, "\n", context));
-			StringHelper::Null(network, StringHelper::DefaultSize);
-			printf("");
-		}
-
-		free(context);
-		free(network);
-		fclose(LFile);
-		return List->ListFirst();
-	} else {
-		printf("Ошибка открытия файла\n");
-		return NULL;
-	}
 }

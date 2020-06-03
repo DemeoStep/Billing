@@ -24,13 +24,6 @@ public:
 	int GetLastOctet(Free_grey_IP* Item);
 	Free_grey_IP* ipRestore(Abonent* List);
 
-	void SaveIP(FILE* FileHandle, Free_grey_IP* Item);
-
-	void SaveToFile(const char* FileName);
-
-	Free_grey_IP* LoadFromFile(const char* FileName);
-
-	
 };
 
 #endif

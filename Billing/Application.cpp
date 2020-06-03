@@ -741,17 +741,19 @@ Abonent* Application::ShowEditCard(bool New) {
 	if (tarif_is_real != Abonents->TarifPTR->isReal) {
 		New = true;
 		if (tarif_is_real) {
-			FreeRealIPs->ipRestore(Abonents);
+			Connection->RestoreRealIP(Abonents->IP);
 		} else {
-			FreeGreyIPs->ipRestore(Abonents);
+			Connection->RestoreGreyIP(Abonents->IP);
 		}
 	} else Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);
+
+	IPReLoad();
 
 	if (!New) {
 		keyPressed = Console::GetKey();
 		if (keyPressed == Console::keyBackspace) {
-			if (Abonents->TarifPTR->isReal) FreeRealIPs->ipRestore(Abonents);
-			else FreeGreyIPs->ipRestore(Abonents);
+			if (Abonents->TarifPTR->isReal) Connection->RestoreRealIP(Abonents->IP);
+			else Connection->RestoreGreyIP(Abonents->IP);
 		}
 	} else keyPressed = Console::keyBackspace;
 
@@ -797,10 +799,10 @@ Abonent* Application::ShowEditCard(bool New) {
 		}
 		if (!Abonents->TarifPTR->isReal) {
 			strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeGreyIPs->ip);
-			FreeGreyIPs = FreeGreyIPs->ListDel();
+			Connection->DelGreyIP(FreeGreyIPs);
 		} else {
 			strcpy_s(Abonents->IP, StringHelper::DefaultSize, FreeRealIPs->ip);
-			FreeRealIPs = FreeRealIPs->ListDel();
+			Connection->DelRealIP(FreeRealIPs);
 		}
 		Console::GotoXY(X, Y);
 		Console::FillRect(X - 1, Y, X + 15, Y, Console::clLightGrey);
@@ -820,9 +822,9 @@ void Application::AbonDel(Abonent* Item) {
 			FreeGreyIPs = FreeGreyIPs->ListLast();
 			if (CursorOn == TableFirst && CursorOn != TableLast) { // Курсор на первой позиции таблицы
 				if (CursorOn->TarifPTR->isReal) {
-					FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
+					Connection->RestoreRealIP(CursorOn->IP);
 				} else {
-					FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+					Connection->RestoreGreyIP(CursorOn->IP);
 				}
 				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
@@ -833,15 +835,15 @@ void Application::AbonDel(Abonent* Item) {
 			} else if (CursorOn == TableLast && CursorOn != TableFirst) { // Курсор на последней позиции таблицы
 				if (CursorOn->ListNext) { // Курсор НЕ на последнем элементе списка
 					if (CursorOn->TarifPTR->isReal) {
-						FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
-					} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+						Connection->RestoreRealIP(CursorOn->IP);
+					} else Connection->RestoreGreyIP(CursorOn->IP);
 					Connection->DelAbon(CursorOn);
 					CursorOn = CursorOn->ListDel();
 					TableLast = CursorOn;
 				} else { // Курсор на последнем элементе списка
 					if (CursorOn->TarifPTR->isReal) {
-						FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
-					} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+						Connection->RestoreRealIP(CursorOn->IP);
+					} else Connection->RestoreGreyIP(CursorOn->IP);
 					Connection->DelAbon(CursorOn);
 					CursorOn = CursorOn->ListDel();
 					TableLast = CursorOn;
@@ -854,9 +856,9 @@ void Application::AbonDel(Abonent* Item) {
 				}
 			} else if (CursorOn == TableFirst && CursorOn == TableLast) { // Единственный элемент списка
 				if (CursorOn->TarifPTR->isReal) {
-					FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
+					Connection->RestoreRealIP(CursorOn->IP);
 				} else {
-					FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+					Connection->RestoreGreyIP(CursorOn->IP);
 				}
 				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
@@ -864,8 +866,8 @@ void Application::AbonDel(Abonent* Item) {
 				AbonShow = false;
 			} else { // Не последний и не первый элемент таблицы и не единственный элемент списка
 				if (CursorOn->TarifPTR->isReal) {
-					FreeRealIPs = FreeRealIPs->ipRestore(CursorOn);
-				} else FreeGreyIPs = FreeGreyIPs->ipRestore(CursorOn);
+					Connection->RestoreRealIP(CursorOn->IP);
+				} else Connection->RestoreGreyIP(CursorOn->IP);
 				Connection->DelAbon(CursorOn);
 				CursorOn = CursorOn->ListDel();
 				if (!TableLast->ListNext && TableFirst->ListPrev) {
@@ -898,6 +900,8 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 	if (Console::ShowWarning((char*)"Создать абонента? (Y/n)", CursorPos)) {
 
+		ListsReLoad();
+
 		if (Abonents) {
 			Abonents = Abonents->ListLast();
 			Abonents = Abonents->ListAdd(new Abonent);
@@ -905,7 +909,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 			Abonents = new Abonent;
 		}
 
-		Abonents->id = Abonents->GetMaxID() + 1;
+		Abonents->id = 0;
 		Abonents->state = 1;
 		Abonents->TarifPTR = Tarifs->ListFirst();
 		Abonents->StreetPTR = Streets->ListFirst();
@@ -934,8 +938,8 @@ void Application::AbonAdd(Abonent* LAdded) {
 			}
 
 		} else {
-			if (!Abonents->TarifPTR->isReal) FreeGreyIPs = FreeGreyIPs->ipRestore(Abonents);
-			else FreeRealIPs = FreeRealIPs->ipRestore(Abonents);
+			if (!Abonents->TarifPTR->isReal) Connection->RestoreRealIP(Abonents->IP);
+			else Connection->RestoreGreyIP(Abonents->IP);
 			Abonents = Abonents->ListDel();
 			LAdded = NULL;
 		}
@@ -949,9 +953,9 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 			}
 
+			CursorPos = JumpTo(LAdded, true);
 			Connection->SaveAbon(LAdded, true, Streets, Tarifs);
 			ListsReLoad();
-			CursorPos = JumpTo(LAdded, true);
 
 		}
 	}
@@ -1233,22 +1237,6 @@ void Application::ListsNULL() {
 	}
 	Abonents = NULL;
 
-	FreeGreyIPs = FreeGreyIPs->ListLast();
-	while (FreeGreyIPs) {
-		Free_grey_IP* Temp = FreeGreyIPs;
-		FreeGreyIPs = FreeGreyIPs->ListPrev;
-		delete Temp;
-	}
-	FreeGreyIPs = NULL;
-
-	FreeRealIPs = FreeRealIPs->ListLast();
-	while (FreeRealIPs) {
-		Free_real_IP* Temp = FreeRealIPs;
-		FreeRealIPs = FreeRealIPs->ListPrev;
-		delete Temp;
-	}
-	FreeRealIPs = NULL;
-
 	Streets = Streets->ListLast();
 	while (Streets) {
 		Street* Temp = Streets;
@@ -1283,4 +1271,24 @@ void Application::ListsReLoad() {
 	CursorOn = Abonents;
 	CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
 	TableDraw();
+}
+
+void Application::IPReLoad() {
+	FreeGreyIPs = FreeGreyIPs->ListLast();
+	while (FreeGreyIPs) {
+		Free_grey_IP* Temp = FreeGreyIPs;
+		FreeGreyIPs = FreeGreyIPs->ListPrev;
+		delete Temp;
+	}
+	FreeGreyIPs = NULL;
+	FreeGreyIPs = Connection->LoadGreyIPs();
+
+	FreeRealIPs = FreeRealIPs->ListLast();
+	while (FreeRealIPs) {
+		Free_real_IP* Temp = FreeRealIPs;
+		FreeRealIPs = FreeRealIPs->ListPrev;
+		delete Temp;
+	}
+	FreeRealIPs = NULL;
+	FreeRealIPs = Connection->LoadRealIPs();
 }

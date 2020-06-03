@@ -17,7 +17,7 @@
 
 MySQL::MySQL() {
 	server = StringHelper::New();
-	strcpy_s(server, StringHelper::DefaultSize, "tcp://euronet.dn.ua:3306");
+	strcpy_s(server, StringHelper::DefaultSize, "tcp://192.168.12.2:3306");
 	schema = StringHelper::New();
 	strcpy_s(schema, StringHelper::DefaultSize, "Kurs_billing");
 
@@ -268,7 +268,7 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 }
 
 void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList) {
-
+	sql::ResultSet* result;
 	try {
 		Connect();
 
@@ -291,6 +291,12 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		
 		pstmt->executeQuery();
 
+		if (New) pstmt = con->prepareStatement("SELECT * FROM users WHERE login = ?");
+		pstmt->setString(1, Abon->login);
+		result = pstmt->executeQuery();
+		while (result->next()) {
+			Abon->id = result->getInt(1);
+		}
 		
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -299,6 +305,7 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		std::cout << " (MySQL error code: " << e.getErrorCode();
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
+	printf("");
 }
 
 void MySQL::DelAbon(Abonent* Abon) {
@@ -308,6 +315,82 @@ void MySQL::DelAbon(Abonent* Abon) {
 
 		pstmt = con->prepareStatement("DELETE FROM `users` WHERE `users`.`id` = ?");
 		pstmt->setInt(1, Abon->id);
+		pstmt->executeQuery();
+
+
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+}
+
+void MySQL::RestoreGreyIP(char* IP) {
+
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("INSERT INTO free_grey_ip VALUES (?)");
+		pstmt->setString(1, IP);
+		pstmt->executeQuery();
+
+
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+}
+
+void MySQL::DelGreyIP(Free_grey_IP* IP) {
+
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("DELETE FROM free_grey_ip WHERE `ip` = ?");
+		pstmt->setString(1, IP->ip);
+		pstmt->executeQuery();
+
+
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+}
+
+void MySQL::RestoreRealIP(char* IP) {
+
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("INSERT INTO free_real_ip VALUES (?)");
+		pstmt->setString(1, IP);
+		pstmt->executeQuery();
+
+
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+}
+
+void MySQL::DelRealIP(Free_real_IP* IP) {
+
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("DELETE FROM free_real_ip WHERE `ip` = ?");
+		pstmt->setString(1, IP->ip);
 		pstmt->executeQuery();
 
 

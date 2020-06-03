@@ -22,9 +22,7 @@ public:
 	Free_real_IP* ListSort(Free_real_IP* Item);
 	int GetLastOctet(Free_real_IP* Item);
 	Free_real_IP* ipRestore(Abonent* Abon);
-	void SaveIP(FILE* FileHandle, Free_real_IP* Item);
-	void SaveToFile(const char* FileName);
-	Free_real_IP* LoadFromFile(const char* FileName);
+
 };
 
 #endif

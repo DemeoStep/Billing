@@ -88,6 +88,8 @@ public:
 
 	void ListsReLoad();
 
+	void IPReLoad();
+
 	void ShowAbonentCard(Abonent* Item, bool New);
 	Abonent* ShowEditCard(bool New);
 	void AbonDel(Abonent* Item);

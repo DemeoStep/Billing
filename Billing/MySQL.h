@@ -40,6 +40,10 @@ public:
 	Abonent* LoadAbons(Street* StreetList, Tarif* TarifList);
 	void SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList);
 	void DelAbon(Abonent* Abon);
+	void RestoreGreyIP(char* IP);
+	void DelGreyIP(Free_grey_IP* IP);
+	void RestoreRealIP(char* IP);
+	void DelRealIP(Free_real_IP* IP);
 };
 
 #endif
