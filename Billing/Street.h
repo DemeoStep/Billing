@@ -16,7 +16,6 @@ public:
 	int ListCount();
 	void ListSwap(Street* Item_1, Street* Item_2);
 	Street* ListSort(Street* Item);
-	Street* LoadFromFile(const char* FileName);
 	Street* Get_by_id(int id);
 	Street* DrawChoiceList();
 };

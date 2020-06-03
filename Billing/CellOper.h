@@ -17,8 +17,6 @@ public:
 
 	CellOper* ListSort(CellOper* Item);
 
-	CellOper* LoadFromFile(const char* FileName);
-
 	CellOper* ListPrev;
 	CellOper* ListNext;
 };

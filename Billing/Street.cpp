@@ -119,38 +119,6 @@ Street* Street::ListSort(Street* Item) {
 	} else return Item;
 }
 
-Street* Street::LoadFromFile(const char* FileName) {
-	Street* List = NULL;
-	FILE* LFile;
-	int LFileOpenError = fopen_s(&LFile, FileName, "r");
-	if (!LFileOpenError) {
-		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
-		char* name = StringHelper::New(StringHelper::DefaultSize);
-
-		while (!feof(LFile)) {
-			fgets(name, StringHelper::DefaultSize * sizeof(char), LFile);
-			if (feof(LFile)) break;
-			if (List) {
-				List = List->ListAdd(new Street);
-			} else {
-				List = new Street;
-			}
-			List->id = atoi(strtok_s(name, "|", context));
-			strcpy_s(List->name, StringHelper::DefaultSize, strtok_s(NULL, "\n", context));
-			StringHelper::Null(name, StringHelper::DefaultSize);
-			printf("");
-		}
-
-		free(context);
-		free(name);
-		fclose(LFile);
-		return List->ListFirst();
-	} else {
-		printf("Îøèáêà îòêğûòèÿ ôàéëà\n");
-		return NULL;
-	}
-}
-
 Street* Street::Get_by_id(int id) {
 	Street* LResult = this->ListFirst();
 	while (id != LResult->id) {

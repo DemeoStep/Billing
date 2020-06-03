@@ -4,6 +4,9 @@
 #include "Abonent.h"
 #include "Street.h"
 #include "Tarif.h"
+#include "CellOper.h"
+#include "Free_grey_IP.h"
+#include "Free_real_IP.h"
 
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
@@ -102,6 +105,36 @@ Street* MySQL::LoadStreets() {
 	return LResult->ListFirst();
 }
 
+CellOper* MySQL::LoadCellCodes() {
+	sql::ResultSet* result;
+	CellOper* LResult = NULL;
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("SELECT * FROM cell_oper");
+		result = pstmt->executeQuery();
+
+		while (result->next()) {
+
+			if (LResult) {
+				LResult = LResult->ListAdd(new CellOper);
+			} else {
+				LResult = new CellOper;
+			}
+
+			strcpy_s(LResult->code, StringHelper::DefaultSize, result->getString(1).c_str());
+
+		}
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+	return LResult->ListFirst();
+}
+
 Tarif* MySQL::LoadTarifs() {
 	sql::ResultSet* result;
 	Tarif* LResult = NULL;
@@ -123,6 +156,66 @@ Tarif* MySQL::LoadTarifs() {
 			strcpy_s(LResult->name, StringHelper::DefaultSize, result->getString(2).c_str());
 			LResult->isReal = result->getBoolean(3);
 			LResult->price = result->getInt(4);
+		}
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+	return LResult->ListFirst();
+}
+
+Free_grey_IP* MySQL::LoadGreyIPs() {
+	sql::ResultSet* result;
+	Free_grey_IP* LResult = NULL;
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("SELECT * FROM free_grey_ip ORDER BY INET_ATON(ip)");
+		result = pstmt->executeQuery();
+
+		while (result->next()) {
+
+			if (LResult) {
+				LResult = LResult->ListAdd(new Free_grey_IP);
+			} else {
+				LResult = new Free_grey_IP;
+			}
+
+			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
+
+		}
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+	return LResult->ListFirst();
+}
+
+Free_real_IP* MySQL::LoadRealIPs() {
+	sql::ResultSet* result;
+	Free_real_IP* LResult = NULL;
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("SELECT * FROM free_real_ip ORDER BY INET_ATON(ip)");
+		result = pstmt->executeQuery();
+
+		while (result->next()) {
+
+			if (LResult) {
+				LResult = LResult->ListAdd(new Free_real_IP);
+			} else {
+				LResult = new Free_real_IP;
+			}
+
+			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
+
 		}
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;

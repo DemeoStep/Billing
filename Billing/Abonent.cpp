@@ -302,11 +302,9 @@ Abonent* Abonent::ListDel() {
 	}
 	delete this;
 	if (AbonNext) {
-		AbonNext->SaveToFile("bin\\abonents.db");
 		return AbonNext;
 	}
 	else if (AbonPrev) {
-		AbonPrev->SaveToFile("bin\\abonents.db");
 		return AbonPrev;
 	}
 	else return NULL;
@@ -396,72 +394,4 @@ int Abonent::GetMaxID() {
 		if (Start->ListNext) Start = Start->ListNext;
 	}
 	return max;
-}
-
-void Abonent::SaveAbon(FILE* FileHandle, Abonent* Item) {
-	fprintf(FileHandle, "%d|%s|%s|%s|%s|%d|%d|%d|%d|%s|%d|%d\n",
-		Item->id, Item->fio, Item->login, Item->pass, Item->Phone, Item->StreetPTR->id, Item->House,
-		Item->Apartment, Item->TarifPTR->id, Item->IP, Item->balance, Item->state);
-}
-
-void Abonent::SaveToFile(const char* FileName) {
-	FILE* LFileHandle;
-	int LFileOpenError = fopen_s(&LFileHandle, FileName, "w+");
-	if (0 == LFileOpenError) {
-		if (this) {
-			Abonent* LItem = this->ListFirst();
-			while (LItem) {
-				SaveAbon(LFileHandle, LItem);
-				LItem = LItem->ListNext;
-			}
-		} else fprintf(LFileHandle, "");
-		fclose(LFileHandle);
-	} else {
-		printf("Не удалось сохранить данные в файл %s \n", FileName);
-	}
-}
-
-Abonent* Abonent::LoadFromFile(const char* FileName, Street* StreetList, Tarif* TarifList) {
-	Abonent* List = NULL;
-	FILE* LFile;
-	int LFileOpenError = fopen_s(&LFile, FileName, "r");
-	if (!LFileOpenError) {
-		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
-		char* buffer = StringHelper::New(StringHelper::DefaultSize);
-
-		while (!feof(LFile)) {
-			fgets(buffer, StringHelper::DefaultSize * sizeof(char), LFile);
-			if (feof(LFile)) break;
-			if (List) {
-				List = List->ListAdd(new Abonent);
-			} else {
-				List = new Abonent;
-			}
-			List->id = atoi(strtok_s(buffer, "|", context));
-			strcpy_s(List->fio, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-			strcpy_s(List->login, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-			strcpy_s(List->pass, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-			strcpy_s(List->Phone, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-
-			List->StreetPTR = StreetList->Get_by_id(atoi(strtok_s(NULL, "|", context)));
-			List->House = atoi(strtok_s(NULL, "|", context));
-			List->Apartment = atoi(strtok_s(NULL, "|", context));
-			List->TarifPTR = TarifList->Get_by_id(atoi(strtok_s(NULL, "|", context)));
-			strcpy_s(List->IP, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-			List->balance = atoi(strtok_s(NULL, "|", context));
-			List->state = atoi(strtok_s(NULL, "\n", context));
-			StringHelper::Null(buffer, StringHelper::DefaultSize);
-			printf("");
-		}
-
-		free(context);
-		free(buffer);
-		fclose(LFile);
-		if (List) {
-			return List->ListSort(List);
-		}
-	} else {
-		printf("Ошибка открытия файла\n");
-		return NULL;
-	}
 }

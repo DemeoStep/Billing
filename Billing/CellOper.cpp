@@ -115,34 +115,3 @@ CellOper* CellOper::ListSort(CellOper* Item) {
 		return ListFirst();
 	} else return Item;
 }
-
-CellOper* CellOper::LoadFromFile(const char* FileName) {
-	CellOper* List = NULL;
-	FILE* LFile;
-	int LFileOpenError = fopen_s(&LFile, FileName, "r");
-	if (!LFileOpenError) {
-		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
-		char* name = StringHelper::New(StringHelper::DefaultSize);
-
-		while (!feof(LFile)) {
-			fgets(name, StringHelper::DefaultSize * sizeof(char), LFile);
-			if (feof(LFile)) break;
-			if (List) {
-				List = List->ListAdd(new CellOper);
-			} else {
-				List = new CellOper;
-			}
-			strcpy_s(List->code, StringHelper::DefaultSize, strtok_s(name, "\n", context));
-			StringHelper::Null(name, StringHelper::DefaultSize);
-			printf("");
-		}
-
-		free(context);
-		free(name);
-		fclose(LFile);
-		return List->ListFirst();
-	} else {
-		printf("Ошибка открытия файла\n");
-		return NULL;
-	}
-}

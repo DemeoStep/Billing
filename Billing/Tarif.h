@@ -19,12 +19,6 @@ public:
 	void ListSwap(Tarif* Item_1, Tarif* Item_2);
 	Tarif* ListSort(Tarif* Item);
 
-	void SaveIP(FILE* FileHandle, Tarif* Item);
-
-	void SaveToFile(const char* FileName);
-
-	Tarif* LoadFromFile(const char* FileName);
-
 	Tarif* Get_by_id(int id);
 
 	Tarif* DrawChoiceList();

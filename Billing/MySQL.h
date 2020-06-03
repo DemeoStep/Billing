@@ -7,6 +7,9 @@
 
 class Street;
 class Tarif;
+class CellOper;
+class Free_grey_IP;
+class Free_real_IP;
 
 class MySQL {
 public:
@@ -21,6 +24,11 @@ public:
 	void Connect();
 
 	Street* LoadStreets();
+
+	CellOper* LoadCellCodes();
+
+	Free_grey_IP* LoadGreyIPs();
+	Free_real_IP* LoadRealIPs();
 
 	Tarif* LoadTarifs();
 

@@ -1079,11 +1079,11 @@ void Application::OnExit() {
 }
 
 void Application::Init() {
-	FreeGreyIPs = FreeGreyIPs->LoadFromFile("bin\\config\\free_grey_ip.cfg");
-	FreeRealIPs = FreeRealIPs->LoadFromFile("bin\\config\\free_real_ip.cfg");
+	FreeGreyIPs = Connection->LoadGreyIPs();
+	FreeRealIPs = Connection->LoadRealIPs();
 	Streets = Connection->LoadStreets();
 	Tarifs = Connection->LoadTarifs();
-	CellCodes = CellCodes->LoadFromFile("bin\\config\\celloperators.cfg");
+	CellCodes = Connection->LoadCellCodes();
 	Abonents = Connection->LoadAbons(Streets, Tarifs);
 }
 

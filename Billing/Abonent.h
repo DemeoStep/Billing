@@ -38,12 +38,6 @@ public:
 	virtual Abonent* ListSort(Abonent* Item);
 	int GetMaxID();
 
-	void SaveAbon(FILE* FileHandle, Abonent* Item);
-
-	void SaveToFile(const char* FileName);
-
-	Abonent* LoadFromFile(const char* FileName, Street* StreetList, Tarif* TarifList);
-
 	int ListCount();
 };
 

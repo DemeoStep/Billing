@@ -121,63 +121,6 @@ Tarif* Tarif::ListSort(Tarif* Item) {
 	} else return Item;
 }
 
-void Tarif::SaveIP(FILE* FileHandle, Tarif* Item) {
-	fprintf(FileHandle, "%d|%s|%d|%d\n",
-		Item->id, Item->name, Item->isReal, Item->price);
-}
-
-void Tarif::SaveToFile(const char* FileName) {
-	FILE* LFileHandle;
-	int LFileOpenError = fopen_s(&LFileHandle, FileName, "w+");
-	if (0 == LFileOpenError) {
-		Tarif* LItem = this->ListFirst();
-		while (LItem) {
-			SaveIP(LFileHandle, LItem);
-			LItem = LItem->ListNext;
-		}
-		fclose(LFileHandle);
-	} else {
-		printf("Íå óäàëîñü ñîõğàíèòü äàííûå â ôàéë %s \n", FileName);
-	}
-}
-
-Tarif* Tarif::LoadFromFile(const char* FileName) {
-	Tarif* List = NULL;
-	FILE* LFile;
-	int LFileOpenError = fopen_s(&LFile, FileName, "r");
-	if (!LFileOpenError) {
-		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
-		char* buffer = StringHelper::New(StringHelper::DefaultSize);
-
-		while (!feof(LFile)) {
-			fgets(buffer, StringHelper::DefaultSize * sizeof(char), LFile);
-			if (feof(LFile)) break;
-			if (List) {
-				List = List->ListAdd(new Tarif);
-			} else {
-				List = new Tarif;
-			}
-			List->id = atoi(strtok_s(buffer, "|", context));
-			strcpy_s(List->name, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
-			int is_real = atoi(strtok_s(NULL, "|", context));
-			if (is_real == 0) List->isReal = false;
-			else List->isReal = true;
-			List->price = atoi(strtok_s(NULL, "|", context)); 
-	
-			StringHelper::Null(buffer, StringHelper::DefaultSize);
-			printf("");
-		}
-
-		free(context);
-		free(buffer);
-		fclose(LFile);
-		return List->ListFirst();
-	} else {
-		printf("Îøèáêà îòêğûòèÿ ôàéëà\n");
-		return NULL;
-	}
-}
-
 Tarif* Tarif::Get_by_id(int id) {
 	Tarif* LResult = this->ListFirst();
 	while (id != LResult->id) {
