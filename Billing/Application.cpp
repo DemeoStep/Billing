@@ -891,6 +891,7 @@ void Application::AbonDel(Abonent* Item) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
+	AbonListReLoad();
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
@@ -949,6 +950,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 			}
 
 			Connection->SaveAbon(LAdded, true, Streets, Tarifs);
+			AbonListReLoad();
 			CursorPos = JumpTo(LAdded, true);
 
 		}
@@ -1001,7 +1003,7 @@ void Application::AbonEdit() {
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
 	Console::GotoXY(0, CursorPos);
-	TableDraw();
+	AbonListReLoad();
 }
 
 void Application::Balance_change(Abonent* Item) {
@@ -1045,6 +1047,7 @@ void Application::Balance_change(Abonent* Item) {
 	}
 	Console::GotoXY(0, CursorPos);
 	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
+	AbonListReLoad();
 
 	free(bal);
 	free(temp);
@@ -1092,30 +1095,6 @@ int Application::JumpTo(Abonent* toItem, bool New) {
 	if (Abonents->ListCount() < Console::Height() - 1) {
 		TableFirst = Abonents->ListFirst();
 		TableLast = Abonents->ListLast();
-		if (CursorOn != toItem && strcmp(CursorOn->fio, toItem->fio) < 0) {
-			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
-				CursorOn = CursorOn->ListNext;
-				CursorPos++;
-			}
-		} else if (CursorOn != toItem && strcmp(CursorOn->fio, toItem->fio) > 0) {
-			if (New) CursorPos++;
-			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
-				CursorOn = CursorOn->ListPrev;
-				CursorPos--;
-			}
-		} else if (CursorOn != toItem) {
-			while (CursorOn != toItem) {
-				if (CursorOn->ListCount() > 1) {
-					CursorPos++;
-					CursorOn = CursorOn->ListNext;
-				}
-			}
-		} else {
-			if (CursorOn->ListCount() > 1) {
-				if (New) CursorPos++;
-				CursorOn = toItem;
-			}
-		}
 	} else {
 		TableFirst = TableFirst->ListFirst();
 		TableLast = TableFirst;
@@ -1123,24 +1102,25 @@ int Application::JumpTo(Abonent* toItem, bool New) {
 		for (int i = 0; i < Console::Height() - 3; i++) {
 			TableLast = TableLast->ListNext;
 		}
-
-		CursorOn = TableFirst;
-		CursorPos = 1;
-		if (strcmp(CursorOn->fio, toItem->fio) != 0) {
-			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
-				if (TableLast->ListNext) {
-					TableLast = TableLast->ListNext;
-					CursorOn = CursorOn->ListNext;
-					TableFirst = TableFirst->ListNext;
-				} else {
-					CursorOn = CursorOn->ListNext;
-					CursorPos++;
-				}
-			}
-		} else {
-			printf("");
-		}
 	}
+
+	CursorOn = TableFirst;
+	CursorPos = 1;
+	if (strcmp(CursorOn->fio, toItem->fio) != 0) {
+		while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+			if (TableLast->ListNext) {
+				TableLast = TableLast->ListNext;
+				CursorOn = CursorOn->ListNext;
+				TableFirst = TableFirst->ListNext;
+			} else {
+				CursorOn = CursorOn->ListNext;
+				CursorPos++;
+			}
+		}
+	} else {
+		printf("");
+	}
+
 	return CursorPos;
 }
 
@@ -1243,3 +1223,23 @@ void Application::Check_login(char* str, const int length) {
 	free(new_pass);
 	free(old_pass);
 };
+
+void Application::AbonListNULL() {
+	Abonents = Abonents->ListLast();
+	while (Abonents) {
+		Abonent* Temp = Abonents;
+		Abonents = Abonents->ListPrev;
+		delete Temp;
+	}
+	Abonents = NULL;
+};
+
+void Application::AbonListReLoad() {
+	int CursorOn_id = CursorOn->id;
+
+	AbonListNULL();
+	Abonents = Connection->LoadAbons(Streets, Tarifs);
+	CursorOn = Abonents;
+	CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
+	TableDraw();
+}

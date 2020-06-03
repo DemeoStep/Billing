@@ -395,3 +395,12 @@ int Abonent::GetMaxID() {
 	}
 	return max;
 }
+
+Abonent* Abonent::Get_by_id(int id) {
+	Abonent* LResult = this->ListFirst();
+	while (id != LResult->id) {
+		LResult = LResult->ListNext;
+	}
+
+	return LResult;
+};

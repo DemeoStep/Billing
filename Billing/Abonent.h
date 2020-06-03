@@ -38,6 +38,8 @@ public:
 	virtual Abonent* ListSort(Abonent* Item);
 	int GetMaxID();
 
+	Abonent* Get_by_id(int id);
+
 	int ListCount();
 };
 

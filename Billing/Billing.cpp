@@ -81,6 +81,10 @@ void App_OnF8(Application* Sender) {
 	}
 }
 
+void App_OnF12(Application* Sender) {
+	Sender->AbonListReLoad();
+}
+
 int main() {
 	Application* App = new Application;
 	App->OnEscape = &App_OnKeyEscape;
@@ -93,6 +97,7 @@ int main() {
 	App->OnF6 = &App_OnF6;
 	App->OnF7 = &App_OnF7;
 	App->OnF8 = &App_OnF8;
+	App->OnF12 = &App_OnF12;
 	App->Run();
 	delete App;
 }

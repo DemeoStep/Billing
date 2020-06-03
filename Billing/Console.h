@@ -44,8 +44,8 @@ public:
 		, keyF8 = 66
 		, keyF9 = 67
 		, keyF10 = 68
-		, keyF11 = 69
-		, keyF12 = 70
+		, keyF11 = 133
+		, keyF12 = 134
 		, keyHome = 71
 		, keyUp = 72
 		, keyPageUp = 73
