@@ -739,12 +739,12 @@ Abonent* Application::ShowEditCard(bool New) {
 	Console::FillRect(X - 1, Y, X + 15, Y, Console::clYellow);
 
 	if (tarif_is_real != Abonents->TarifPTR->isReal) {
-		New = true;
-		if (tarif_is_real) {
+		if (!New && tarif_is_real) {
 			Connection->RestoreRealIP(Abonents->IP);
-		} else {
+		} else if (!New) {
 			Connection->RestoreGreyIP(Abonents->IP);
 		}
+		New = true;
 	} else Console::Print(Abonents->IP, Console::clBlack, Console::clYellow);
 
 	IPReLoad();
