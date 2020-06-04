@@ -1045,8 +1045,10 @@ void Application::Balance_change(Abonent* Item) {
 	Console::SetColor(Console::clBlack, Console::clLightGrey);
 	StringHelper::Input_currency(input);
 	strcpy_s(temp, StringHelper::DefaultSize, input);
-	CursorOn->balance += std::strtol(temp, NULL, 10);
-	if(std::strtol(temp, NULL, 10)) Connection->SavePay(CursorOn, std::strtol(temp, NULL, 10));
+	if (std::strtol(temp, NULL, 10)) {
+		CursorOn->balance += std::strtol(temp, NULL, 10);
+		Connection->SavePay(CursorOn, std::strtol(temp, NULL, 10));
+	}
 	Console::ShowCursor(false);
 	
 	if (CursorOn->balance <= 0) CursorOn->state = 1;
