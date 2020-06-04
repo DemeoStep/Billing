@@ -1020,6 +1020,8 @@ void Application::Balance_change(Abonent* Item) {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
+	char* bal = StringHelper::New();
+	char* input = StringHelper::New();
 	Console::FillRect(X - 25, Y - 4, X + 25, Y + 4, Console::clDarkGrey);
 
 	X -= 23;
@@ -1028,7 +1030,6 @@ void Application::Balance_change(Abonent* Item) {
 	Console::GotoXY(X, Y);
 	strcpy_s(temp, StringHelper::DefaultSize, " Текущий баланс: ");
 	
-	char* bal = StringHelper::New();
 	StringHelper::int_to_currency(bal, CursorOn->balance);
 	strcat_s(temp, StringHelper::DefaultSize, bal);
 	strcat_s(temp, StringHelper::DefaultSize, " ");
@@ -1042,7 +1043,6 @@ void Application::Balance_change(Abonent* Item) {
 	Console::ShowCursor(true);
 
 	Console::SetColor(Console::clBlack, Console::clLightGrey);
-	char* input = StringHelper::New();
 	StringHelper::Input_currency(input);
 	strcpy_s(temp, StringHelper::DefaultSize, input);
 	CursorOn->balance += std::strtol(temp, NULL, 10);
@@ -1085,6 +1085,7 @@ void Application::ShowProgress(char* mess, int step) {
 
 	Console::GotoXY(0, CursorPos);
 	free(temp);
+	free(step_temp);
 }
 
 void Application::OnExit() {
@@ -1195,7 +1196,7 @@ void Application::Search() {
 	DrawMenu(0, TableString);
 	Console::GotoXY(0, CursorPos);
 	TableDraw();
-	printf("");
+	free(temp);
 }
 
 void Application::Check_login(char* str, const int length) {
@@ -1267,7 +1268,6 @@ void Application::ListsNULL() {
 		delete Temp;
 	}
 	CellCodes = NULL;
-
 };
 
 void Application::ListsReLoad() {

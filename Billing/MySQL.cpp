@@ -16,6 +16,7 @@
 
 
 MySQL::MySQL() {
+	driver = get_driver_instance();
 	server = StringHelper::New();
 	strcpy_s(server, StringHelper::DefaultSize, "tcp://192.168.12.2:3306");
 	schema = StringHelper::New();
@@ -58,13 +59,13 @@ MySQL::MySQL() {
 
 MySQL::~MySQL() {
 	free(server);
+	free(schema);
 	free(username);
 	free(password);
 }
 
 void MySQL::Connect() {
 	try {
-		driver = get_driver_instance();
 		con = driver->connect(server, username, password);
 		con->setSchema(schema);
 	} catch (sql::SQLException e) {
@@ -75,7 +76,7 @@ void MySQL::Connect() {
 }
 
 Street* MySQL::LoadStreets() {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	Street* LResult = NULL;
 	try {
 		Connect();
@@ -95,6 +96,10 @@ Street* MySQL::LoadStreets() {
 			strcpy_s(LResult->name, StringHelper::DefaultSize, result->getString(2).c_str());
 	
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -106,7 +111,7 @@ Street* MySQL::LoadStreets() {
 }
 
 CellOper* MySQL::LoadCellCodes() {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	CellOper* LResult = NULL;
 	try {
 		Connect();
@@ -125,6 +130,10 @@ CellOper* MySQL::LoadCellCodes() {
 			strcpy_s(LResult->code, StringHelper::DefaultSize, result->getString(1).c_str());
 
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -136,7 +145,7 @@ CellOper* MySQL::LoadCellCodes() {
 }
 
 Tarif* MySQL::LoadTarifs() {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	Tarif* LResult = NULL;
 	try {
 		Connect();
@@ -157,6 +166,10 @@ Tarif* MySQL::LoadTarifs() {
 			LResult->isReal = result->getBoolean(3);
 			LResult->price = result->getInt(4);
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -168,7 +181,7 @@ Tarif* MySQL::LoadTarifs() {
 }
 
 Free_grey_IP* MySQL::LoadGreyIPs() {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	Free_grey_IP* LResult = NULL;
 	try {
 		Connect();
@@ -187,6 +200,10 @@ Free_grey_IP* MySQL::LoadGreyIPs() {
 			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
 
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -198,7 +215,7 @@ Free_grey_IP* MySQL::LoadGreyIPs() {
 }
 
 Free_real_IP* MySQL::LoadRealIPs() {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	Free_real_IP* LResult = NULL;
 	try {
 		Connect();
@@ -217,6 +234,10 @@ Free_real_IP* MySQL::LoadRealIPs() {
 			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
 
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -228,8 +249,8 @@ Free_real_IP* MySQL::LoadRealIPs() {
 }
 
 Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
-	sql::ResultSet* result;
-	sql::ResultSet* bal_result;
+	sql::ResultSet* result = NULL;
+	sql::ResultSet* bal_result = NULL;
 	Abonent* LResult = NULL;
 	try {
 		Connect();
@@ -264,8 +285,12 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 				LResult->balance = bal_result->getInt(1);
 			}
 		}
-		delete (result);
+		con->close();
 
+		delete result;
+		delete bal_result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -273,11 +298,12 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 		std::cout << " (MySQL error code: " << e.getErrorCode();
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
+
 	return LResult->ListFirst();
 }
 
 void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList) {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	try {
 		Connect();
 
@@ -307,6 +333,10 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 				Abon->id = result->getInt(1);
 			}
 		}
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -314,7 +344,6 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		std::cout << " (MySQL error code: " << e.getErrorCode();
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
-	printf("");
 }
 
 void MySQL::DelAbon(Abonent* Abon) {
@@ -326,6 +355,9 @@ void MySQL::DelAbon(Abonent* Abon) {
 		pstmt->setInt(1, Abon->id);
 		pstmt->executeQuery();
 
+		con->close();
+		delete pstmt;
+		delete con;
 
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -345,6 +377,9 @@ void MySQL::RestoreGreyIP(char* IP) {
 		pstmt->setString(1, IP);
 		pstmt->executeQuery();
 
+		con->close();
+		delete pstmt;
+		delete con;
 
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -364,6 +399,9 @@ void MySQL::DelGreyIP(Free_grey_IP* IP) {
 		pstmt->setString(1, IP->ip);
 		pstmt->executeQuery();
 
+		con->close();
+		delete pstmt;
+		delete con;
 
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -383,6 +421,9 @@ void MySQL::RestoreRealIP(char* IP) {
 		pstmt->setString(1, IP);
 		pstmt->executeQuery();
 
+		con->close();
+		delete pstmt;
+		delete con;
 
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -402,6 +443,9 @@ void MySQL::DelRealIP(Free_real_IP* IP) {
 		pstmt->setString(1, IP->ip);
 		pstmt->executeQuery();
 
+		con->close();
+		delete pstmt;
+		delete con;
 
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
@@ -413,7 +457,7 @@ void MySQL::DelRealIP(Free_real_IP* IP) {
 }
 
 void MySQL::SavePay(Abonent* Abon, int payment) {
-	sql::ResultSet* result;
+	sql::ResultSet* result = NULL;
 	char* temp = StringHelper::New();
 	strcpy_s(temp, StringHelper::DefaultSize, "Изменение баланса оператором ");
 	strcat_s(temp, StringHelper::DefaultSize, username);
@@ -426,6 +470,11 @@ void MySQL::SavePay(Abonent* Abon, int payment) {
 		pstmt->setInt(2, payment);
 		pstmt->setString(3, temp);
 		pstmt->executeQuery();
+
+		con->close();
+		delete result;
+		delete pstmt;
+		delete con;
 		free(temp);
 
 	} catch (sql::SQLException& e) {

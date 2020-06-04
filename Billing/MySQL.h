@@ -33,9 +33,9 @@ public:
 	Tarif* LoadTarifs();
 
 	sql::Driver* driver;
-	sql::Connection* con;
+	sql::Connection* con = NULL;
 	//sql::Statement* stmt;
-	sql::PreparedStatement* pstmt;
+	sql::PreparedStatement* pstmt = NULL;
 
 	Abonent* LoadAbons(Street* StreetList, Tarif* TarifList);
 	void SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList);
