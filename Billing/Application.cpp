@@ -598,11 +598,15 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				Console::Print((char*)"Доступ разрешен", Color, BgColor);
 			} else Console::Print((char*)"Заблокирован   ", Console::clRed, BgColor);
 
-			Color = Console::clCyan;
-			BgColor = Console::clYellow;
+			if (AbonShow) {
+				Color = Console::clCyan;
+				BgColor = Console::clCyan;
+			} else {
+				Color = Console::clCyan;
+				BgColor = Console::clYellow;
+			}
 
 			Console::GotoXY(LeftX, LeftY);
-			if (!AbonShow) {
 				if (Console::Height() >= 33) {
 					LeftX += 14;
 					LeftY = Console::Height() - 14;
@@ -613,18 +617,13 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				}
 				Console::GotoXY(LeftX, LeftY);
 				Console::Print((char*)" F5 - Редактировать  ", Color, BgColor);
-			} 
 
-			BgColor = Console::clYellow;
-			if (!AbonShow) {
-				if (Console::Height() >= 33) {
-					LeftY = Console::Height() - 9;
-					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
-				} else LeftX += 26;
-				Console::GotoXY(LeftX, LeftY);
-				Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
-			}
-
+			if (Console::Height() >= 33) {
+				LeftY = Console::Height() - 9;
+				Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+			} else LeftX += 26;
+			Console::GotoXY(LeftX, LeftY);
+			Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
 
 			if (CursorOn->balance <= 0) {
 				Color = Console::clYellow;
@@ -633,6 +632,12 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				Color = Console::clWhite;
 				BgColor = Console::clLightGrey;
 			}
+
+			if (AbonShow) {
+				Color = Console::clCyan;
+				BgColor = Console::clCyan;
+			}
+
 			if (Console::Height() >= 33) {
 				LeftY = Console::Height() - 4;
 				LeftX = Console::Width() - 39;
@@ -962,8 +967,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 		}
 	}
 	AbonShow = false;
-	DrawMenu(Console::Height() - 1, HelpString);
-	DrawMenu(0, TableString);
+	ShowAbonentCard(CursorOn, false);
 	Console::GotoXY(0, CursorPos);
 	TableDraw();
 }
@@ -1007,8 +1011,6 @@ void Application::AbonEdit() {
 	}
 	AbonShow = false;
 	ShowAbonentCard(CursorOn, false);
-	/*DrawMenu(Console::Height() - 1, HelpString);
-	DrawMenu(0, TableString);*/
 	Console::GotoXY(0, CursorPos);
 	ListsReLoad();
 }
