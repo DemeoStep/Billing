@@ -90,7 +90,7 @@ public:
 
 	void IPReLoad();
 
-	void ShowAbonentCard(Abonent* Item, bool New);
+	void ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons = true);
 	Abonent* ShowEditCard(bool New);
 	void AbonDel(Abonent* Item);
 	void AbonAdd(Abonent* List);

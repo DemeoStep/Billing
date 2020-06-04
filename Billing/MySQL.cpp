@@ -489,16 +489,14 @@ void MySQL::SavePay(Abonent* Abon, int payment) {
 	char* temp = StringHelper::New();
 	strcpy_s(temp, StringHelper::DefaultSize, "Изменение баланса оператором ");
 	strcat_s(temp, StringHelper::DefaultSize, username);
-	time_t now = time(0);
 	try {
 		Connect();
 		
-		pstmt = con->prepareStatement("INSERT INTO `pays` (`time`, `user_id`, `money`, `reason`) VALUES (?, ?, ?, ?)");
+		pstmt = con->prepareStatement("INSERT INTO `pays` (`user_id`, `money`, `reason`) VALUES (?, ?, ?)");
 
-		pstmt->setInt(1, now);
-		pstmt->setInt(2, Abon->id);
-		pstmt->setInt(3, payment);
-		pstmt->setString(4, temp);
+		pstmt->setInt(1, Abon->id);
+		pstmt->setInt(2, payment);
+		pstmt->setString(3, temp);
 		pstmt->executeQuery();
 
 		con->close();

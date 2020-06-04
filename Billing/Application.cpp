@@ -455,7 +455,7 @@ void Application::TableDraw() {
 	
 }
 
-void Application::ShowAbonentCard(Abonent* Item, bool New) {
+void Application::ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons) {
 	if (Item) {
 		short LeftX = Console::Width() - StringHelper::AbonCardWidth;
 		short LeftY = 0;
@@ -599,15 +599,12 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				Console::Print((char*)"Доступ разрешен", Color, BgColor);
 			} else Console::Print((char*)"Заблокирован   ", Console::clRed, BgColor);
 
-			if (AbonShow) {
-				Color = Console::clCyan;
-				BgColor = Console::clCyan;
-			} else {
+			if (ShowButtons) {
+
 				Color = Console::clCyan;
 				BgColor = Console::clYellow;
-			}
 
-			Console::GotoXY(LeftX, LeftY);
+				Console::GotoXY(LeftX, LeftY);
 				if (Console::Height() >= 33) {
 					LeftX += 14;
 					LeftY = Console::Height() - 14;
@@ -619,36 +616,32 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				Console::GotoXY(LeftX, LeftY);
 				Console::Print((char*)" F5 - Редактировать  ", Color, BgColor);
 
-			if (Console::Height() >= 33) {
-				LeftY = Console::Height() - 9;
-				Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
-			} else LeftX += 26;
-			Console::GotoXY(LeftX, LeftY);
-			Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
+				if (Console::Height() >= 33) {
+					LeftY = Console::Height() - 9;
+					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+				} else LeftX += 26;
+				Console::GotoXY(LeftX, LeftY);
+				Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
 
-			if (CursorOn->balance <= 0) {
-				Color = Console::clYellow;
-				BgColor = Console::clRed;
-			} else {
-				Color = Console::clWhite;
-				BgColor = Console::clLightGrey;
-			}
+				if (CursorOn->balance <= 0) {
+					Color = Console::clYellow;
+					BgColor = Console::clRed;
+				} else {
+					Color = Console::clWhite;
+					BgColor = Console::clLightGrey;
+				}
 
-			if (AbonShow) {
-				Color = Console::clCyan;
-				BgColor = Console::clCyan;
+				if (Console::Height() >= 33) {
+					LeftY = Console::Height() - 4;
+					LeftX = Console::Width() - 39;
+					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+				} else {
+					LeftY = Console::Height() - 3;
+					LeftX = Console::Width() - 39;
+				}
+				Console::GotoXY(LeftX, LeftY);
+				Console::Print((char*)"   F8 - УДАЛИТЬ!!!   ", Color, BgColor);
 			}
-
-			if (Console::Height() >= 33) {
-				LeftY = Console::Height() - 4;
-				LeftX = Console::Width() - 39;
-				Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
-			} else {
-				LeftY = Console::Height() - 3;
-				LeftX = Console::Width() - 39;
-			}
-			Console::GotoXY(LeftX, LeftY);
-			Console::Print((char*)"   F8 - УДАЛИТЬ!!!   ", Color, BgColor);
 		}
 		Console::GotoXY(0, CursorPos);
 		AbonShow = true;
@@ -675,7 +668,7 @@ Abonent* Application::ShowEditCard(bool New) {
 		Console::FillRect(X - 20, Y - 2, X + 20, Y + 2, Console::clBlack);
 	};
 
-	ShowAbonentCard(Abonents, New);
+	ShowAbonentCard(Abonents, New, false);
 
 	Console::ShowCursor(false);
 
