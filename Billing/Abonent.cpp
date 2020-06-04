@@ -12,6 +12,7 @@ class Application;
 
 Abonent::Abonent() {
 	id = 0;
+	index = 0;
 	fio = StringHelper::New();
 	login = StringHelper::New();
 	pass = StringHelper::New();
@@ -189,10 +190,10 @@ void Abonent::FastPrint(bool AbonShow, const Console::ConsoleColors Color, const
 void Abonent::BuildStr(Abonent* Abon, char* LineToBuild) {
 	char* temp = StringHelper::New();
 	char* int_to_str_temp = StringHelper::New();
-	StringHelper::int_to_str(int_to_str_temp, Abon->id);
+	StringHelper::int_to_str(int_to_str_temp, Abon->index);
 	strcpy_s(temp, StringHelper::DefaultSize, int_to_str_temp);
 
-	StringHelper::StrToSize(temp, 4, 1);
+	StringHelper::StrToSize(temp, 6, 1);
 	strcat_s(LineToBuild, StringHelper::DefaultSize, temp);
 	strcat_s(LineToBuild, StringHelper::DefaultSize, " | ");
 

@@ -62,7 +62,7 @@ Application::Application() {
 	CursorPos = 0;
 
 	strcpy_s(HelpString, StringHelper::DefaultSize,  " Esc - Выход | F5 - Новый | F6 - Пополнить счет | F7 - Поиск по адресу");
-	strcpy_s(TableString, StringHelper::DefaultSize, "  №  |                    ФИО                   |    Телефон    |             Адрес            | Тариф |        IP       |   Баланс  | "); // Состояние | ");
+	strcpy_s(TableString, StringHelper::DefaultSize, "   №   |                    ФИО                   |    Телефон    |             Адрес            | Тариф |        IP       |   Баланс  | "); // Состояние | ");
 	strcpy_s(Curr, StringHelper::DefaultSize, "шек.");
 
 	Abonents = NULL;

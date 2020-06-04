@@ -281,6 +281,7 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 	sql::ResultSet* result = NULL;
 	sql::ResultSet* bal_result = NULL;
 	Abonent* LResult = NULL;
+	int index = 0;
 	try {
 		Connect();
 
@@ -294,8 +295,9 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 			} else {
 				LResult = new Abonent;
 			}
-
+			index++;
 			LResult->id = result->getInt(1);
+			LResult->index = index;
 			strcpy_s(LResult->fio, StringHelper::DefaultSize, result->getString(2).c_str());
 			strcpy_s(LResult->login, StringHelper::DefaultSize, result->getString(3).c_str());
 			strcpy_s(LResult->pass, StringHelper::DefaultSize, result->getString(4).c_str());

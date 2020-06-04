@@ -11,6 +11,7 @@ public:
 	Abonent();
 	~Abonent();
 	int id;
+	int index;
 	char* fio;
 	char* login;
 	char* pass;
