@@ -642,6 +642,32 @@ void Application::ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons) {
 				}
 				Console::GotoXY(LeftX, LeftY);
 				Console::Print((char*)"   F8 - ÓÄÀËÈÒÜ!!!   ", Color, BgColor);
+			} else {
+				Color = Console::clCyan;
+				BgColor = Console::clCyan;
+
+				if (Console::Height() >= 33) {
+					LeftX += 14;
+					LeftY = Console::Height() - 14;
+					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+				} else {
+					LeftY = Console::Height() - 5;
+					LeftX++;
+				}
+
+				if (Console::Height() >= 33) {
+					LeftY = Console::Height() - 9;
+					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+				} else LeftX += 26;
+
+				if (Console::Height() >= 33) {
+					LeftY = Console::Height() - 4;
+					LeftX = Console::Width() - 39;
+					Console::FillRect(LeftX - 2, LeftY - 1, LeftX + 21, LeftY + 1, BgColor);
+				} else {
+					LeftY = Console::Height() - 3;
+					LeftX = Console::Width() - 39;
+				}
 			}
 		}
 		Console::GotoXY(0, CursorPos);
