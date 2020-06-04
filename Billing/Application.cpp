@@ -534,6 +534,7 @@ void Application::ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons) {
 		if (!AbonShow) Console::Print((char*)"Id: ", Color, BgColor);
 		Console::GotoX(LeftX + 30);
 		StringHelper::int_to_str(int_to_str_temp, Item->id);
+		StringHelper::StrToSize(int_to_str_temp, 5);
 		Console::Print(int_to_str_temp, Color, BgColor);
 
 		LeftY += 2;
