@@ -1277,8 +1277,8 @@ void Application::ListsReLoad() {
 		Init();
 		CursorOn = Abonents;
 		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
-		TableDraw();
 	}
+	TableDraw();
 	free(last_our_time);
 }
 
