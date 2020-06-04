@@ -17,11 +17,14 @@ public:
 	char* username;
 	char* password;
 	char* schema;
+	char* lastupdate;
 
 	MySQL();
 	~MySQL();
 
 	void Connect();
+
+	void GetLastUpdatetime();
 
 	Street* LoadStreets();
 
@@ -34,7 +37,6 @@ public:
 
 	sql::Driver* driver;
 	sql::Connection* con = NULL;
-	//sql::Statement* stmt;
 	sql::PreparedStatement* pstmt = NULL;
 
 	Abonent* LoadAbons(Street* StreetList, Tarif* TarifList);

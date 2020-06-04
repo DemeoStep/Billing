@@ -99,6 +99,7 @@ void Application::Run() {
 	Console::GotoXY(0, 1);
 
 	Init();
+	Connection->GetLastUpdatetime();
 
 	if (Abonents) {
 		if (Abonents->ListCount() > 1) {
@@ -1059,7 +1060,6 @@ void Application::Balance_change(Abonent* Item) {
 		ShowAbonentCard(CursorOn, false);
 	}
 	Console::GotoXY(0, CursorPos);
-	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 	ListsReLoad();
 
 	free(bal);
@@ -1274,12 +1274,19 @@ void Application::ListsNULL() {
 
 void Application::ListsReLoad() {
 	int CursorOn_id = CursorOn->id;
+	char* last_our_time = StringHelper::New();
+	strcpy_s(last_our_time, StringHelper::DefaultSize, Connection->lastupdate);
+	Connection->GetLastUpdatetime();
 
-	ListsNULL();
-	Init();
-	CursorOn = Abonents;
-	CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
-	TableDraw();
+	if (strcmp(last_our_time, Connection->lastupdate)) {
+
+		ListsNULL();
+		Init();
+		CursorOn = Abonents;
+		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
+		TableDraw();
+	}
+	free(last_our_time);
 }
 
 void Application::IPReLoad() {

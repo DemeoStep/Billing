@@ -17,6 +17,7 @@
 
 
 MySQL::MySQL() {
+	lastupdate = StringHelper::New();
 	driver = get_driver_instance();
 	server = StringHelper::New();
 	strcpy_s(server, StringHelper::DefaultSize, "tcp://192.168.12.2:3306");
@@ -63,6 +64,7 @@ MySQL::~MySQL() {
 	free(schema);
 	free(username);
 	free(password);
+	free(lastupdate);
 }
 
 void MySQL::Connect() {
@@ -75,6 +77,32 @@ void MySQL::Connect() {
 		exit(1);
 	}
 }
+
+void MySQL::GetLastUpdatetime() {
+	sql::ResultSet* result = NULL;
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = ? ORDER BY UPDATE_TIME DESC LIMIT 1");
+		pstmt->setString(1, schema);
+		result = pstmt->executeQuery();
+
+		while (result->next()) {
+			strcpy_s(lastupdate, StringHelper::DefaultSize, result->getString(1).c_str());
+
+		}
+		con->close();
+		delete con;
+		delete result;
+		delete pstmt;
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+};
 
 Street* MySQL::LoadStreets() {
 	sql::ResultSet* result = NULL;
