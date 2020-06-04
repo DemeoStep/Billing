@@ -229,11 +229,12 @@ Free_real_IP* MySQL::LoadRealIPs() {
 
 Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 	sql::ResultSet* result;
+	sql::ResultSet* bal_result;
 	Abonent* LResult = NULL;
 	try {
 		Connect();
 
-		pstmt = con->prepareStatement("SELECT id,fio,login,AES_DECRYPT(pass,'hardpassword'),phone,street,house,appart,tarif,ip,balance,state FROM users ORDER BY fio;");
+		pstmt = con->prepareStatement("SELECT id,fio,login,AES_DECRYPT(pass,'hardpassword'),phone,street,house,appart,tarif,ip,state FROM users ORDER BY fio;");
 		result = pstmt->executeQuery();
 
 		while (result->next()) {
@@ -254,9 +255,17 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 			LResult->Apartment = result->getInt(8);
 			LResult->TarifPTR = TarifList->Get_by_id(result->getInt(9));
 			strcpy_s(LResult->IP, StringHelper::DefaultSize, result->getString(10).c_str());
-			LResult->balance = result->getInt(11);
-			LResult->state = result->getInt(12);
+			LResult->state = result->getInt(11);
+
+			pstmt = con->prepareStatement("SELECT ROUND(SUM(money)) FROM Kurs_billing.pays WHERE user_id = ?;");
+			pstmt->setInt(1, LResult->id);
+			bal_result = pstmt->executeQuery();
+			while (bal_result->next()) {
+				LResult->balance = bal_result->getInt(1);
+			}
 		}
+		delete (result);
+
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -272,8 +281,8 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 	try {
 		Connect();
 
-		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = AES_ENCRYPT(?, 'hardpassword'), `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `balance` = ?, `state` = ? WHERE `users`.`id` = ?");
-		else pstmt = con->prepareStatement("INSERT INTO `users` (`fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `balance`, `state`) VALUES (?, ?, AES_ENCRYPT(?, 'hardpassword'), ?, ?, ?, ?, ?, ?, ?, ?)");
+		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = AES_ENCRYPT(?, 'hardpassword'), `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `state` = ? WHERE `users`.`id` = ?");
+		else pstmt = con->prepareStatement("INSERT INTO `users` (`fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `state`) VALUES (?, ?, AES_ENCRYPT(?, 'hardpassword'), ?, ?, ?, ?, ?, ?, ?)");
 
 		pstmt->setString(1, Abon->fio);
 		pstmt->setString(2, Abon->login);
@@ -284,10 +293,9 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		pstmt->setInt(7, Abon->Apartment);
 		pstmt->setInt(8, Abon->TarifPTR->id);
 		pstmt->setString(9, Abon->IP);
-		pstmt->setInt(10, Abon->balance);
-		pstmt->setInt(11, Abon->state);
+		pstmt->setInt(10, Abon->state);
 
-		if (!New)pstmt->setInt(12, Abon->id);
+		if (!New)pstmt->setInt(11, Abon->id);
 		
 		pstmt->executeQuery();
 
