@@ -97,9 +97,9 @@ Street* MySQL::LoadStreets() {
 	
 		}
 		con->close();
+		delete con;
 		delete result;
 		delete pstmt;
-		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -286,11 +286,10 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 			}
 		}
 		con->close();
-
+		delete con;
 		delete result;
 		delete bal_result;
 		delete pstmt;
-		delete con;
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
