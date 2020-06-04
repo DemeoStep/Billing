@@ -1047,6 +1047,7 @@ void Application::Balance_change(Abonent* Item) {
 	
 	if (CursorOn->balance <= 0) CursorOn->state = 1;
 	else CursorOn->state = 0;
+	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 	TableDraw();
 	if (AbonShow) {
 		AbonShow = false;
@@ -1187,8 +1188,7 @@ void Application::Search() {
 	}
 
 	AbonShow = false;
-	DrawMenu(Console::Height() - 1, HelpString);
-	DrawMenu(0, TableString);
+	ShowAbonentCard(Search_abon, false);
 	Console::GotoXY(0, CursorPos);
 	TableDraw();
 	free(temp);
