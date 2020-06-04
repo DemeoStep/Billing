@@ -44,6 +44,7 @@ public:
 	void DelGreyIP(Free_grey_IP* IP);
 	void RestoreRealIP(char* IP);
 	void DelRealIP(Free_real_IP* IP);
+	void SavePay(Abonent* Abon, int payment);
 };
 
 #endif

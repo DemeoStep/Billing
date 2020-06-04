@@ -613,8 +613,9 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				}
 				Console::GotoXY(LeftX, LeftY);
 				Console::Print((char*)" F5 - Редактировать  ", Color, BgColor);
-			}
+			} 
 
+			BgColor = Console::clYellow;
 			if (!AbonShow) {
 				if (Console::Height() >= 33) {
 					LeftY = Console::Height() - 9;
@@ -623,6 +624,7 @@ void Application::ShowAbonentCard(Abonent* Item, bool New) {
 				Console::GotoXY(LeftX, LeftY);
 				Console::Print((char*)" F6 - Пополнить счет ", Color, BgColor);
 			}
+
 
 			if (CursorOn->balance <= 0) {
 				Color = Console::clYellow;
@@ -1004,13 +1006,15 @@ void Application::AbonEdit() {
 
 	}
 	AbonShow = false;
-	DrawMenu(Console::Height() - 1, HelpString);
-	DrawMenu(0, TableString);
+	ShowAbonentCard(CursorOn, false);
+	/*DrawMenu(Console::Height() - 1, HelpString);
+	DrawMenu(0, TableString);*/
 	Console::GotoXY(0, CursorPos);
 	ListsReLoad();
 }
 
 void Application::Balance_change(Abonent* Item) {
+	ListsReLoad();
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -1040,6 +1044,7 @@ void Application::Balance_change(Abonent* Item) {
 	StringHelper::Input_currency(input);
 	strcpy_s(temp, StringHelper::DefaultSize, input);
 	CursorOn->balance += std::strtol(temp, NULL, 10);
+	Connection->SavePay(CursorOn, std::strtol(temp, NULL, 10));
 	Console::ShowCursor(false);
 	
 	if (CursorOn->balance <= 0) CursorOn->state = 1;

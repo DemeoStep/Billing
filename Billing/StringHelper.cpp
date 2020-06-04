@@ -182,6 +182,7 @@ void StringHelper::InputRus(char* str, const int length) {
 		} else if (i && (keyPressed == Console::keyEnter || keyPressed == Console::keyEscape)) {
 			break;
 		}
+		*s = 0;
 		keyPressed = Console::GetKey();
 	}
 	

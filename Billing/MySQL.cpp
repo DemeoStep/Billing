@@ -233,7 +233,7 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 	try {
 		Connect();
 
-		pstmt = con->prepareStatement("SELECT * FROM users ORDER BY fio;");
+		pstmt = con->prepareStatement("SELECT id,fio,login,AES_DECRYPT(pass,'hardpassword'),phone,street,house,appart,tarif,ip,balance,state FROM users ORDER BY fio;");
 		result = pstmt->executeQuery();
 
 		while (result->next()) {
@@ -272,8 +272,8 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 	try {
 		Connect();
 
-		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = ?, `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `balance` = ?, `state` = ? WHERE `users`.`id` = ?");
-		else pstmt = con->prepareStatement("INSERT INTO `users` (`id`, `fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `balance`, `state`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = AES_ENCRYPT(?, 'hardpassword'), `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `balance` = ?, `state` = ? WHERE `users`.`id` = ?");
+		else pstmt = con->prepareStatement("INSERT INTO `users` (`fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `balance`, `state`) VALUES (?, ?, AES_ENCRYPT(?, 'hardpassword'), ?, ?, ?, ?, ?, ?, ?, ?)");
 
 		pstmt->setString(1, Abon->fio);
 		pstmt->setString(2, Abon->login);
@@ -291,13 +291,14 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		
 		pstmt->executeQuery();
 
-		if (New) pstmt = con->prepareStatement("SELECT * FROM users WHERE login = ?");
-		pstmt->setString(1, Abon->login);
-		result = pstmt->executeQuery();
-		while (result->next()) {
-			Abon->id = result->getInt(1);
+		if (New) {
+			pstmt = con->prepareStatement("SELECT * FROM users WHERE login = ?");
+			pstmt->setString(1, Abon->login);
+			result = pstmt->executeQuery();
+			while (result->next()) {
+				Abon->id = result->getInt(1);
+			}
 		}
-		
 	} catch (sql::SQLException& e) {
 		std::cout << "# ERR: SQLException in " << __FILE__;
 		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -401,4 +402,30 @@ void MySQL::DelRealIP(Free_real_IP* IP) {
 		std::cout << " (MySQL error code: " << e.getErrorCode();
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
+}
+
+void MySQL::SavePay(Abonent* Abon, int payment) {
+	sql::ResultSet* result;
+	char* temp = StringHelper::New();
+	strcpy_s(temp, StringHelper::DefaultSize, "Изменение баланса оператором ");
+	strcat_s(temp, StringHelper::DefaultSize, username);
+	try {
+		Connect();
+
+		pstmt = con->prepareStatement("INSERT INTO `pays` (`user_id`, `money`, `reason`) VALUES (?, ?, ?)");
+
+		pstmt->setInt(1, Abon->id);
+		pstmt->setInt(2, payment);
+		pstmt->setString(3, temp);
+		pstmt->executeQuery();
+		free(temp);
+
+	} catch (sql::SQLException& e) {
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+	printf("");
 }
