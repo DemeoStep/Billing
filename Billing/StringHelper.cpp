@@ -315,11 +315,11 @@ void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
 			bool correct = false;
 			OperList = OperList->ListFirst();
 
-			while (OperList->ListNext) {
+			while (OperList) {
 				if (!strcmp(str, OperList->code)) {
 					correct = true;
 					break;
-				} else OperList = OperList->ListNext;
+				} else if (OperList->ListNext) OperList = OperList->ListNext;
 			}
 			if (!correct) {
 				Console::GotoXY(X, Y);
