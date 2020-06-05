@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ctime>
 #include "StringHelper.h"
 #include "MySQL.h"
 #include "Abonent.h"
