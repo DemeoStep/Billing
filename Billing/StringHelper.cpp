@@ -297,6 +297,7 @@ void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
 	int length = 13;
 	short X = Console::X();
 	short Y = Console::Y();
+	CellOper* List = OperList;
 	Console::SetColor(Console::clBlack, Console::clYellow);
 	Console::FillRect(X - 1, Y, X + length + 2, Y, Console::clYellow);
 	Console::ShowCursor(true);
@@ -313,13 +314,13 @@ void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
 	do {
 		if (i == 3) {
 			bool correct = false;
-			OperList = OperList->ListFirst();
+			List = List->ListFirst();
 
-			while (OperList) {
-				if (!strcmp(str, OperList->code)) {
+			while (List) {
+				if (!strcmp(str, List->code)) {
 					correct = true;
 					break;
-				} else if (OperList->ListNext) OperList = OperList->ListNext;
+				} else List = List->ListNext;
 			}
 			if (!correct) {
 				Console::GotoXY(X, Y);
@@ -327,6 +328,7 @@ void StringHelper::InputCellPhone(char* str, CellOper* OperList) {
 				StringHelper::Null(str);
 				i = 0;
 				s = str;
+				List = OperList;
 			}
 		}
 		if (i == 3 || i == 7 || i == 10) {

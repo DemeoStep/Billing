@@ -101,31 +101,6 @@ void Application::Run() {
 	Init();
 	Connection->GetLastUpdatetime();
 
-	if (Abonents) {
-		if (Abonents->ListCount() > 1) {
-			TableFirst = Abonents->ListSort(Abonents);
-		} else TableFirst = Abonents;
-
-		TableLast = TableFirst;
-		int end = 0;
-
-		if (Abonents->ListCount() < (Console::Height() - 2)) {
-			end = Abonents->ListCount();
-		} else {
-			end = (Console::Height() - 2);
-		}
-
-		if (TableLast->ListNext) {
-			for (int i = 1; i < end; i++) {
-				TableLast = TableLast->ListNext;
-			}
-		}
-
-		CursorOn = TableFirst;
-		CursorPos = 1;
-		TableDraw();
-
-	}
 	while (Running) {
 		PressedKey = _getch();
 		if ( (0xE0!= PressedKey) && (0 != PressedKey) ) {
@@ -910,7 +885,7 @@ void Application::AbonDel(Abonent* Item) {
 				}
 			}
 		}
-
+		CursorOn->IndexChange();
 		TableDraw();
 		AbonShow = false;
 		ShowAbonentCard(CursorOn, false);
@@ -921,7 +896,7 @@ void Application::AbonDel(Abonent* Item) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
-	ListsReLoad();
+	//ListsReLoad();
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
@@ -983,14 +958,15 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 			CursorPos = JumpTo(LAdded, true);
 			Connection->SaveAbon(LAdded, true, Streets, Tarifs);
-			ListsReLoad();
 
 		}
 	}
+	/*CursorOn->IndexChange();*/
+	ListsReLoad();
 	AbonShow = false;
 	ShowAbonentCard(CursorOn, false);
 	Console::GotoXY(0, CursorPos);
-	TableDraw();
+	//TableDraw();
 }
 
 void Application::AbonEdit() {
@@ -1030,6 +1006,7 @@ void Application::AbonEdit() {
 		CursorPos = JumpTo(CursorOn, false);
 
 	}
+	CursorOn->IndexChange();
 	AbonShow = false;
 	ShowAbonentCard(CursorOn, false);
 	Console::GotoXY(0, CursorPos);
@@ -1081,7 +1058,6 @@ void Application::Balance_change(Abonent* Item) {
 		ShowAbonentCard(CursorOn, false);
 	}
 	Console::GotoXY(0, CursorPos);
-	ListsReLoad();
 
 	free(bal);
 	free(temp);
@@ -1123,6 +1099,33 @@ void Application::Init() {
 	Tarifs = Connection->LoadTarifs();
 	CellCodes = Connection->LoadCellCodes();
 	Abonents = Connection->LoadAbons(Streets, Tarifs);
+
+	if (Abonents) {
+		if (Abonents->ListCount() > 1) {
+			TableFirst = Abonents->ListSort(Abonents);
+		} else TableFirst = Abonents;
+
+		TableLast = TableFirst;
+		int end = 0;
+
+		if (Abonents->ListCount() < (Console::Height() - 2)) {
+			end = Abonents->ListCount();
+		} else {
+			end = (Console::Height() - 2);
+		}
+
+		if (TableLast->ListNext) {
+			for (int i = 1; i < end; i++) {
+				TableLast = TableLast->ListNext;
+			}
+		}
+
+		CursorOn = TableFirst;
+		CursorPos = 1;
+		TableDraw();
+
+	}
+
 }
 
 int Application::JumpTo(Abonent* toItem, bool New) {

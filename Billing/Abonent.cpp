@@ -405,3 +405,13 @@ Abonent* Abonent::Get_by_id(int id) {
 
 	return LResult;
 };
+
+void Abonent::IndexChange() {
+	Abonent* List = this->ListFirst();
+	int index = 0;
+	while (List) {
+		index++;
+		List->index = index;
+		List = List->ListNext;
+	}
+}

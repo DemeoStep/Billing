@@ -41,6 +41,8 @@ public:
 
 	Abonent* Get_by_id(int id);
 
+	void IndexChange();
+
 	int ListCount();
 };
 
