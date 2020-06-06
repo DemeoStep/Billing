@@ -961,12 +961,10 @@ void Application::AbonAdd(Abonent* LAdded) {
 
 		}
 	}
-	/*CursorOn->IndexChange();*/
 	ListsReLoad();
 	AbonShow = false;
 	ShowAbonentCard(CursorOn, false);
 	Console::GotoXY(0, CursorPos);
-	//TableDraw();
 }
 
 void Application::AbonEdit() {
