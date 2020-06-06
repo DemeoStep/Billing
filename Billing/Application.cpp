@@ -1044,12 +1044,17 @@ void Application::Balance_change(Abonent* Item) {
 	if (std::strtol(temp, NULL, 10)) {
 		CursorOn->balance += std::strtol(temp, NULL, 10);
 		Connection->SavePay(CursorOn, std::strtol(temp, NULL, 10));
+		if (CursorOn->balance <= 0 && CursorOn->state == 0) {
+			CursorOn->state = 1;
+			Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
+		}
+		else if (CursorOn->balance > 0 && CursorOn->state == 1) {
+			CursorOn->state = 0;
+			Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
+		}
 	}
 	Console::ShowCursor(false);
 	
-	if (CursorOn->balance <= 0) CursorOn->state = 1;
-	else CursorOn->state = 0;
-	Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 	TableDraw();
 	if (AbonShow) {
 		AbonShow = false;
