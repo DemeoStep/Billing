@@ -92,6 +92,7 @@ Application::~Application() {
 
 void Application::Run() {
 	Running = true;
+	Connection->InputLoginPass();
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
 	Console::ShowCursor(false);

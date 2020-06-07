@@ -22,7 +22,19 @@ MySQL::MySQL() {
 	strcpy_s(server, StringHelper::DefaultSize, "tcp://192.168.12.2:3306");
 	schema = StringHelper::New();
 	strcpy_s(schema, StringHelper::DefaultSize, "Kurs_billing");
+	username = StringHelper::New();
+	password = StringHelper::New();
+}
 
+MySQL::~MySQL() {
+	free(server);
+	free(schema);
+	free(username);
+	free(password);
+	free(lastupdate);
+}
+
+void MySQL::InputLoginPass() {
 	int X = Console::Width() / 2;
 	int Y = Console::Height() / 2;
 	char* temp = StringHelper::New();
@@ -48,23 +60,12 @@ MySQL::MySQL() {
 	Console::GotoXY(X, Y);
 	Console::SetColor(Console::clBlack, Console::clLightGrey);
 
-	username = StringHelper::New();
-	password = StringHelper::New();
-
 	StringHelper::Input(username);
 
 	Console::GotoXY(X, Y + 2);
 	StringHelper::InputPass(password);
+};
 
-}
-
-MySQL::~MySQL() {
-	free(server);
-	free(schema);
-	free(username);
-	free(password);
-	free(lastupdate);
-}
 
 void MySQL::Connect() {
 	try {

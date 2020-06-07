@@ -22,6 +22,8 @@ public:
 	MySQL();
 	~MySQL();
 
+	void InputLoginPass();
+
 	void Connect();
 
 	void GetLastUpdatetime();
