@@ -24,6 +24,7 @@ Abonent::Abonent() {
 	IP = StringHelper::New();
 	balance = 0;
 	state = 0;
+	need_pay = true;
 
 	ListNext = NULL;
 	ListPrev = NULL;

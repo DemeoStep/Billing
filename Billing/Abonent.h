@@ -23,6 +23,7 @@ public:
 	char* IP;
 	int balance; //в копейках
 	int state;
+	bool need_pay;
 
 	void GenTest();
 	void Print();

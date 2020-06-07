@@ -285,7 +285,7 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 	try {
 		Connect();
 
-		pstmt = con->prepareStatement("SELECT id,fio,login,AES_DECRYPT(pass,'hardpassword'),phone,street,house,appart,tarif,ip,state FROM users ORDER BY fio;");
+		pstmt = con->prepareStatement("SELECT id,fio,login,AES_DECRYPT(pass,'hardpassword'),phone,street,house,appart,tarif,ip,state,need_pay FROM users ORDER BY fio;");
 		result = pstmt->executeQuery();
 
 		while (result->next()) {
@@ -308,6 +308,7 @@ Abonent* MySQL::LoadAbons(Street* StreetList, Tarif* TarifList) {
 			LResult->TarifPTR = TarifList->Get_by_id(result->getInt(9));
 			strcpy_s(LResult->IP, StringHelper::DefaultSize, result->getString(10).c_str());
 			LResult->state = result->getInt(11);
+			LResult->need_pay = result->getBoolean(12);
 
 			pstmt = con->prepareStatement("SELECT ROUND(SUM(money)) FROM Kurs_billing.pays WHERE user_id = ?;");
 			pstmt->setInt(1, LResult->id);
@@ -337,8 +338,8 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 	try {
 		Connect();
 
-		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = AES_ENCRYPT(?, 'hardpassword'), `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `state` = ? WHERE `users`.`id` = ?");
-		else pstmt = con->prepareStatement("INSERT INTO `users` (`fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `state`) VALUES (?, ?, AES_ENCRYPT(?, 'hardpassword'), ?, ?, ?, ?, ?, ?, ?)");
+		if (!New) pstmt = con->prepareStatement("UPDATE `users` SET `fio` = ?, `login` = ?, `pass` = AES_ENCRYPT(?, 'hardpassword'), `phone` = ?, `street` = ?, `house` = ?, `appart` = ?, `tarif` = ?, `ip` = ?, `state` = ?, `need_pay` = ? WHERE `users`.`id` = ?");
+		else pstmt = con->prepareStatement("INSERT INTO `users` (`fio`, `login`, `pass`, `phone`, `street`, `house`, `appart`, `tarif`, `ip`, `state`) VALUES (?, ?, AES_ENCRYPT(?, 'hardpassword'), ?, ?, ?, ?, ?, ?, ?, ?)");
 
 		pstmt->setString(1, Abon->fio);
 		pstmt->setString(2, Abon->login);
@@ -350,8 +351,9 @@ void MySQL::SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifLi
 		pstmt->setInt(8, Abon->TarifPTR->id);
 		pstmt->setString(9, Abon->IP);
 		pstmt->setInt(10, Abon->state);
+		pstmt->setBoolean(11, Abon->need_pay);
 
-		if (!New)pstmt->setInt(11, Abon->id);
+		if (!New)pstmt->setInt(12, Abon->id);
 		
 		pstmt->executeQuery();
 

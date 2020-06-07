@@ -21,28 +21,19 @@
     <ClCompile Include="..\Billing\Abonent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Billing\MySQL.cpp">
+    <ClCompile Include="..\Billing\Tarif.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Billing\Street.cpp">
+    <ClCompile Include="MySQL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Billing\StringHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Billing\Tarif.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Billing\Console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Billing\CellOper.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Billing\Free_grey_IP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Billing\Free_real_IP.cpp">
+    <ClCompile Include="..\Billing\CellOper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,28 +44,19 @@
     <ClInclude Include="..\Billing\Abonent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Billing\MySQL.h">
+    <ClInclude Include="..\Billing\Tarif.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Billing\Street.h">
+    <ClInclude Include="MySQL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Billing\StringHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Billing\Tarif.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Billing\Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Billing\CellOper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Billing\Free_grey_IP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Billing\Free_real_IP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

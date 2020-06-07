@@ -11,4 +11,7 @@ Tarif* Tarifs = NULL;
 Street* Streets = NULL;
 MySQL* Connection = NULL;
 
+time_t now = time(NULL);
+tm ltm;
+
 #endif

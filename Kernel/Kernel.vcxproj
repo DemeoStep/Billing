@@ -146,25 +146,19 @@
     <ClCompile Include="..\Billing\Abonent.cpp" />
     <ClCompile Include="..\Billing\CellOper.cpp" />
     <ClCompile Include="..\Billing\Console.cpp" />
-    <ClCompile Include="..\Billing\Free_grey_IP.cpp" />
-    <ClCompile Include="..\Billing\Free_real_IP.cpp" />
-    <ClCompile Include="..\Billing\MySQL.cpp" />
-    <ClCompile Include="..\Billing\Street.cpp" />
     <ClCompile Include="..\Billing\StringHelper.cpp" />
     <ClCompile Include="..\Billing\Tarif.cpp" />
     <ClCompile Include="Kernel.cpp" />
+    <ClCompile Include="MySQL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Billing\Abonent.h" />
     <ClInclude Include="..\Billing\CellOper.h" />
     <ClInclude Include="..\Billing\Console.h" />
-    <ClInclude Include="..\Billing\Free_grey_IP.h" />
-    <ClInclude Include="..\Billing\Free_real_IP.h" />
-    <ClInclude Include="..\Billing\MySQL.h" />
-    <ClInclude Include="..\Billing\Street.h" />
     <ClInclude Include="..\Billing\StringHelper.h" />
     <ClInclude Include="..\Billing\Tarif.h" />
     <ClInclude Include="Kernel.h" />
+    <ClInclude Include="MySQL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
