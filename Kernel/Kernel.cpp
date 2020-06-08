@@ -150,9 +150,6 @@ int main() {
 	char* last_our_time = StringHelper::New();
 	today = StringHelper::New();
 
-	Connection->GetLastUpdatetime();
-	strcpy_s(last_our_time, StringHelper::DefaultSize, Connection->lastupdate);
-
 	while (true) {
 		Connection->GetLastUpdatetime();
 		Abonent* List = Abonents;
