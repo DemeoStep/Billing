@@ -100,6 +100,31 @@ void Application::Run() {
 	Console::GotoXY(0, 1);
 
 	Init();
+
+	if (Abonents) {
+		TableFirst = Abonents;
+
+		TableLast = TableFirst;
+		int end = 0;
+
+		if (Abonents->ListCount() < (Console::Height() - 2)) {
+			end = Abonents->ListCount();
+		} else {
+			end = (Console::Height() - 2);
+		}
+
+		if (TableLast->ListNext) {
+			for (int i = 1; i < end; i++) {
+				TableLast = TableLast->ListNext;
+			}
+		}
+
+		CursorOn = TableFirst;
+		CursorPos = 1;
+		TableDraw();
+
+	}
+
 	Connection->GetLastUpdatetime();
 
 	while (Running) {
@@ -820,6 +845,7 @@ Abonent* Application::ShowEditCard(bool New) {
 }
 
 void Application::AbonDel(Abonent* Item) {
+	ListsReLoad();
 	if (CursorOn) { // Список НЕнулевой
 		bool Desigion = Console::ShowWarning((char*)"Удалить? (Y/n)", CursorPos);
 		if (Desigion) {
@@ -897,7 +923,7 @@ void Application::AbonDel(Abonent* Item) {
 		Console::FillRect(0, 0, Console::Width(), Console::Height() - 2, Console::clBlack);
 		AbonShow = false;
 	}
-	//ListsReLoad();
+	ListsReLoad();
 }
 
 void Application::AbonAdd(Abonent* LAdded) {
@@ -972,7 +998,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 void Application::AbonEdit() {
 	
 	if (Console::ShowWarning((char*)"Редактировать? (Y/n)", CursorPos)) {
-
+		ListsReLoad();
 		ShowEditCard(false);
 
 		if (Abonents->ListCount() > 1) {
@@ -1105,10 +1131,8 @@ void Application::Init() {
 	CellCodes = Connection->LoadCellCodes();
 	Abonents = Connection->LoadAbons(Streets, Tarifs);
 
-	if (Abonents) {
-		if (Abonents->ListCount() > 1) {
-			TableFirst = Abonents->ListSort(Abonents);
-		} else TableFirst = Abonents;
+	/*if (Abonents) {
+		TableFirst = Abonents;
 
 		TableLast = TableFirst;
 		int end = 0;
@@ -1129,41 +1153,50 @@ void Application::Init() {
 		CursorPos = 1;
 		TableDraw();
 
-	}
+	}*/
 
 }
 
 int Application::JumpTo(Abonent* toItem, bool New) {
 
-	if (Abonents->ListCount() < Console::Height() - 1) {
-		TableFirst = Abonents->ListFirst();
-		TableLast = Abonents->ListLast();
-	} else {
-		TableFirst = TableFirst->ListFirst();
-		TableLast = TableFirst;
+	if (New) {
+		if (Abonents->ListCount() < Console::Height() - 1) {
+			TableFirst = Abonents->ListFirst();
+			TableLast = Abonents->ListLast();
+		} else {
+			TableFirst = TableFirst->ListFirst();
+			TableLast = TableFirst;
 
-		for (int i = 0; i < Console::Height() - 3; i++) {
-			TableLast = TableLast->ListNext;
-		}
-	}
-
-	CursorOn = TableFirst;
-	CursorPos = 1;
-	if (strcmp(CursorOn->fio, toItem->fio) != 0) {
-		while (strcmp(CursorOn->fio, toItem->fio) != 0) {
-			if (TableLast->ListNext) {
+			for (int i = 0; i < Console::Height() - 3; i++) {
 				TableLast = TableLast->ListNext;
-				CursorOn = CursorOn->ListNext;
-				TableFirst = TableFirst->ListNext;
-			} else {
-				CursorOn = CursorOn->ListNext;
-				CursorPos++;
 			}
 		}
-	} else {
-		printf("");
-	}
 
+		CursorOn = TableFirst;
+		CursorPos = 1;
+
+		if (strcmp(CursorOn->fio, toItem->fio) != 0) {
+			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+				if (TableLast->ListNext) {
+					TableLast = TableLast->ListNext;
+					CursorOn = CursorOn->ListNext;
+					TableFirst = TableFirst->ListNext;
+				} else {
+					CursorOn = CursorOn->ListNext;
+					CursorPos++;
+				}
+			}
+		} else {
+			printf("");
+		}
+	} else {
+		CursorOn = TableFirst;
+		if (strcmp(CursorOn->fio, toItem->fio) != 0) {
+			while (strcmp(CursorOn->fio, toItem->fio) != 0) {
+				CursorOn = CursorOn->ListNext;
+			}
+		}
+	}
 	return CursorPos;
 }
 
@@ -1302,6 +1335,8 @@ void Application::ListsNULL() {
 
 void Application::ListsReLoad() {
 	int CursorOn_id = CursorOn->id;
+	int TableFirst_id = TableFirst->id;
+	int TableLast_id = TableLast->id;
 	char* last_our_time = StringHelper::New();
 	strcpy_s(last_our_time, StringHelper::DefaultSize, Connection->lastupdate);
 	Connection->GetLastUpdatetime();
@@ -1311,7 +1346,9 @@ void Application::ListsReLoad() {
 		ListsNULL();
 		Init();
 		CursorOn = Abonents;
-		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), true);
+		TableFirst = Abonents->Get_by_id(TableFirst_id);
+		TableLast = Abonents->Get_by_id(TableLast_id);
+		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), false);
 	}
 	TableDraw();
 	free(last_our_time);
