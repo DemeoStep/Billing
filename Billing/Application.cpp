@@ -1399,19 +1399,15 @@ void Application::Today() {
 	StringHelper::int_to_str(temp, 1900 + ltm.tm_year);
 	strcpy_s(today, StringHelper::DefaultSize, temp);
 	strcat_s(today, StringHelper::DefaultSize, "-");
-
 	if (ltm.tm_mon < 10) {
 		strcat_s(today, StringHelper::DefaultSize, "0");
 	}
-
 	StringHelper::int_to_str(temp, ltm.tm_mon);
 	strcat_s(today, StringHelper::DefaultSize, temp);
 	strcat_s(today, StringHelper::DefaultSize, "-");
-
 	if (ltm.tm_mon < 10) {
 		strcat_s(today, StringHelper::DefaultSize, "0");
 	}
-
 	StringHelper::int_to_str(temp, ltm.tm_mday);
 	strcat_s(today, StringHelper::DefaultSize, temp);
 	free(temp);
