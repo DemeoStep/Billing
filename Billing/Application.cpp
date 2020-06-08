@@ -917,6 +917,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 		Abonents->state = 1;
 		Abonents->TarifPTR = Tarifs->ListFirst();
 		Abonents->StreetPTR = Streets->ListFirst();
+		strcpy_s(Abonents->last_pay, StringHelper::DefaultSize, "1000-12-31");
 
 		LAdded = ShowEditCard(true);
 

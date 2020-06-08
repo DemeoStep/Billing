@@ -13,5 +13,6 @@ MySQL* Connection = NULL;
 
 time_t now = time(NULL);
 tm ltm;
+char* today;
 
 #endif

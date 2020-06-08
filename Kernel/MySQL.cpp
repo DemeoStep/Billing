@@ -112,7 +112,7 @@ Abonent* MySQL::LoadAbons(Tarif* TarifList) {
 	try {
 		Connect();
 
-		pstmt = con->prepareStatement("SELECT id,tarif,state,need_pay FROM users ORDER BY id;");
+		pstmt = con->prepareStatement("SELECT id,fio,tarif,state,last_pay FROM users ORDER BY id;");
 		result = pstmt->executeQuery();
 
 		while (result->next()) {
@@ -124,11 +124,12 @@ Abonent* MySQL::LoadAbons(Tarif* TarifList) {
 			}
 			index++;
 			LResult->id = result->getInt(1);
-			
-			LResult->TarifPTR = TarifList->Get_by_id(result->getInt(2));
+			strcpy_s(LResult->fio, StringHelper::DefaultSize, result->getString(2).c_str());
+
+			LResult->TarifPTR = TarifList->Get_by_id(result->getInt(3));
 		
-			LResult->state = result->getInt(3);
-			LResult->need_pay = result->getBoolean(4);
+			LResult->state = result->getInt(4);
+			strcpy_s(LResult->last_pay, StringHelper::DefaultSize, result->getString(5).c_str());
 
 			pstmt = con->prepareStatement("SELECT ROUND(SUM(money)) FROM Kurs_billing.pays WHERE user_id = ?;");
 			pstmt->setInt(1, LResult->id);
@@ -158,10 +159,10 @@ void MySQL::SaveAbon(Abonent* Abon) {
 	try {
 		Connect();
 
-		pstmt = con->prepareStatement("UPDATE `users` SET `state` = ?, `need_pay` = ? WHERE `users`.`id` = ?");
+		pstmt = con->prepareStatement("UPDATE `users` SET `state` = ?, `last_pay` = ? WHERE `users`.`id` = ?");
 
 		pstmt->setInt(1, Abon->state);
-		pstmt->setBoolean(2, Abon->need_pay);
+		pstmt->setString(2, Abon->last_pay);
 
 		pstmt->setInt(3, Abon->id);
 		

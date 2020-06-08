@@ -44,13 +44,8 @@ void LoadConfig() {
 }
 
 void LoadLists() {
-	printf("Загружаем...\n");
-
-	printf("...тарифы\n");
 	Tarifs = Connection->LoadTarifs();
-	printf("...данные абонентов\n");
 	Abonents = Connection->LoadAbons(Tarifs);
-	printf("OK\n");
 }
 
 void ListsNULL() {
@@ -74,6 +69,24 @@ void ListsNULL() {
 void GetTime() {
 	now = time(0);
 	localtime_s(&ltm, &now);
+}
+
+void Today() {
+	char* temp = StringHelper::New();
+	StringHelper::int_to_str(temp, 1900 + ltm.tm_year);
+	strcpy_s(today, StringHelper::DefaultSize, temp);
+	strcat_s(today, StringHelper::DefaultSize, "-");
+	if (ltm.tm_mon < 10) {
+		strcat_s(today, StringHelper::DefaultSize, "0");
+	}
+	StringHelper::int_to_str(temp, ltm.tm_mon);
+	strcat_s(today, StringHelper::DefaultSize, temp);
+	strcat_s(today, StringHelper::DefaultSize, "-");
+	if (ltm.tm_mon < 10) {
+		strcat_s(today, StringHelper::DefaultSize, "0");
+	}
+	StringHelper::int_to_str(temp, ltm.tm_mday);
+	strcat_s(today, StringHelper::DefaultSize, temp);
 }
 
 int GetDays_in_Mon() {
@@ -100,9 +113,31 @@ int GetDays_in_Mon() {
 	return days;
 }
 
-//int DayPayCount() {
-//
-//}
+int DayPayCount(Abonent* Abon) {
+	double payment = 0.0;
+	payment = 0.0 - Abon->TarifPTR->price / GetDays_in_Mon();
+
+	return (int)payment;
+}
+
+void PayProcess(Abonent* Abon) {
+	Abonent* List = Abon->ListFirst();
+	while (List) {
+		if (!List->state && strcmp(List->last_pay, today)) {
+			int payment = DayPayCount(List);
+			printf("Cнимаем суточную плату %d c %s \n", payment, List->fio);
+			Connection->SavePay(List, payment);
+			List->balance += payment;
+			if (List->balance <= 0) {
+				List->state = 1;
+			}
+			strcpy_s(List->last_pay, StringHelper::DefaultSize, today);
+
+			Connection->SaveAbon(List);
+		}
+		List = List->ListNext;
+	}
+}
 
 int main() {
 	setlocale(LC_ALL, "rus");
@@ -113,32 +148,25 @@ int main() {
 	LoadConfig();
 	LoadLists();
 	char* last_our_time = StringHelper::New();
+	today = StringHelper::New();
+
+	Connection->GetLastUpdatetime();
 	strcpy_s(last_our_time, StringHelper::DefaultSize, Connection->lastupdate);
 
-	/*while (true) {
+	while (true) {
 		Connection->GetLastUpdatetime();
-		if (strcmp(last_our_time, Connection->lastupdate)) {
-			printf("Данные обновились - обновляем данные в памяти... \n");
+		Abonent* List = Abonents;
+		GetTime();
+		Today();
+		if (strcmp(last_our_time, Connection->lastupdate) || ltm.tm_hour == 0 && ltm.tm_min >= 0) {
 			ListsNULL();
 			LoadLists();
+			PayProcess(Abonents);
 			strcpy_s(last_our_time, StringHelper::DefaultSize, Connection->lastupdate);
 		}
-		GetTime();
-		if (ltm.tm_hour == 14 && ltm.tm_min == 10) {
-			Abonent* List = Abonents->ListFirst();
-			while (List) {
-				if (!List->need_pay) {
-					List->need_pay = true;
-					Connection->SaveAbon(List);
-				}
-				List = List->ListNext;
-			}
 
-		}
 		Sleep(1000);
-	}*/
-	GetTime();
-	
-	printf("%d %d %d", ltm.tm_year + 1900, ltm.tm_mon, GetDays_in_Mon());
+	}
+
 
 }
