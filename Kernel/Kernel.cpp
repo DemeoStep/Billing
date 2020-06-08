@@ -158,7 +158,7 @@ int main() {
 		Abonent* List = Abonents;
 		GetTime();
 		Today();
-		if (strcmp(last_our_time, Connection->lastupdate) || ltm.tm_hour == 0 && ltm.tm_min >= 0) {
+		if (strcmp(last_our_time, Connection->lastupdate) || (ltm.tm_hour == 0 && ltm.tm_min >= 0)) {
 			ListsNULL();
 			LoadLists();
 			PayProcess(Abonents);

@@ -1057,7 +1057,7 @@ void Application::Balance_change(Abonent* Item) {
 	}
 	Console::ShowCursor(false);
 	
-	TableDraw();
+	ListsReLoad();
 	if (AbonShow) {
 		AbonShow = false;
 		ShowAbonentCard(CursorOn, false);

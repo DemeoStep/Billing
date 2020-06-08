@@ -30,10 +30,10 @@
     <ClCompile Include="..\Billing\StringHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Billing\Console.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Billing\CellOper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Billing\Console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
