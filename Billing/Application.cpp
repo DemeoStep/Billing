@@ -1258,7 +1258,7 @@ void Application::Search() {
 	}
 
 	if (Search_abon) {
-		CursorPos = JumpTo(Search_abon, false);
+		CursorPos = JumpTo(Search_abon, true);
 	} else {
 		Console::ShowWarning((char*)"Абонент не найден!", CursorPos);
 	}
