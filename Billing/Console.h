@@ -5,7 +5,7 @@
 
 class Console {
 public:
-	static const short DefaultScreenWidth  = 170;
+	static const short DefaultScreenWidth  = 165;
 	static const short DefaultScreenHeight = 40;
 	static enum ConsoleColors {        // LRGB LRGB    Light Red Blue Green
 		  clBlack = 0			// 0000 0000 
