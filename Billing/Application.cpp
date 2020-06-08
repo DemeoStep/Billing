@@ -19,6 +19,9 @@ Application::Application() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
+	now = time(0);
+	localtime_s(&ltm, &now);
+
 	// установка параметров экрана по-умолчанию
 	Console::SetScreen();
 	// очистим экран
@@ -76,7 +79,6 @@ Application::Application() {
 	TableFirst = NULL;
 	TableLast = NULL;
 	AbonShow = false;
-	TimerOn = true;
 	
 }
 
@@ -128,9 +130,15 @@ void Application::Run() {
 	Connection->GetLastUpdatetime();
 
 	while (Running) {
-		PressedKey = _getch();
-		if ( (0xE0!= PressedKey) && (0 != PressedKey) ) {
-			DoProcessKey(PressedKey);
+		now = time(0);
+		localtime_s(&ltm, &now);
+		if (_kbhit()) {
+			PressedKey = _getch();
+			if ((0xE0 != PressedKey) && (0 != PressedKey)) {
+				DoProcessKey(PressedKey);
+			}
+		} else if (ltm.tm_sec == 0){
+			ListsReLoad();
 		}
 	}
 
@@ -1351,6 +1359,10 @@ void Application::ListsReLoad() {
 		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), false);
 	}
 	TableDraw();
+	if (AbonShow) {
+		AbonShow = false;
+		ShowAbonentCard(CursorOn, false);
+	}
 	free(last_our_time);
 }
 

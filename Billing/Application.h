@@ -19,7 +19,8 @@ public:
 	int PressedKey;
 	bool Running;
 	bool AbonShow;
-	bool TimerOn;
+	time_t now;
+	tm ltm;
 
 	Application();
 	~Application();
