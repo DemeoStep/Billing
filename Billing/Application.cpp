@@ -61,6 +61,7 @@ Application::Application() {
 	HelpString = StringHelper::New();
 	TableString = StringHelper::New();
 	Curr = StringHelper::New();
+	today = StringHelper::New();
 	CursorPos = 0;
 
 	strcpy_s(HelpString, StringHelper::DefaultSize,  " Esc - Выход | F5 - Новый | F6 - Пополнить счет | F7 - Поиск по адресу");
@@ -86,6 +87,7 @@ Application::~Application() {
 	free(HelpString);
 	free(TableString);
 	free(Curr);
+	free(today);
 	Console::FillRect(0, 0, Console::Width(), Console::Height(), Console::clBlack);
 	Console::GotoXY(0, 0);
 
@@ -130,8 +132,7 @@ void Application::Run() {
 	Connection->GetLastUpdatetime();
 
 	while (Running) {
-		now = time(0);
-		localtime_s(&ltm, &now);
+		Today();
 		if (_kbhit()) {
 			PressedKey = _getch();
 			if ((0xE0 != PressedKey) && (0 != PressedKey)) {
@@ -951,7 +952,7 @@ void Application::AbonAdd(Abonent* LAdded) {
 		Abonents->state = 1;
 		Abonents->TarifPTR = Tarifs->ListFirst();
 		Abonents->StreetPTR = Streets->ListFirst();
-		strcpy_s(Abonents->last_pay, StringHelper::DefaultSize, "1000-12-31");
+		strcpy_s(Abonents->last_pay, StringHelper::DefaultSize, today);
 
 		LAdded = ShowEditCard(true);
 
@@ -1086,6 +1087,7 @@ void Application::Balance_change(Abonent* Item) {
 		}
 		else if (CursorOn->balance > 0 && CursorOn->state == 1) {
 			CursorOn->state = 0;
+			strcpy_s(Abonents->last_pay, StringHelper::DefaultSize, today);
 			Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 		}
 	}
@@ -1384,4 +1386,29 @@ void Application::IPReLoad() {
 	}
 	FreeRealIPs = NULL;
 	FreeRealIPs = Connection->LoadRealIPs();
+}
+
+void Application::GetTime() {
+	now = time(0);
+	localtime_s(&ltm, &now);
+}
+
+void Application::Today() {
+	GetTime();
+	char* temp = StringHelper::New();
+	StringHelper::int_to_str(temp, 1900 + ltm.tm_year);
+	strcpy_s(today, StringHelper::DefaultSize, temp);
+	strcat_s(today, StringHelper::DefaultSize, "-");
+	if (ltm.tm_mon < 10) {
+		strcat_s(today, StringHelper::DefaultSize, "0");
+	}
+	StringHelper::int_to_str(temp, ltm.tm_mon);
+	strcat_s(today, StringHelper::DefaultSize, temp);
+	strcat_s(today, StringHelper::DefaultSize, "-");
+	if (ltm.tm_mon < 10) {
+		strcat_s(today, StringHelper::DefaultSize, "0");
+	}
+	StringHelper::int_to_str(temp, ltm.tm_mday);
+	strcat_s(today, StringHelper::DefaultSize, temp);
+	free(temp);
 }

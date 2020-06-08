@@ -30,6 +30,7 @@ public:
 	char* HelpString;
 	char* TableString;
 	char* Curr;
+	char* today;
 	short CursorPos;
 
 	FuncOnKey OnEscape;
@@ -91,6 +92,10 @@ public:
 	void ListsReLoad();
 
 	void IPReLoad();
+
+	void GetTime();
+
+	void Today();
 
 	void ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons = true);
 	Abonent* ShowEditCard(bool New);

@@ -72,6 +72,7 @@ void GetTime() {
 }
 
 void Today() {
+	GetTime();
 	char* temp = StringHelper::New();
 	StringHelper::int_to_str(temp, 1900 + ltm.tm_year);
 	strcpy_s(today, StringHelper::DefaultSize, temp);
@@ -153,7 +154,6 @@ int main() {
 	while (true) {
 		Connection->GetLastUpdatetime();
 		Abonent* List = Abonents;
-		GetTime();
 		Today();
 		if (strcmp(last_our_time, Connection->lastupdate) || (ltm.tm_hour == 0 && ltm.tm_min == 0)) {
 			ListsNULL();
