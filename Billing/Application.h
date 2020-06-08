@@ -19,6 +19,7 @@ public:
 	int PressedKey;
 	bool Running;
 	bool AbonShow;
+	bool TimerOn;
 
 	Application();
 	~Application();

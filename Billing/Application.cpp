@@ -1,7 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
-#include <time.h>
+#include <ctime>
 #include "Console.h"
 #include "Application.h"
 #include "StringHelper.h"
@@ -19,7 +19,6 @@ Application::Application() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	srand(time(NULL));
 	// установка параметров экрана по-умолчанию
 	Console::SetScreen();
 	// очистим экран
@@ -63,7 +62,7 @@ Application::Application() {
 
 	strcpy_s(HelpString, StringHelper::DefaultSize,  " Esc - Выход | F5 - Новый | F6 - Пополнить счет | F7 - Поиск по адресу");
 	strcpy_s(TableString, StringHelper::DefaultSize, "   №   |                    ФИО                   |    Телефон    |             Адрес            | Тариф |        IP       |   Баланс  | "); // Состояние | ");
-	strcpy_s(Curr, StringHelper::DefaultSize, "шек.");
+	strcpy_s(Curr, StringHelper::DefaultSize, "грн.");
 
 	Abonents = NULL;
 	Streets = NULL;
@@ -77,6 +76,7 @@ Application::Application() {
 	TableFirst = NULL;
 	TableLast = NULL;
 	AbonShow = false;
+	TimerOn = true;
 	
 }
 
