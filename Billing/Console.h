@@ -24,7 +24,8 @@ public:
 		, clLightMagenta = 13   // 0000 1101 
 		, clYellow = 14			// 0000 1110 
 		, clWhite = 15			// 0000 1111 
-	};
+	} consolecolors;
+
 	static const ConsoleColors DefaultColor = clWhite;
 	static const ConsoleColors DefaultBgColor = clBlack;
 
@@ -57,7 +58,7 @@ public:
 		, keyPageDown = 81
 		, keyInsert = 82
 		, keyDelete = 83
-	};
+	} funckeys;
 
 	static HANDLE GetHandle();
 	static void SetColor(const ConsoleColors Foreground, const ConsoleColors Background = clBlack);
