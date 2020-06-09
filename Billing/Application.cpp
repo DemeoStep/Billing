@@ -447,7 +447,6 @@ void Application::TableDraw() {
 					if (!AbonShow)Console::FillRect(0, CursorOn->ListCount() + 1, Console::Width(), Console::Height() - 2, Console::clBlack);
 					else Console::FillRect(0, CursorOn->ListCount() + 1, Console::Width() - StringHelper::AbonCardWidth - 1, Console::Height() - 2, Console::clBlack);
 				}
-				//if (Console::Y() < Console::Height() - 2) StartLine++;
 				Console::SetColor(Console::clWhite, Console::clBlack);
 				Console::GotoXY(0, Console::Y() + 1);
 			}
@@ -911,7 +910,6 @@ void Application::AbonDel(Abonent* Item) {
 				CursorOn = CursorOn->ListDel();
 				if (!TableLast->ListNext && TableFirst->ListPrev) {
 					TableFirst = TableFirst->ListPrev;
-					//CursorOn = CursorOn;
 					CursorPos++;
 				} else if (TableLast->ListNext && !TableFirst->ListPrev) {
 					TableLast = TableLast->ListNext;
@@ -1105,29 +1103,6 @@ void Application::Balance_change(Abonent* Item) {
 	free(input);
 }
 
-void Application::ShowProgress(char* mess, int step) {
-	int X = Console::Width() / 2;
-	int Y = Console::Height() / 2;
-	char* temp = StringHelper::New();
-	char* step_temp = StringHelper::New();
-
-	Console::FillRect(X - 20, Y - 2, X + 20, Y + 2, Console::clRed);
-
-	X -= strlen(mess) / 2;
-
-	Console::GotoXY(X, Y);
-	strcpy_s(temp, StringHelper::DefaultSize, mess);
-	StringHelper::int_to_str(step_temp, step);
-	strcat_s(temp, StringHelper::DefaultSize, step_temp);
-	strcat_s(temp, StringHelper::DefaultSize, "%");
-
-	Console::Print(temp, Console::clYellow, Console::clRed);
-
-	Console::GotoXY(0, CursorPos);
-	free(temp);
-	free(step_temp);
-}
-
 void Application::OnExit() {
 	Console::GotoXY(0, 0);
 	Console::SetColor(Console::clWhite);
@@ -1140,30 +1115,6 @@ void Application::Init() {
 	Tarifs = Connection->LoadTarifs();
 	CellCodes = Connection->LoadCellCodes();
 	Abonents = Connection->LoadAbons(Streets, Tarifs);
-
-	/*if (Abonents) {
-		TableFirst = Abonents;
-
-		TableLast = TableFirst;
-		int end = 0;
-
-		if (Abonents->ListCount() < (Console::Height() - 2)) {
-			end = Abonents->ListCount();
-		} else {
-			end = (Console::Height() - 2);
-		}
-
-		if (TableLast->ListNext) {
-			for (int i = 1; i < end; i++) {
-				TableLast = TableLast->ListNext;
-			}
-		}
-
-		CursorOn = TableFirst;
-		CursorPos = 1;
-		TableDraw();
-
-	}*/
 
 }
 
@@ -1359,11 +1310,12 @@ void Application::ListsReLoad() {
 		TableFirst = Abonents->Get_by_id(TableFirst_id);
 		TableLast = Abonents->Get_by_id(TableLast_id);
 		CursorPos = JumpTo(Abonents->Get_by_id(CursorOn_id), false);
-	}
-	TableDraw();
-	if (AbonShow) {
-		AbonShow = false;
-		ShowAbonentCard(CursorOn, false);
+
+		TableDraw();
+		if (AbonShow) {
+			AbonShow = false;
+			ShowAbonentCard(CursorOn, false);
+		}
 	}
 	free(last_our_time);
 }

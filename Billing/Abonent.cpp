@@ -44,109 +44,6 @@ Abonent::~Abonent() {
 	free (IP);
 }
 
-void Abonent::GenTest() {
-	id = rand() % 2000;
-	char* FirstName = StringHelper::New(StringHelper::DefaultSize);
-	char* SecondName = StringHelper::New(StringHelper::DefaultSize);
-	char* LastName = StringHelper::New(StringHelper::DefaultSize);
-
-	const char* LC_FirstName[10] = {
-		"Иванов\0",
-		"Петров\0",
-		"Сидоров\0",
-		"Андреев\0",
-		"Потапов\0",
-		"Константинов\0",
-		"Юрьев\0",
-		"Антонов\0",
-		"Сергеев\0",
-		"Васильев\0"
-	};
-	strcpy_s(FirstName, StringHelper::DefaultSize, LC_FirstName[rand() % 10]);
-
-	const char* LC_SecondName[10] = {
-		"Иван\0",
-		"Петр\0",
-		"Сидор\0",
-		"Андрей\0",
-		"Потап\0",
-		"Константин\0",
-		"Юрий\0",
-		"Антон\0",
-		"Сергей\0",
-		"Василий\0"
-	};
-	strcpy_s(SecondName, StringHelper::DefaultSize, LC_SecondName[rand() % 10]);
-
-	const char* LC_LastName[10] = {
-		"Иванович\0",
-		"Петрович\0",
-		"Сидорович\0",
-		"Андреевич\0",
-		"Потапович\0",
-		"Константинович\0",
-		"Юрьевич\0",
-		"Антонович\0",
-		"Сергеевич\0",
-		"Васильевич\0"
-	};
-	strcpy_s(LastName, StringHelper::DefaultSize, LC_LastName[rand() % 10]);
-
-	strcat_s(fio, StringHelper::DefaultSize, FirstName);
-	strcat_s(fio, StringHelper::DefaultSize, " ");
-	strcat_s(fio, StringHelper::DefaultSize, SecondName);
-	strcat_s(fio, StringHelper::DefaultSize, " ");
-	strcat_s(fio, StringHelper::DefaultSize, LastName);
-
-	const char* LC_Operator[15] = {
-		"039\0", "067\0", "068\0",
-		"096\0", "097\0", "098\0",
-		"050\0", "066\0", "095\0",
-		"099\0", "063\0", "093\0",
-		"091\0", "092\0", "094\0"
-	};
-	strcpy_s(Phone, StringHelper::DefaultSize, LC_Operator[rand() % 15]);
-
-	int LPh = rand() % 1000;
-	char* temp = StringHelper::New(StringHelper::DefaultSize);
-
-	if (LPh < 100 && LPh >= 10) {
-		strcat_s(Phone, StringHelper::DefaultSize, "0");
-	} else if (LPh < 10) {
-		strcat_s(Phone, StringHelper::DefaultSize, "00");
-	};
-	
-	StringHelper::int_to_str(temp, LPh);
-	strcat_s(Phone, StringHelper::DefaultSize, temp);
-
-	for (int i = 0; i < 2; i++)	{
-		LPh = rand() % 100;
-		if (LPh < 10) {
-			strcat_s(Phone, StringHelper::DefaultSize, "0");
-		};
-		StringHelper::Null(temp);
-		StringHelper::int_to_str(temp, LPh);
-		strcat_s(Phone, StringHelper::DefaultSize, temp);
-	}
-
-	House = rand() % 100;
-	Apartment = rand() % 100;
-	TarifPTR->id = rand() % 10;
-
-	balance = ((rand() % 10000) - 1000);
-	
-	if (balance > 0) {
-		state = 0;
-	} else state = 1 + rand() % 5;
-
-
-
-	free(FirstName);
-	free(SecondName);
-	free(LastName);
-	free(temp);
-}
-
 void Abonent::Print() {
 	printf(" %3d | %-40s | %10s | ул. %-15s %2d-%-2d | %-5d | %15s | %-5d | %-9d |",
 		id, fio, Phone, StreetPTR->name, House, Apartment, TarifPTR->id, IP, balance, state);
@@ -260,26 +157,6 @@ Abonent* Abonent::ListLast() {
 		LResult = LResult->ListNext;
 	}
 	return LResult;
-}
-
-void Abonent::ListDraw(Abonent* TableFirst, short CursorPos) {
-	Abonent* LItem = TableFirst;
-	Console::GotoY(1);
-	for (int i = 0; i < (Console::Height() - 2); i++) {
-		if (Console::Y() % 2) {
-			Console::SetColor(Console::clDarkGrey);
-		}
-		if (Console::Y() == CursorPos) {
-			Console::SetColor(Console::clYellow, Console::clCyan);
-		}
-		LItem->Print();
-		if (LItem->ListNext) {
-			LItem = LItem->ListNext;
-		}
-		if (i < Console::Height() - 2) printf("\n");
-		Console::SetColor(Console::clWhite, Console::clBlack);
-	}
-	Console::GotoY(CursorPos);
 }
 
 Abonent* Abonent::ListAdd(Abonent* ExistingItem) {

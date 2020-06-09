@@ -103,7 +103,6 @@ public:
 	void AbonAdd(Abonent* List);
 	void AbonEdit();
 	void Balance_change(Abonent* Item);
-	void ShowProgress(char* mess, int step);
 	void OnExit();
 	void Init();
 

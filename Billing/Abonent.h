@@ -25,7 +25,6 @@ public:
 	int state;
 	char* last_pay;
 
-	void GenTest();
 	void Print();
 	void FastPrint(bool AbonShow, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
 	void BuildStr(Abonent* Abon, char* LineToBuild);
@@ -33,17 +32,13 @@ public:
 	Abonent* ListPrev;
 	virtual Abonent* ListFirst();
 	virtual Abonent* ListLast();
-	static void ListDraw(Abonent* aTableFirst, short CursorPos);
 	virtual Abonent* ListAdd(Abonent* ExistingItem);
 	virtual Abonent* ListDel();
 	static void ListSwap(Abonent* Item_1, Abonent* Item_2);
 	virtual Abonent* ListSort(Abonent* Item);
 	int GetMaxID();
-
 	Abonent* Get_by_id(int id);
-
 	void IndexChange();
-
 	int ListCount();
 };
 

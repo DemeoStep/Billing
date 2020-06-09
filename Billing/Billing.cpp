@@ -69,7 +69,6 @@ void App_OnF7(Application* Sender) {
 void App_OnF8(Application* Sender) {
 	if (Sender->AbonShow) {
 		if (Sender->CursorOn && Sender->CursorOn->balance <= 0) { // Запрет удаления абонентов с положительным балансом
-		//if (Sender->CursorOn) {
 			if (Sender->CursorOn->ListNext || Sender->CursorOn->ListPrev) {
 				Sender->AbonDel(Sender->CursorOn);
 			} else {

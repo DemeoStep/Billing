@@ -15,10 +15,6 @@ public:
 
 	int ListCount();
 
-	void ListSwap(CellOper* Item_1, CellOper* Item_2);
-
-	CellOper* ListSort(CellOper* Item);
-
 	CellOper* ListPrev;
 	CellOper* ListNext;
 };

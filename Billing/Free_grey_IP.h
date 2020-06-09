@@ -19,10 +19,6 @@ public:
 	Free_grey_IP* ListFirst();
 	Free_grey_IP* ListLast();
 	int ListCount();
-	void ListSwap(Free_grey_IP* Item_1, Free_grey_IP* Item_2);
-	Free_grey_IP* ListSort(Free_grey_IP* Item);
-	int GetLastOctet(Free_grey_IP* Item);
-	Free_grey_IP* ipRestore(Abonent* List);
 
 };
 
