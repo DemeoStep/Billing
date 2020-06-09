@@ -184,7 +184,7 @@ int Abonent::ListCount() {
 	int LResult = 0;
 	Abonent* LItem = ListFirst();
 	if (LItem) LResult++;
-	if (!LItem->ListNext && !LItem->ListNext) return LResult;
+	if (!LItem->ListPrev && !LItem->ListNext) return LResult;
 	while (LItem->ListNext) {
 		LResult++;
 		LItem = LItem->ListNext;
