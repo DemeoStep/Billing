@@ -19,8 +19,6 @@ Application::Application() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	Today();
-
 	// установка параметров экрана по-умолчанию
 	Console::SetScreen();
 	// очистим экран
@@ -80,6 +78,7 @@ Application::Application() {
 	TableLast = NULL;
 	AbonShow = false;
 	
+	Today();
 }
 
 Application::~Application() {
