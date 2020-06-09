@@ -19,8 +19,7 @@ Application::Application() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	now = time(0);
-	localtime_s(&ltm, &now);
+	Today();
 
 	// установка параметров экрана по-умолчанию
 	Console::SetScreen();

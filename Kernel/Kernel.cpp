@@ -142,8 +142,8 @@ void PayProcess(Abonent* Abon) {
 
 int main() {
 	setlocale(LC_ALL, "rus");
-	SetConsoleCP(.1251);
-	SetConsoleOutputCP(.1251);
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 
 	Connection = new MySQL;
 	LoadConfig();
