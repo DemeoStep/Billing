@@ -44,15 +44,6 @@ Abonent::~Abonent() {
 	free (IP);
 }
 
-void Abonent::Print() {
-	printf(" %3d | %-40s | %10s | ул. %-15s %2d-%-2d | %-5d | %15s | %-5d | %-9d |",
-		id, fio, Phone, StreetPTR->name, House, Apartment, TarifPTR->id, IP, balance, state);
-	while (Console::X() < Console::DefaultScreenWidth - 1) {
-		printf(" ");
-	}
-	printf(" ");
-}
-
 void Abonent::FastPrint(bool AbonShow, const Console::ConsoleColors Color, const Console::ConsoleColors BgColor) {
 	short LWidth;
 	if (AbonShow) LWidth = Console::Width() - StringHelper::AbonCardWidth;

@@ -25,7 +25,6 @@ public:
 	int state;
 	char* last_pay;
 
-	void Print();
 	void FastPrint(bool AbonShow, const Console::ConsoleColors Color = Console::DefaultColor, const Console::ConsoleColors BgColor = Console::DefaultBgColor);
 	void BuildStr(Abonent* Abon, char* LineToBuild);
 	Abonent* ListNext;
