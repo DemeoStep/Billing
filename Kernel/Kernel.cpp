@@ -83,7 +83,7 @@ void Today() {
 	StringHelper::int_to_str(temp, ltm.tm_mon);
 	strcat_s(today, StringHelper::DefaultSize, temp);
 	strcat_s(today, StringHelper::DefaultSize, "-");
-	if (ltm.tm_mon < 10) {
+	if (ltm.tm_mday < 10) {
 		strcat_s(today, StringHelper::DefaultSize, "0");
 	}
 	StringHelper::int_to_str(temp, ltm.tm_mday);
