@@ -97,6 +97,8 @@ public:
 
 	void Today();
 
+	void LoadConfig();
+
 	void ShowAbonentCard(Abonent* Item, bool New, bool ShowButtons = true);
 	Abonent* ShowEditCard(bool New);
 	void AbonDel(Abonent* Item);

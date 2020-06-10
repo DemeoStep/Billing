@@ -94,6 +94,7 @@ Application::~Application() {
 
 void Application::Run() {
 	Running = true;
+	LoadConfig();
 	Connection->InputLoginPass();
 	DrawMenu(Console::Height() - 1, HelpString);
 	DrawMenu(0, TableString);
@@ -1361,4 +1362,36 @@ void Application::Today() {
 	StringHelper::int_to_str(temp, ltm.tm_mday);
 	strcat_s(today, StringHelper::DefaultSize, temp);
 	free(temp);
+}
+
+void Application::LoadConfig() {
+	char* filename = StringHelper::New();
+	strcpy_s(filename, StringHelper::DefaultSize, "config.cfg");
+
+	FILE* LFile;
+
+	int FileOpenError = fopen_s(&LFile, filename, "r");
+	if (!FileOpenError) {
+		char** context = (char**)calloc(StringHelper::DefaultSize, sizeof(char*));
+		char* buffer = StringHelper::New();
+
+		fgets(buffer, StringHelper::DefaultSize * sizeof(char), LFile);
+
+		strcpy_s(Connection->server, StringHelper::DefaultSize, "tcp://");
+		strcat_s(Connection->server, StringHelper::DefaultSize, strtok_s(buffer, "|", context));
+		strcat_s(Connection->server, StringHelper::DefaultSize, ":");
+		strcat_s(Connection->server, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
+		strcpy_s(Connection->schema, StringHelper::DefaultSize, strtok_s(NULL, "\n", context));
+
+		free(context);
+		free(buffer);
+		fclose(LFile);
+		printf("OK\n");
+
+	} else {
+		printf("Файл %s отсутсвует! Нажмите любую клавишу для выхода", filename);
+		getchar();
+		exit(1);
+	}
+
 }

@@ -24,6 +24,7 @@ void LoadConfig() {
 		strcat_s(Connection->server, StringHelper::DefaultSize, strtok_s(buffer, "|", context));
 		strcat_s(Connection->server, StringHelper::DefaultSize, ":");
 		strcat_s(Connection->server, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
+		strcpy_s(Connection->schema, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
 
 		strcpy_s(Connection->username, StringHelper::DefaultSize, strtok_s(NULL, "|", context));
 		strcpy_s(Connection->password, StringHelper::DefaultSize, strtok_s(NULL, "\n", context));

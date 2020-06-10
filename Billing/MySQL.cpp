@@ -19,9 +19,7 @@ MySQL::MySQL() {
 	lastupdate = StringHelper::New();
 	driver = get_driver_instance();
 	server = StringHelper::New();
-	strcpy_s(server, StringHelper::DefaultSize, "tcp://192.168.12.2:3306");
 	schema = StringHelper::New();
-	strcpy_s(schema, StringHelper::DefaultSize, "Kurs_billing");
 	username = StringHelper::New();
 	password = StringHelper::New();
 }
