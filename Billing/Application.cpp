@@ -1087,7 +1087,7 @@ void Application::Balance_change(Abonent* Item) {
 			strcpy_s(Abonents->last_pay, StringHelper::DefaultSize, today);
 			Connection->SaveAbon(CursorOn, false, Streets, Tarifs);
 		}
-	}
+	} else TableDraw();
 	Console::ShowCursor(false);
 	
 	ListsReLoad();
@@ -1386,7 +1386,6 @@ void Application::LoadConfig() {
 		free(context);
 		free(buffer);
 		fclose(LFile);
-		printf("OK\n");
 
 	} else {
 		printf("Файл %s отсутсвует! Нажмите любую клавишу для выхода", filename);

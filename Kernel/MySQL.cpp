@@ -4,16 +4,11 @@
 #include "../Billing/StringHelper.h"
 #include "../Billing/Tarif.h"
 
-#include <mysql_connection.h>
-#include <cppconn/driver.h>
-#include <cppconn/connection.h>
-#include <cppconn/exception.h>
-#include <cppconn/prepared_statement.h>
+#include <mysql/jdbc.h>
 
 
 MySQL::MySQL() {
 	lastupdate = StringHelper::New();
-	driver = get_driver_instance();
 	server = StringHelper::New();
 	schema = StringHelper::New();
 	username = StringHelper::New();

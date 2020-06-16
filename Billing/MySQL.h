@@ -1,9 +1,6 @@
 #ifndef MYSQL_H
 #define MYSQL_H
-
-#include <cppconn/driver.h>
-#include <cppconn/connection.h>
-#include <cppconn/statement.h>
+#include <mysql/jdbc.h>
 
 class Street;
 class Tarif;
@@ -37,7 +34,7 @@ public:
 
 	Tarif* LoadTarifs();
 
-	sql::Driver* driver;
+	sql::Driver* driver = sql::mysql::get_driver_instance();
 	sql::Connection* con = NULL;
 	sql::PreparedStatement* pstmt = NULL;
 
