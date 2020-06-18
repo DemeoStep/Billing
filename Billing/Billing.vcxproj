@@ -157,8 +157,7 @@
     <ClCompile Include="Billing.cpp" />
     <ClCompile Include="CellOper.cpp" />
     <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Free_grey_IP.cpp" />
-    <ClCompile Include="Free_real_IP.cpp" />
+    <ClCompile Include="FreeIP.cpp" />
     <ClCompile Include="MySQL.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StringHelper.cpp" />
@@ -169,8 +168,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="CellOper.h" />
     <ClInclude Include="Console.h" />
-    <ClInclude Include="Free_grey_IP.h" />
-    <ClInclude Include="Free_real_IP.h" />
+    <ClInclude Include="FreeIP.h" />
     <ClInclude Include="MySQL.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Street.h" />

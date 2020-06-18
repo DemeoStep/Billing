@@ -5,8 +5,7 @@
 class Street;
 class Tarif;
 class CellOper;
-class Free_grey_IP;
-class Free_real_IP;
+class FreeIP;
 
 class MySQL {
 public:
@@ -29,8 +28,8 @@ public:
 
 	CellOper* LoadCellCodes();
 
-	Free_grey_IP* LoadGreyIPs();
-	Free_real_IP* LoadRealIPs();
+	FreeIP* LoadGreyIPs();
+	FreeIP* LoadRealIPs();
 
 	Tarif* LoadTarifs();
 
@@ -42,9 +41,9 @@ public:
 	void SaveAbon(Abonent* Abon, bool New, Street* StreetList, Tarif* TarifList);
 	void DelAbon(Abonent* Abon);
 	void RestoreGreyIP(char* IP);
-	void DelGreyIP(Free_grey_IP* IP);
+	void DelGreyIP(FreeIP* IP);
 	void RestoreRealIP(char* IP);
-	void DelRealIP(Free_real_IP* IP);
+	void DelRealIP(FreeIP* IP);
 	void SavePay(Abonent* Abon, int payment);
 };
 

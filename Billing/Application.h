@@ -7,8 +7,7 @@ class Abonent;
 class Street;
 class Tarif;
 class CellOper;
-class Free_grey_IP;
-class Free_real_IP;
+class FreeIP;
 class Console;
 class MySQL;
 
@@ -68,8 +67,8 @@ public:
 	CellOper* CellCodes;
 	MySQL* Connection;
 
-	Free_grey_IP* FreeGreyIPs;
-	Free_real_IP* FreeRealIPs;
+	FreeIP* FreeGreyIPs;
+	FreeIP* FreeRealIPs;
 
 	Abonent* TableFirst;
 	Abonent* TableLast;

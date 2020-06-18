@@ -36,16 +36,13 @@
     <ClCompile Include="Tarif.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Free_grey_IP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Free_real_IP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CellOper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MySQL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeIP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,12 +65,6 @@
     <ClInclude Include="Tarif.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Free_grey_IP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Free_real_IP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CellOper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MySQL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeIP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

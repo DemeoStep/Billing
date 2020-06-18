@@ -5,8 +5,7 @@
 #include "Street.h"
 #include "Tarif.h"
 #include "CellOper.h"
-#include "Free_grey_IP.h"
-#include "Free_real_IP.h"
+#include "FreeIP.h"
 
 #include <mysql/jdbc.h>
 
@@ -202,9 +201,9 @@ Tarif* MySQL::LoadTarifs() {
 	return LResult->ListFirst();
 }
 
-Free_grey_IP* MySQL::LoadGreyIPs() {
+FreeIP* MySQL::LoadGreyIPs() {
 	sql::ResultSet* result = NULL;
-	Free_grey_IP* LResult = NULL;
+	FreeIP* LResult = NULL;
 	try {
 		Connect();
 
@@ -214,9 +213,9 @@ Free_grey_IP* MySQL::LoadGreyIPs() {
 		while (result->next()) {
 
 			if (LResult) {
-				LResult = LResult->ListAdd(new Free_grey_IP);
+				LResult = LResult->ListAdd(new FreeIP);
 			} else {
-				LResult = new Free_grey_IP;
+				LResult = new FreeIP;
 			}
 
 			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
@@ -236,9 +235,9 @@ Free_grey_IP* MySQL::LoadGreyIPs() {
 	return LResult->ListFirst();
 }
 
-Free_real_IP* MySQL::LoadRealIPs() {
+FreeIP* MySQL::LoadRealIPs() {
 	sql::ResultSet* result = NULL;
-	Free_real_IP* LResult = NULL;
+	FreeIP* LResult = NULL;
 	try {
 		Connect();
 
@@ -248,9 +247,9 @@ Free_real_IP* MySQL::LoadRealIPs() {
 		while (result->next()) {
 
 			if (LResult) {
-				LResult = LResult->ListAdd(new Free_real_IP);
+				LResult = LResult->ListAdd(new FreeIP);
 			} else {
-				LResult = new Free_real_IP;
+				LResult = new FreeIP;
 			}
 
 			strcpy_s(LResult->ip, StringHelper::DefaultSize, result->getString(1).c_str());
@@ -415,7 +414,7 @@ void MySQL::RestoreGreyIP(char* IP) {
 	}
 }
 
-void MySQL::DelGreyIP(Free_grey_IP* IP) {
+void MySQL::DelGreyIP(FreeIP* IP) {
 
 	try {
 		Connect();
@@ -459,7 +458,7 @@ void MySQL::RestoreRealIP(char* IP) {
 	}
 }
 
-void MySQL::DelRealIP(Free_real_IP* IP) {
+void MySQL::DelRealIP(FreeIP* IP) {
 
 	try {
 		Connect();

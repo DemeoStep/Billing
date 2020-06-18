@@ -9,8 +9,7 @@
 #include "Street.h"
 #include "CellOper.h"
 #include "Tarif.h"
-#include "Free_grey_IP.h"
-#include "Free_real_IP.h"
+#include "FreeIP.h"
 #include "MySQL.h"
 
 Application::Application() {
@@ -1322,7 +1321,7 @@ void Application::ListsReLoad() {
 void Application::IPReLoad() {
 	FreeGreyIPs = FreeGreyIPs->ListLast();
 	while (FreeGreyIPs) {
-		Free_grey_IP* Temp = FreeGreyIPs;
+		FreeIP* Temp = FreeGreyIPs;
 		FreeGreyIPs = FreeGreyIPs->ListPrev;
 		delete Temp;
 	}
@@ -1331,7 +1330,7 @@ void Application::IPReLoad() {
 
 	FreeRealIPs = FreeRealIPs->ListLast();
 	while (FreeRealIPs) {
-		Free_real_IP* Temp = FreeRealIPs;
+		FreeIP* Temp = FreeRealIPs;
 		FreeRealIPs = FreeRealIPs->ListPrev;
 		delete Temp;
 	}

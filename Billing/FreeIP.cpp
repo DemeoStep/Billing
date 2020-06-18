@@ -1,16 +1,16 @@
-#include "Free_grey_IP.h"
+#include "FreeIP.h"
 #include <iostream>
 #include "StringHelper.h"
 #include "Abonent.h"
 
-Free_grey_IP::Free_grey_IP() {
+FreeIP::FreeIP() {
 	ip = StringHelper::New(StringHelper::DefaultSize);
 
 	ListPrev = NULL;
 	ListNext = NULL;
 }
 
-Free_grey_IP::~Free_grey_IP() {
+FreeIP::~FreeIP() {
 	if (NULL != ListPrev) {
 		ListPrev->ListNext = ListNext;
 	}
@@ -21,8 +21,8 @@ Free_grey_IP::~Free_grey_IP() {
 	free(ip);
 }
 
-Free_grey_IP* Free_grey_IP::ListAdd(Free_grey_IP* ExistingItem) {
-	Free_grey_IP* LResult = ExistingItem;
+FreeIP* FreeIP::ListAdd(FreeIP* ExistingItem) {
+	FreeIP* LResult = ExistingItem;
 	LResult->ListPrev = this;
 	LResult->ListNext = this->ListNext;
 	if (this->ListNext) {
@@ -32,9 +32,9 @@ Free_grey_IP* Free_grey_IP::ListAdd(Free_grey_IP* ExistingItem) {
 	return LResult;
 }
 
-Free_grey_IP* Free_grey_IP::ListDel() {
-	Free_grey_IP* IPNext = this->ListNext;
-	Free_grey_IP* IPPrev = this->ListPrev;
+FreeIP* FreeIP::ListDel() {
+	FreeIP* IPNext = this->ListNext;
+	FreeIP* IPPrev = this->ListPrev;
 	if (IPPrev) {
 		IPPrev->ListNext = this->ListNext;
 	}
@@ -46,29 +46,28 @@ Free_grey_IP* Free_grey_IP::ListDel() {
 		return IPNext;
 	} else if (IPPrev) {
 		return IPPrev;
-	}
-	else return NULL;
+	} else return NULL;
 }
 
-Free_grey_IP* Free_grey_IP::ListFirst() {
-	Free_grey_IP* LResult = this;
+FreeIP* FreeIP::ListFirst() {
+	FreeIP* LResult = this;
 	while (LResult->ListPrev) {
 		LResult = LResult->ListPrev;
 	}
 	return LResult;
 }
 
-Free_grey_IP* Free_grey_IP::ListLast() {
-	Free_grey_IP* LResult = this;
+FreeIP* FreeIP::ListLast() {
+	FreeIP* LResult = this;
 	while (LResult->ListNext) {
 		LResult = LResult->ListNext;
 	}
 	return LResult;
 }
 
-int Free_grey_IP::ListCount() {
+int FreeIP::ListCount() {
 	int LResult = 0;
-	Free_grey_IP* LItem = ListFirst();
+	FreeIP* LItem = ListFirst();
 	if (LItem) LResult++;
 	while (NULL != LItem->ListNext) {
 		LResult++;
